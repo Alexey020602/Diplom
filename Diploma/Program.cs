@@ -1,10 +1,12 @@
-using Diploma.Models;
-using Microsoft.EntityFrameworkCore;
+using DataBase.Data;
+using Diploma;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 //string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationContext>();
+builder.Services.AddScoped<IPartnersDataManager, PartnersDataManager>();
 
 var app = builder.Build();
 
