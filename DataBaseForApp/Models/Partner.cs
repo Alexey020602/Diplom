@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 namespace DataBase.Models;
 
@@ -94,6 +95,7 @@ public class PartnerType
     ///<summary>
     ///Список партнеров соответсвующего типа
     /// </summary>
+    [JsonIgnore]
     public ICollection<Partner> Partners { get; set; }
 
     public override string ToString()
