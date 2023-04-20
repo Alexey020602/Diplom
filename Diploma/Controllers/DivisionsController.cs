@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Diploma.Controllers;
-
+[ApiExplorerSettings(IgnoreApi = true)]
 public class DivisionsController : Controller
 {
     // GET

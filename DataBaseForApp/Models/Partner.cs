@@ -67,6 +67,11 @@ public class Partner
     public ICollection<Interaction> Interactions { get; set; }
     
     public ICollection<Direction> Directions { get; set; }
+
+    public override string ToString()
+    {
+        return $"{FullName} {PartnerType.ToString()}";
+    }
 }
 
 /// <summary>
@@ -90,4 +95,9 @@ public class PartnerType
     ///Список партнеров соответсвующего типа
     /// </summary>
     public ICollection<Partner> Partners { get; set; }
+
+    public override string ToString()
+    {
+        return $"{Id} {Name}";
+    }
 }

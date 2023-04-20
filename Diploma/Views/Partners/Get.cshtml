@@ -1,0 +1,30 @@
+﻿
+
+@model IEnumerable<DataBase.Models.Partner>
+ @{
+     Layout = "_Layout";
+ }
+<h2>Список пользователей</h2>
+<h3>Поиск пользователя</h3>
+<form asp-action="Post" asp-controller="Partners">
+    <input type="text" name="shortName"/>
+    <input type="button"/>
+</form>
+<p><a asp-action="Create">Добавить пользователя</a></p>
+<table class="table">
+    <tr><th>Имя</th><th>Возраст</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ShortName</td>
+            <td>@item.City</td><td>
+                <a asp-action="Edit" asp-controller="Partners" asp-route-id="@item.Id">Изменить</a>
+                                           </td>
+                                           <td>
+                                               <form asp-controller="Partners" asp-action="Delete" method="post"  asp-route-id="@item.Id">
+                                                   <input type="submit" value="Удалить" />
+                                               </form>
+                                           </td>
+        </tr>
+    }
+</table>

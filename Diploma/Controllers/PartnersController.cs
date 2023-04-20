@@ -1,21 +1,30 @@
-﻿using DataBase.Data;
+﻿using System.Security.Cryptography.X509Certificates;
+using DataBase.Data;
 using DataBase.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diploma.Controllers;
-
+[ApiExplorerSettings(IgnoreApi = true)]
+[Route("[controller]")]
 public class PartnersController : Controller
 {
-    ApplicationContext db;
+    private IPartnersDataManager PartnersDataManager { get; set; }
 
-    public PartnersController(ApplicationContext context)
+    public PartnersController(IPartnersDataManager partnersDataManager)
     {
-        db = context;
+        PartnersDataManager = partnersDataManager;
     }
-    public async Task<IActionResult> Index()
+    [HttpGet(Name = "GetPartners")]
+    public async Task<IActionResult> Get()
     {
-        return View(await db.Partners.ToListAsync());
+        return View(await PartnersDataManager.GetPartnersAsync());
+    }
+
+    [HttpPost(Name = "PostTest")]
+    public async Task<IActionResult> Post(string? shortNamePart)
+    {
+        return View("Get",await PartnersDataManager.GetPartnerAsync(shortNamePart));
     }
     public IActionResult Create()
     {
@@ -24,20 +33,19 @@ public class PartnersController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Partner partner)
     {
-        db.Partners.Add(partner);
-        await db.SaveChangesAsync();
-        return RedirectToAction("Index");
+        await PartnersDataManager.AddPartnerAsync(partner);
+        return RedirectToAction("Get");
     }
+    
+    
     
     [HttpPost]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id != null)
         {
-            var partner = new Partner { Id = id.Value };
-            db.Entry(partner).State = EntityState.Deleted;
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            await PartnersDataManager.DeletePartnerAsync(id.Value);
+            return RedirectToAction("Get");
         }
         return NotFound();
     }
@@ -45,16 +53,15 @@ public class PartnersController : Controller
     {
         if(id!=null)
         {
-            Partner? partner = await db.Partners.FirstOrDefaultAsync(p=>p.Id==id);
+            Partner? partner = await PartnersDataManager.EditPartner(id.Value);
             if (partner != null) return View(partner);
         }
         return NotFound();
     }
     [HttpPost]
-    public async Task<IActionResult> Edit(Partner user)
+    public async Task<IActionResult> Edit(Partner partner)
     {
-        db.Partners.Update(user);
-        await db.SaveChangesAsync();
-        return RedirectToAction("Index");
+        await PartnersDataManager.EditPartner(partner);
+        return RedirectToAction("Get");
     }
 }
