@@ -12,6 +12,47 @@ namespace DataBase.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {1, "ИФИО"}
+                );
+            migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {2, "ИНПРОТЕХ"}
+            );
+            migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {3, "ФРТ"}
+            );
+            migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {4, "ФЭЛ"}
+            );
+            migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {5, "ФКТИ"}
+            );
+            migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {6, "ФЭА"}
+            );
+            migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {7, "ФИБС"}
+            );
+            migrationBuilder.InsertData(
+                table:"Faculties",
+                columns: new[]{"Id", "Name"},
+                values: new object[] {8, "ГФ"}
+            );
+            
+            migrationBuilder.InsertData(
                 table:"PartnerTypes",
                 columns:new[]{"Id", "Name"},
                 values: new object[]{1, "Тестовый тип"}

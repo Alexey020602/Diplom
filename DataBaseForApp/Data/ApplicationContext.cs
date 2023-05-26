@@ -34,26 +34,6 @@ public class ApplicationContext:DbContext
     /// DbSet факультета университета
     /// </summary>
     public DbSet<Direction> Directions { get; set; }
-    /// <summary>
-    /// DbSet факультета университета
-    /// </summary>
-    public DbSet<Agreement> Agreements { get; set; }
-    /// <summary>
-    /// DbSet факультета университета
-    /// </summary>
-    public DbSet<DivisionInAgreement> DivisionsInAgreement { get; set; }
-    /// <summary>
-    /// DbSet факультета университета
-    /// </summary>
-    public DbSet<PartnerInAgreement> PartnersInAgreement { get; set; }
-    /// <summary>
-    /// DbSet факультета университета
-    /// </summary>
-    public DbSet<AgreementType> AgreementType { get; set; }
-    /// <summary>
-    /// DbSet факультета университета
-    /// </summary>
-    public DbSet<AgreementStatus> AgreementStatus { get; set; }
 
     public ApplicationContext():base()
     {
@@ -121,15 +101,37 @@ public class ApplicationContext:DbContext
         
     }
 
+
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<Agreement> Agreements { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<DivisionInAgreement> DivisionsInAgreement { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<PartnerInAgreement> PartnersInAgreement { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<AgreementType> AgreementType { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<AgreementStatus> AgreementStatus { get; set; }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder
             .Properties<DateTime>()
             .HaveColumnType("date");
         
-         configurationBuilder
-            .Properties<string>()
-            .HaveColumnType("char");
+         //configurationBuilder
+         //   .Properties<string>()
+         //   .HaveColumnType("char");
             
     }
     

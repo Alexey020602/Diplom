@@ -24,6 +24,7 @@ public class Partner
     /// <summary>
     /// Краткое название партнера
     /// </summary>
+    
     [MaxLength(50)]
     //[Column(TypeName = "char")]
     public string ShortName { get; set; }
