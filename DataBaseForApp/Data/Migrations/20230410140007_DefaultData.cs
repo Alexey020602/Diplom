@@ -51,6 +51,18 @@ namespace DataBase.Data.Migrations
                 columns: new[]{"Id", "Name"},
                 values: new object[] {8, "ГФ"}
             );
+
+            migrationBuilder.InsertData(
+                table:"Divisions",
+                columns: new[]{"Id", "FullName", "ShortName", "FacultyId", "Contacts", "Site"},
+                values: new object[] {1, "Подразделение номер 1", "Подразделение 1", 2, "Контактные данные", "www.somesite.ru"}
+            );
+            
+            migrationBuilder.InsertData(
+                table:"Divisions",
+                columns: new[]{"Id", "FullName", "ShortName", "FacultyId", "Contacts", "Site"},
+                values: new object[] {2, "Подразделение номер 2", "Подразделение 2", 4, "Контактные данные второго подразделения", "www.somesite2.ru"}
+            );
             
             migrationBuilder.InsertData(
                 table:"PartnerTypes",
