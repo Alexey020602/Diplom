@@ -1,6 +1,5 @@
 using DataBase.Data;
 using Diploma;
-using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +12,18 @@ builder.Services.AddSwaggerGen(o =>
     {
     });
 
+//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7217/") });
+
+builder.Services.AddCors();
+
 var app = builder.Build();
+
+app.UseBlazorFrameworkFiles();
+
+app.UseCors(builder => builder.AllowAnyOrigin()
+.AllowAnyHeader()
+.AllowAnyMethod()
+ ) ;
 
 if (app.Environment.IsDevelopment())
 {
@@ -21,9 +31,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.MapControllerRoute(
     name: "lists",
     pattern: "{controller=Partners}/{action}"
     );
 
+//app.MapFallbackToFile("index.html");
 app.Run();

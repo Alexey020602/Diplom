@@ -64,4 +64,7 @@ public class PartnersController : Controller
         await PartnersDataManager.EditPartner(partner);
         return RedirectToAction("Get");
     }
+
+    [HttpGet("component")]
+    public IActionResult Test() => View();
 }

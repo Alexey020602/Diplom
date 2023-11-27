@@ -128,11 +128,11 @@ public class ApplicationContext:DbContext
         configurationBuilder
             .Properties<DateTime>()
             .HaveColumnType("date");
-        
-         //configurationBuilder
-         //   .Properties<string>()
-         //   .HaveColumnType("char");
-            
+
+        configurationBuilder
+           .Properties<string>()
+           .HaveColumnType("varchar");
+
     }
     
 }
