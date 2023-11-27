@@ -19,25 +19,25 @@ public class Partner
     /// Полное  название партнера
     /// </summary>
     [MaxLength(200)]
-    public string FullName { get; set; }
-    
+    public string FullName { get; set; } = null!;
+
     /// <summary>
     /// Краткое название партнера
     /// </summary>
-    
+
     [MaxLength(50)]
     //[Column(TypeName = "char")]
-    public string ShortName { get; set; }
-    
+    public string ShortName { get; set; } = null!;
+
     /// <summary>
     /// Идентификатор типа партнера
     /// </summary>
     //public int PartnerTypeId { get; set; }
-    
+
     /// <summary>
     /// Адрес партнера
     /// </summary>
-    
+
     [MaxLength(100)]
     public string? Address { get; set; }
     
@@ -62,17 +62,17 @@ public class Partner
     /// <summary>
     /// Тип партнера
     /// </summary>
-    public PartnerType PartnerType { get; set; }
-    
-    public ICollection<PartnerInAgreement> PartnersInAgreement { get; set; }
-    
-    public ICollection<Interaction> Interactions { get; set; }
-    
-    public ICollection<Direction> Directions { get; set; }
+    public PartnerType PartnerType { get; set; } = null!;
+    [JsonIgnore]
+    public ICollection<PartnerInAgreement> PartnersInAgreement { get; set; } = null!;
+    [JsonIgnore]
+    public ICollection<Interaction> Interactions { get; set; } = null!;
+    [JsonIgnore]
+    public ICollection<Direction> Directions { get; set; } = null!;
 
     public override string ToString()
     {
-        return $"{FullName} {PartnerType.ToString()}";
+        return $"{FullName} {PartnerType}";
     }
 }
 
@@ -91,13 +91,13 @@ public class PartnerType
     /// Название типа партнера
     /// </summary>
     [MaxLength(50)] 
-    public string Name { get; set; }
-    
+    public string Name { get; set; } = null!;
+
     ///<summary>
     ///Список партнеров соответсвующего типа
     /// </summary>
     [JsonIgnore]
-    public ICollection<Partner> Partners { get; set; }
+    public ICollection<Partner> Partners { get; set; } = null!;
 
     public override string ToString()
     {

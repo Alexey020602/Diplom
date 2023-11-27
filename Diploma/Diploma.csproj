@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Client\Client.csproj" />
       <ProjectReference Include="..\DataBaseForApp\DataBaseForApp.csproj" />
     </ItemGroup>

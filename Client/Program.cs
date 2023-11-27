@@ -9,7 +9,7 @@ new HttpClient
     BaseAddress=new Uri(builder.HostEnvironment.BaseAddress)
 });
 
-//builder.RootComponents.Add<Component>("#app");
+//builder.RootComponents.Add<App>("#app");
 
 var app = builder.Build();
 await app.RunAsync();

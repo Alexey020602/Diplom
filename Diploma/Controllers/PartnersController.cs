@@ -1,70 +1,193 @@
-﻿using System.Security.Cryptography.X509Certificates;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc;
 using DataBase.Data;
 using DataBase.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diploma.Controllers;
-[ApiExplorerSettings(IgnoreApi = true)]
-[Route("[controller]")]
-public class PartnersController : Controller
+
+[Route("api/[controller]")]
+[ApiController]
+public class PartnersController : ControllerBase
 {
-    private IPartnersDataManager PartnersDataManager { get; set; }
+    private ApplicationContext _context { get; set; }
 
-    public PartnersController(IPartnersDataManager partnersDataManager)
+    public PartnersController(ApplicationContext context)
     {
-        PartnersDataManager = partnersDataManager;
-    }
-    [HttpGet(Name = "GetPartners")]
-    public async Task<IActionResult> Get()
-    {
-        return View(await PartnersDataManager.GetPartnersAsync());
+        this._context = context;
     }
 
-    [HttpPost(Name = "PostTest")]
-    public async Task<IActionResult> Post(string? shortNamePart)
+    [HttpGet]
+    public IActionResult ShowPartners()
     {
-        return View("Get",await PartnersDataManager.GetPartnerAsync(shortNamePart));
+        var list = 
+            from p in _context.Partners.Include(p=>p.PartnerType) 
+            //where p.
+            select p;
+
+        return new JsonResult(list.ToList());
     }
-    public IActionResult Create()
+
+    [HttpGet("{id}")]
+    public IActionResult ShowPartner(int id)
     {
-        return View();
-    }
-    [HttpPost]
-    public async Task<IActionResult> Create(Partner partner)
-    {
-        await PartnersDataManager.AddPartnerAsync(partner);
-        return RedirectToAction("Get");
-    }
-    
-    
-    
-    [HttpPost]
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id != null)
+        var partner =
+            (from p in _context.Partners
+                where p.Id == id
+                select p).FirstOrDefault();
+        if (partner == null)
         {
-            await PartnersDataManager.DeletePartnerAsync(id.Value);
-            return RedirectToAction("Get");
+            return NotFound("Нет соответсвующего партнера");
         }
-        return NotFound();
-    }
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if(id!=null)
+        else
         {
-            Partner? partner = await PartnersDataManager.EditPartner(id.Value);
-            if (partner != null) return View(partner);
+            return new JsonResult(partner);
         }
-        return NotFound();
-    }
-    [HttpPost]
-    public async Task<IActionResult> Edit(Partner partner)
-    {
-        await PartnersDataManager.EditPartner(partner);
-        return RedirectToAction("Get");
     }
 
-    [HttpGet("component")]
-    public IActionResult Test() => View();
+    [HttpPut("partners/{id:int}")]
+    public IActionResult EditPartner(
+        int id,
+        [FromForm] string? fullName,
+        [FromForm] string? shortName,
+        [FromForm] string? address,
+        [FromForm] string? site,
+        [FromForm] string? contactData,
+        [FromForm] string? city
+        )
+    {
+        var partner = (
+            from p in _context.Partners.Include(p => p.PartnerType)
+            where p.Id == id
+            select p
+        ).ToList().FirstOrDefault();
+        if (partner == null)
+        {
+            return NotFound("Нет соответсвующего партнера");
+        }
+
+        if (fullName != null)
+        {
+            partner.FullName = fullName;
+        }
+        
+        if (shortName != null)
+        {
+            partner.ShortName = shortName;
+        }
+
+        if (address != null)
+        {
+            partner.Address = address;
+        }
+
+        if (site != null)
+        {
+            partner.Site = site;
+        }
+
+        if (contactData != null)
+        {
+            partner.ContactData = contactData;
+        }
+
+        if (city != null)
+        {
+            partner.City = city;
+        }
+        _context.Partners.Update(partner);
+        _context.SaveChanges();
+        return Ok();
+    }
+    
+    [HttpDelete("partners/{id:int}")]
+    public IActionResult EditPartner(
+        int id
+    )
+    {
+        var partner = (
+            from p in _context.Partners.Include(p => p.PartnerType)
+            where p.Id == id
+            select p
+        ).ToList().FirstOrDefault();
+        if (partner == null)
+        {
+            return NotFound("Нет соответсвующего партнера");
+        }
+        _context.Partners.Remove(partner);
+        _context.SaveChanges();
+        return Ok();
+    }
+
+    [HttpPost("partners")]
+    public IActionResult CreatePartner(
+        [FromForm] [Required] string fullName,
+        [FromForm] [Required] string shortName,
+        [FromForm] string? address,
+        [FromForm] string? site,
+        [FromForm] string? contactData,
+        [FromForm] string? city
+        )
+    {
+        var type =
+            (from t in _context.PartnerTypes
+                select t).FirstOrDefault();
+        var partner = new Partner()
+        {
+            FullName = fullName,
+            ShortName = shortName,
+            Address = address,
+            Site = site,
+            ContactData = contactData,
+            City = city,
+            PartnerType = type
+        };
+
+        _context.Partners.Add(partner);
+        _context.SaveChanges();
+        return Ok();
+    }
+
+    [HttpGet("partnertypes")]
+    public IActionResult ShowPartnerTypes()
+    {
+        var list =
+            from type in _context.PartnerTypes
+            select type;
+        return new JsonResult(list);
+    }
+
+    [HttpGet("partnertypes/{id}")]
+    public IActionResult ShowPartnerType(int id)
+    {
+        var type = (from t in _context.PartnerTypes where t.Id == id select t).FirstOrDefault();
+        if (type == null) return NotFound("Нет соответсвующего типа партнера");
+        return new JsonResult(type);
+    }
+    
+    [HttpDelete("partnertypes/{id}")]
+    public IActionResult DeletePartnerType(int id)
+    {
+        var type = (from t in _context.PartnerTypes where t.Id == id select t).FirstOrDefault();
+        if (type == null) return NotFound("Нет соответсвующего типа партнера");
+        _context.PartnerTypes.Remove(type);
+        _context.SaveChanges();
+        return Ok();
+    }
+    
+    [HttpPost("partnertypes")]
+    public IActionResult CreatePartnerType(
+        [FromForm] [Required] string name
+    )
+    {
+        var type = new PartnerType()
+        {
+            Name = name
+        };
+        _context.PartnerTypes.Add(type);
+        _context.SaveChanges();
+        //if (type == null) return NotFound("Нет соответсвующего типа партнера");
+        return new JsonResult(type);
+    }
 }
