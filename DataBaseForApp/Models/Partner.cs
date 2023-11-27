@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 namespace DataBase.Models;
 
@@ -23,6 +24,7 @@ public class Partner
     /// <summary>
     /// Краткое название партнера
     /// </summary>
+    
     [MaxLength(50)]
     //[Column(TypeName = "char")]
     public string ShortName { get; set; }
@@ -67,6 +69,11 @@ public class Partner
     public ICollection<Interaction> Interactions { get; set; }
     
     public ICollection<Direction> Directions { get; set; }
+
+    public override string ToString()
+    {
+        return $"{FullName} {PartnerType.ToString()}";
+    }
 }
 
 /// <summary>
@@ -89,5 +96,11 @@ public class PartnerType
     ///<summary>
     ///Список партнеров соответсвующего типа
     /// </summary>
+    [JsonIgnore]
     public ICollection<Partner> Partners { get; set; }
+
+    public override string ToString()
+    {
+        return $"{Id} {Name}";
+    }
 }

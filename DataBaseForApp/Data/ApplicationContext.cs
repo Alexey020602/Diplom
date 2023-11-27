@@ -1,44 +1,50 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using DataBase.Models;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
 namespace DataBase.Data;
 /// <summary>
 /// Контекст приложения для подключения к БД
 /// </summary>
 public class ApplicationContext:DbContext
 {
+    /// <summary>
+    /// DbSet партнеров в база данных
+    /// </summary>
     public DbSet<Partner> Partners { get; set; }
+    /// <summary>
+    /// DbSet типов партнеров
+    /// </summary>
     public DbSet<PartnerType> PartnerTypes { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
     public DbSet<Faculty> Faculties { get; set; }
+    /// <summary>
+    /// DbSet подразделений университета
+    /// </summary>
     public DbSet<Division> Divisions { get; set; }
+    /// <summary>
+    /// DbSet взаимодействий между подразделениями и партнерами
+    /// </summary>
     public DbSet<Interaction> Interactions { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
     public DbSet<InteractionType> InteractionTypes { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
     public DbSet<Direction> Directions { get; set; }
-    public DbSet<Agreement> Agreements { get; set; }
-    public DbSet<DivisionInAgreement> DivisionsInAgreement { get; set; }
-    public DbSet<PartnerInAgreement> PartnersInAgreement { get; set; }
-    public DbSet<AgreementType> AgreementType { get; set; }
-    public DbSet<AgreementStatus> AgreementStatus { get; set; }
 
-    public ApplicationContext()
+    public ApplicationContext():base()
     {
-        //Database.EnsureDeleted();
-        //Database.EnsureCreated();
+        Database.Migrate();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        
         optionsBuilder.UseNpgsql(
             "Host=localhost;Port=5432;Database=Diploma;Username=postgres;Password=11111111")
-            .LogTo(Console.WriteLine)
+            //.LogTo(Console.WriteLine)
             ;
     }
 
@@ -95,16 +101,38 @@ public class ApplicationContext:DbContext
         
     }
 
+
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<Agreement> Agreements { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<DivisionInAgreement> DivisionsInAgreement { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<PartnerInAgreement> PartnersInAgreement { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<AgreementType> AgreementType { get; set; }
+    /// <summary>
+    /// DbSet факультета университета
+    /// </summary>
+    public DbSet<AgreementStatus> AgreementStatus { get; set; }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder
             .Properties<DateTime>()
             .HaveColumnType("date");
-        
-         configurationBuilder
-            .Properties<string>()
-            .HaveColumnType("char");
-            
+
+        configurationBuilder
+           .Properties<string>()
+           .HaveColumnType("varchar");
+
     }
     
 }

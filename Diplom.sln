@@ -1,8 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma", "Diploma\Diploma.csproj", "{6125303C-0CF1-4D0B-AE1B-F3ED2C491329}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma", "Diploma\Diploma.csproj", "{6125303C-0CF1-4D0B-AE1B-F3ED2C491329}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseForApp", "DataBaseForApp\DataBaseForApp.csproj", "{5A75269B-EA00-4567-95C9-3DD1C0090F89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBaseForApp", "DataBaseForApp\DataBaseForApp.csproj", "{5A75269B-EA00-4567-95C9-3DD1C0090F89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{4332DB10-3A47-45FC-B04D-5F2F31249B16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +23,15 @@ Global
 		{5A75269B-EA00-4567-95C9-3DD1C0090F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A75269B-EA00-4567-95C9-3DD1C0090F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A75269B-EA00-4567-95C9-3DD1C0090F89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4332DB10-3A47-45FC-B04D-5F2F31249B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4332DB10-3A47-45FC-B04D-5F2F31249B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4332DB10-3A47-45FC-B04D-5F2F31249B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4332DB10-3A47-45FC-B04D-5F2F31249B16}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {698101D4-8F35-4370-818D-01DF268B7F44}
 	EndGlobalSection
 EndGlobal
