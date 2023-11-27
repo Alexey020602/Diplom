@@ -8,9 +8,9 @@ namespace DataBase.Models;
 public class PartnerInAgreement
 {
     [MaxLength(500)]
-    public string ContactPersons { get; set; }
+    public string ContactPersons { get; set; } = null!;
     public int AgreementId { get; set; }
-    public Agreement Agreement { get; set; }
+    public Agreement Agreement { get; set; } = null!;
     public int PartnerInAgreementId { get; set; }
-    public Partner Partner { get; set; }
- }
+    public Partner Partner { get; set; } = null!;
+}

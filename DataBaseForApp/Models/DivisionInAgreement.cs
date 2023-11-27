@@ -7,9 +7,9 @@ namespace DataBase.Models;
 public class DivisionInAgreement
 {
     [MaxLength(100)] 
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public int DivisionInAgreementId { get; set; }
-    public Models.Division Division { get; set; }
-   public int AgreementId { get; set; }
-   public Agreement Agreement { get; set; }
+    public Division Division { get; set; } = null!;
+    public int AgreementId { get; set; }
+   public Agreement Agreement { get; set; } = null!;
 }

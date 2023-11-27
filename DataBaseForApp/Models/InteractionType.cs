@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DataBase.Models;
 
@@ -9,5 +10,6 @@ public class InteractionType
     
     [MaxLength(100)]
     public string Name { get; set; }
-    public ICollection<Interaction> Interactions { get; set; }
+    [JsonIgnore]
+    public ICollection<Interaction> Interactions { get; set; } = null!;
 }
