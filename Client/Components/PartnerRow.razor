@@ -1,11 +1,17 @@
 ﻿@using DataBase.Models;
 
+@inject HttpClient HttpClient
 <div>
-<h6>@partner.ShortName</h6>
-@partner.FullName
+@Partner.ShortName <button @onclick="Delete">Удалить</button>
 </div>
 
 @code {
     [Parameter]
-    public Partner partner { get; set; }
+    public Partner Partner { get; set; } = null!;
+
+
+    public async Task Delete()
+    {
+        await HttpClient.DeleteAsync($"partners/{Partner.Id}");
+    }
 }
