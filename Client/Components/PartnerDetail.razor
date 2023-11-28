@@ -1,0 +1,10 @@
+﻿@using DataBase.Models
+
+<h3>@Partner.ShortName</h3>
+<h4>@Partner.FullName</h4>
+
+
+@code {
+    [Parameter]
+    public Partner Partner { get; set; } = null!;
+}
