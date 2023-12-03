@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen(o =>
 builder.Services.AddCors();
 
 var app = builder.Build();
-
+app.UseStaticFiles();
 app.UseBlazorFrameworkFiles();
 
 app.UseCors(builder => builder.AllowAnyOrigin()

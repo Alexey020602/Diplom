@@ -5,12 +5,14 @@
 @page "/partners"
 @inject HttpClient httpClient
 
+<PageTitle>Патнеры университета</PageTitle>
+
 <h3>Component</h3>
 <h4>@message</h4>
 
 @if (SelectedPartner == null)
 {
-    <ul>
+    <ul class="parentList">
         @foreach (var partner in partners)
         {
             <li>
