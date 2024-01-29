@@ -4,7 +4,7 @@ namespace DataBase.Data;
 /// <summary>
 /// Контекст приложения для подключения к БД
 /// </summary>
-public class ApplicationContext:DbContext
+public class ApplicationContext: DbContext
 {
     /// <summary>
     /// DbSet партнеров в база данных
@@ -134,5 +134,4 @@ public class ApplicationContext:DbContext
            .HaveColumnType("varchar");
 
     }
-    
 }

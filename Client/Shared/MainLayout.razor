@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Routing
+<head>
+    <HeadOutlet/>
+</head>
+<header class="myHeader">
+    <NavLink href="partners">Партнеры</NavLink>
+    <NavLink href="divisions">Подразделения</NavLink>
+    <NavLink>Соглашения</NavLink>
+    <NavLink>Взаимодействия</NavLink>
+</header>
+<div>
+    <div>
+        @Body
+    </div>
+</div>

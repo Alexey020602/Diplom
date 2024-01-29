@@ -1,0 +1,167 @@
+﻿@using DataBase.Models;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Microsoft.AspNetCore.Components.Web;
+@using Client.Services;
+@using Client.Shared;
+@* @rendermode RenderMode.Interactive *@
+
+@inject IPartnerTypesService PartnerTypesService;
+@inject IDirectionsService DirectionsService;
+
+@if (Partner != null)
+{
+    <EditForm Model=@Partner OnValidSubmit="@OnValidSubmit">
+        <DataAnnotationsValidator/>
+        <div>
+            <p>Краткое название</p>
+            <InputText @bind-Value="Partner.ShortName" />
+            <ValidationMessage For="@( () => Partner.ShortName )" />
+        </div>
+        <div>
+            <p>Полное название</p>
+            <InputText @bind-Value="Partner.FullName" />
+        </div>
+        <div>
+            <p>Адрес</p>
+            <InputText @bind-Value="Partner.Address" />
+        </div>
+        <div>
+            <p>Контактные данные</p>
+            <InputTextArea @bind-Value="Partner.ContactData" />
+        </div>
+        <div>
+            <p>Город</p>
+            <InputText @bind-Value="Partner.City" />
+        </div>
+        <div>
+            @if (partnerTypes != null)
+            {
+                <InputSelect @bind-Value:get="@PartnerTypeId" @bind-Value:set="@OnPartnerTypeSelected">
+                    @foreach (var partnerType in partnerTypes)
+                    {
+                        <option value="@partnerType.Id.ToString()">
+                            @partnerType.Name
+                        </option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@( () => Partner.PartnerType )" />
+            }
+        </div>
+        <div>
+            @if (directions != null && Partner.Directions != null)
+            {
+                <MultipleSelect NoSelected=@directions Selected=@Partner.Directions/>
+            }
+            else
+            {
+                <p>
+                    Один из списков пустой
+                </p>
+            }
+        </div>
+        <div>
+            <input type="submit" />
+        </div>
+        <div>
+            @if (Partner.Directions != null)
+            {
+                <ul>
+                    @foreach (var direction in Partner.Directions)
+                    {
+                        <li>
+                            @direction.Name
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </EditForm>
+}
+@code {
+    [Parameter]
+    public Partner Partner { get; set; } = null!;
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+    private IEnumerable<PartnerType>? partnerTypes;
+    private List<Direction>? directions;
+    private string PartnerTypeId => Partner.PartnerTypeId != 0 ? Partner.PartnerTypeId.ToString() : "Выберите опцию";
+
+    protected async override Task OnParametersSetAsync()
+    {
+        SetDirectionsToPartner();
+        var directionsTask = LoadDirections();
+        var partnerTypesTask = LoadPartnerTypes();
+        await directionsTask;
+        await partnerTypesTask;
+    }
+
+    private void SetDirectionsToPartner()
+    {
+        if (Partner.Directions is not null) return;
+        Partner.Directions = new List<Direction>();
+    }
+
+    private async Task LoadDirections()
+    {
+        try
+        {
+            directions = await DirectionsService.GetDirections();
+        }
+        catch (Exception ex)
+        {
+            //TODO Добавить обработку исключений
+            Console.WriteLine($"Исключение при загрузке списка направлений: {ex}");
+        }
+    }
+
+    private async Task LoadPartnerTypes()
+    {
+        Console.WriteLine("Загрузка списка типов партнеров");
+        try
+        {
+            partnerTypes = await PartnerTypesService.GetPartnerTypesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Исключение при загрузке списка типов партнеров: {ex}");
+        }
+    }
+
+    private void OnPartnerTypeSelected(string id)
+    {
+        Console.WriteLine($"Выбран тип партнера {id}");
+        var partnerTypeId = int.Parse(id);
+        // var partnerType = partnerTypes?.FirstOrDefault(type => type.Id == partnerTypeId);
+        Partner.PartnerTypeId = partnerTypeId;
+        // if (partnerType != null)
+        // {
+        //     Console.WriteLine($"Найден тип партнера {partnerType}");
+        //     Partner.PartnerType = partnerType;
+        // }
+    }
+
+    private void OnDirectionSelected(string id)
+    {
+        Console.WriteLine($"Выбрано направление {id}");
+        var directionId = int.Parse(id);
+        if (Partner.Directions is null)
+        {
+            Partner.Directions = new List<Direction>();
+        }
+
+        if (directions is null) return;
+
+        var direction = directions.First(direction => direction.Id == directionId);
+        if (direction is not null)
+        {
+            Partner.Directions.Append(direction);
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        Console.WriteLine(Partner);
+        await OnSubmit.InvokeAsync();
+    }
+}

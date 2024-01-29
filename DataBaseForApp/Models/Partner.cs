@@ -14,66 +14,62 @@ public class Partner
     /// Идентификатор партнера
     /// </summary>
     public int Id { get; set; }
-    
     /// <summary>
     /// Полное  название партнера
     /// </summary>
-    [MaxLength(200)]
-    public string FullName { get; set; }
-    
+    [StringLength(200, MinimumLength = 1)]
+    public string FullName { get; set; } = null!;
     /// <summary>
     /// Краткое название партнера
     /// </summary>
-    
-    [MaxLength(50)]
-    //[Column(TypeName = "char")]
-    public string ShortName { get; set; }
-    
+    [StringLength(50, MinimumLength = 1)]
+    public string ShortName { get; set; } = null!;
     /// <summary>
     /// Идентификатор типа партнера
     /// </summary>
     //public int PartnerTypeId { get; set; }
-    
     /// <summary>
     /// Адрес партнера
     /// </summary>
-    
-    [MaxLength(100)]
-    public string? Address { get; set; }
-    
+    [StringLength(100)]
+    public string? Address { get; set; } 
     /// <summary>
     /// Адрес сайта партнера
     /// </summary>
-    [MaxLength(100)]
+    [StringLength(100)]
     public string? Site { get; set; }
-    
     /// <summary>
     /// Контактные данные пратнера
     /// </summary>
-    [MaxLength(500)]
+    [StringLength(500)]
     public string? ContactData { get; set; }
-    
     /// <summary>
     /// Город партнера
     /// </summary>
-    [MaxLength(100)]
+    [StringLength(100)]
     public string? City { get; set; }
-    
+    public int PartnerTypeId { get; set; }
     /// <summary>
     /// Тип партнера
     /// </summary>
-    public PartnerType PartnerType { get; set; }
-    
-    public ICollection<PartnerInAgreement> PartnersInAgreement { get; set; }
-    
-    public ICollection<Interaction> Interactions { get; set; }
-    
-    public ICollection<Direction> Directions { get; set; }
+    public PartnerType? PartnerType { get; set; } = null!;
+    [JsonIgnore]
+    public IEnumerable<PartnerInAgreement>? PartnersInAgreement { get; set; }
+    [JsonIgnore]
+    public IEnumerable<Interaction>? Interactions { get; set; }
+    public List<Direction>? Directions { get; set; }
 
-    public override string ToString()
-    {
-        return $"{FullName} {PartnerType.ToString()}";
-    }
+    public override string ToString() =>
+        $"""
+        Короткое имя: {ShortName}
+        Полное имя: {FullName}
+        Адрес: {Address}
+        Сайт: {Site}
+        Контактные данные: {ContactData}
+        Город: {City}
+        Тип партнера: {PartnerType} 
+        Направления:{Directions}
+        """;
 }
 
 /// <summary>
@@ -91,13 +87,13 @@ public class PartnerType
     /// Название типа партнера
     /// </summary>
     [MaxLength(50)] 
-    public string Name { get; set; }
-    
+    public string Name { get; set; } = null!;
+
     ///<summary>
     ///Список партнеров соответсвующего типа
     /// </summary>
     [JsonIgnore]
-    public ICollection<Partner> Partners { get; set; }
+    public ICollection<Partner>? Partners { get; set; } = null!;
 
     public override string ToString()
     {

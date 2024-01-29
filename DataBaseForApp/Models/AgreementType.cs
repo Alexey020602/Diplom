@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Models;
@@ -7,7 +8,8 @@ namespace DataBase.Models;
 public class AgreementType 
 { 
     public int Id { get; set; } 
-    [MaxLength(100)] public string Name { get; set; }
-    public ICollection<Agreement> Agreements { get; set; }
+    [MaxLength(100)] public string Name { get; set; } = null!;
+    [JsonIgnore]
+    public ICollection<Agreement> Agreements { get; set; } = null!;
 }
 

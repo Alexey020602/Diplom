@@ -1,70 +1,68 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using DataBase.Data;
-using DataBase.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using DataBase.Models;
+using Diploma.Services;
+using SharedModel;
 
 namespace Diploma.Controllers;
-[ApiExplorerSettings(IgnoreApi = true)]
-[Route("[controller]")]
-public class PartnersController : Controller
+
+[Route("api/[controller]")]
+[ApiController]
+public class PartnersController : ControllerBase
 {
-    private IPartnersDataManager PartnersDataManager { get; set; }
+    //private ApplicationContext _context { get; set; }
+    private IPartnersRepository _partnersRepository;
 
-    public PartnersController(IPartnersDataManager partnersDataManager)
+    public PartnersController(IPartnersRepository partnersRepository)
     {
-        PartnersDataManager = partnersDataManager;
-    }
-    [HttpGet(Name = "GetPartners")]
-    public async Task<IActionResult> Get()
-    {
-        return View(await PartnersDataManager.GetPartnersAsync());
+        _partnersRepository = partnersRepository;
     }
 
-    [HttpPost(Name = "PostTest")]
-    public async Task<IActionResult> Post(string? shortNamePart)
+    [HttpGet]
+    public async Task<IActionResult> ShowPartners()
     {
-        return View("Get",await PartnersDataManager.GetPartnerAsync(shortNamePart));
+        var partners = await _partnersRepository.GetPartnersAsync();
+
+        return new JsonResult(from p in partners select new PartnerForList(p.Id, p.ShortName));
     }
-    public IActionResult Create()
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> ShowPartnerById(int id)
     {
-        return View();
-    }
-    [HttpPost]
-    public async Task<IActionResult> Create(Partner partner)
-    {
-        await PartnersDataManager.AddPartnerAsync(partner);
-        return RedirectToAction("Get");
-    }
-    
-    
-    
-    [HttpPost]
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id != null)
+        var partner = await _partnersRepository.GetPartnerByIdAsync(id);
+        if (partner == null)
         {
-            await PartnersDataManager.DeletePartnerAsync(id.Value);
-            return RedirectToAction("Get");
+            return NotFound("Нет соответсвующего партнера");
         }
-        return NotFound();
-    }
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if(id!=null)
+        else
         {
-            Partner? partner = await PartnersDataManager.EditPartner(id.Value);
-            if (partner != null) return View(partner);
+            return new JsonResult(partner);
         }
-        return NotFound();
-    }
-    [HttpPost]
-    public async Task<IActionResult> Edit(Partner partner)
-    {
-        await PartnersDataManager.EditPartner(partner);
-        return RedirectToAction("Get");
     }
 
-    [HttpGet("component")]
-    public IActionResult Test() => View();
+    [HttpPut]
+    public async Task<IActionResult> AddPartner([FromBody] Partner partner)
+    {
+        await _partnersRepository.AddPartnerAsync(partner);
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdatePartner([FromBody] Partner partner)
+    {
+        await _partnersRepository.UpdatePartnerAsync(partner);
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task DeletePartner(int id)
+    {
+        await _partnersRepository.DeletePartnerByIdAsync(id);
+    }
+
+    //[HttpDelete]
+    //public async Task DeletePartner(Partner partner)
+    //{
+    //    await _partnersDataManager.DeletePartnerAsync(partner);
+    //}
 }
+

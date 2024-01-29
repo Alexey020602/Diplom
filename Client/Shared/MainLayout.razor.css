@@ -1,0 +1,30 @@
+﻿
+
+header.myHeader {
+    padding-left: 60px;
+    background-color: #264795;
+    padding: 20px;
+}
+
+    header.myHeader ::deep a {
+        text-decoration: none;
+        color: white;
+        padding: 20px;
+        border-color: white;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-right-width: 1px;
+        border-right-style: solid;
+    }
+
+.nav-link-style {
+    background-color:yellow; 
+    text-decoration: none;
+    color: white;
+    padding: 20px;
+    border-color: white;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
