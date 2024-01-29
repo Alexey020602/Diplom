@@ -1,0 +1,21 @@
+﻿@using DataBase.Models;
+@using Client.Services;
+@page "/partners/create"
+@inject IPartnersService PartnersService
+
+<p>Создание</p>
+<Form Partner=@partner OnSubmit="@CreatePartner" />
+
+@* <Form Partner=@partner OnSubmit="@CreatePartner"/> *@
+
+@code {
+    private Partner partner = new()
+        {
+            Directions = new List<Direction>()
+        };
+
+    private async Task CreatePartner()
+    {
+        await PartnersService.AddPartner(partner);
+    }
+}

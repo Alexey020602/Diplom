@@ -1,0 +1,23 @@
+﻿@page "/partners/{id:int}/edit"
+@using Client.Services;
+@using DataBase.Models;
+
+@inject IPartnersService PartnersService
+
+<Form Partner="@partner" OnSubmit="@UpdatePartner"/>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Partner partner = null!;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        partner = await PartnersService.GetPartnerById(Id);
+    }
+
+    private async Task UpdatePartner() 
+    {
+        await PartnersService.UpdatePartner(partner);
+    }
+}

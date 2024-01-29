@@ -10,9 +10,11 @@ public class Direction
     [MaxLength(200)]
     public string Name { get; set; } = null!;
     [JsonIgnore]
-    public ICollection<Partner> Partners { get; set; } = null!;
+    public ICollection<Partner>? Partners { get; set; }
     [JsonIgnore]
-    public ICollection<Division> Divisions { get; set; } = null!;
+    public ICollection<Division>? Divisions { get; set; }
     [JsonIgnore]
-    public ICollection<Interaction> Interactions { get; set; } = null!;
+    public ICollection<Interaction>? Interactions { get; set; }
+
+    public override string ToString() => $"{Name}:{Id}";
 }

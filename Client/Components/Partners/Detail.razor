@@ -1,0 +1,48 @@
+﻿@using DataBase.Models
+@using Client.Services;
+
+@page "/partners/{id:int}"
+
+@inject IPartnersService PartnersService
+
+<NavLink href="partners">
+    Назад
+</NavLink>
+
+@if(partner != null)
+{
+    <h3>@partner.ShortName</h3>
+    <h4>@partner.FullName</h4>
+}
+else
+{
+    <p>Загрузка...</p>
+}
+
+    <div>
+        <NavLink href=@($"partners/{Id}/edit")>
+            Редактировать
+        </NavLink>
+    </div>
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Partner? partner;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        try
+        {
+            Console.WriteLine($"{Id}");
+            partner = await PartnersService.GetPartnerById(Id);
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+}

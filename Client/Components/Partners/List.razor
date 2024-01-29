@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Components.Web;
+@using System.Net.Http.Json;
+@using DataBase.Models;
+@using Client.Services;
+@using SharedModel;
+
+@page "/partners"
+
+@inject IPartnersService PartnersService
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+
+<PageTitle>Патнеры университета</PageTitle>
+<div>
+    @if (partners is not null)
+    {
+        <div class="patrners-list">
+            <ul>
+                @foreach (var partner in partners)
+                {
+                    <li>
+                        <NavLink href="@($"partners/{partner.id}")">
+                            @partner.name
+                        </NavLink>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div>
+            @message
+        </div>
+    }
+    <div>
+        <NavLink href="partners/create">
+            Добавить
+        </NavLink>
+    </div>
+</div>
+
+@*<button @onclick = "LoadPartners">Присоединить</button>*@
+
+@code {
+    // private string PartnerListClass => SelectedPartner != null ? "sidebar" : "patrners-list";
+
+    IEnumerable<PartnerForList> partners { get; set; } = null!;
+
+    // Partner? SelectedPartner { get; set; } = null;
+
+    string message = "Загрузка...";
+
+    async Task LoadPartners()
+    {
+        Console.WriteLine("Начата загрузка списка партнеров");
+        try
+        {
+            partners = await PartnersService.GetPartners();
+        }
+        catch (Exception ex)
+        {
+            message = $"Поймали исключение на списке партнеров: {ex}";
+        }
+    }
+
+    void OpenPartnerDetails(Partner partner)
+    {
+        NavigationManager.NavigateTo("/person/" + partner.Id.ToString());
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("On init");
+        await LoadPartners();
+    }
+}

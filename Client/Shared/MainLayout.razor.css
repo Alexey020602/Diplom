@@ -6,7 +6,7 @@ header.myHeader {
     padding: 20px;
 }
 
-    header.myHeader > a {
+    header.myHeader ::deep a {
         text-decoration: none;
         color: white;
         padding: 20px;
@@ -16,3 +16,15 @@ header.myHeader {
         border-right-width: 1px;
         border-right-style: solid;
     }
+
+.nav-link-style {
+    background-color:yellow; 
+    text-decoration: none;
+    color: white;
+    padding: 20px;
+    border-color: white;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
