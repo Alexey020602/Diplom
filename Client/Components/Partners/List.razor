@@ -3,6 +3,7 @@
 @using DataBase.Models;
 @using Client.Services;
 @using SharedModel;
+@using Client.Shared;
 
 @page "/partners"
 
@@ -11,20 +12,15 @@
 
 <PageTitle>Патнеры университета</PageTitle>
 <div>
-    @if (partners is not null)
+    @if (Partners is not null)
     {
-        <div class="patrners-list">
-            <ul>
-                @foreach (var partner in partners)
-                {
-                    <li>
-                        <NavLink href="@($"partners/{partner.id}")">
-                            @partner.name
-                        </NavLink>
-                    </li>
-                }
-            </ul>
-        </div>
+        <BaseList List=@Partners>
+            <RowFragment Context="partner">
+                <NavLink href="@($"partners/{partner.id}")">
+                    @partner.name
+                </NavLink>
+            </RowFragment>
+        </BaseList>
     }
     else
     {
@@ -38,39 +34,3 @@
         </NavLink>
     </div>
 </div>
-
-@*<button @onclick = "LoadPartners">Присоединить</button>*@
-
-@code {
-    // private string PartnerListClass => SelectedPartner != null ? "sidebar" : "patrners-list";
-
-    IEnumerable<PartnerForList> partners { get; set; } = null!;
-
-    // Partner? SelectedPartner { get; set; } = null;
-
-    string message = "Загрузка...";
-
-    async Task LoadPartners()
-    {
-        Console.WriteLine("Начата загрузка списка партнеров");
-        try
-        {
-            partners = await PartnersService.GetPartners();
-        }
-        catch (Exception ex)
-        {
-            message = $"Поймали исключение на списке партнеров: {ex}";
-        }
-    }
-
-    void OpenPartnerDetails(Partner partner)
-    {
-        NavigationManager.NavigateTo("/person/" + partner.Id.ToString());
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        Console.WriteLine("On init");
-        await LoadPartners();
-    }
-}

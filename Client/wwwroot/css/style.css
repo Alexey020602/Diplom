@@ -1,3 +1,23 @@
 ﻿.test-style {
     background-color: yellow;
 }
+
+.blue-outline-button {
+    background-color: white;
+    border-radius: 15px;
+    border-style: solid;
+    padding: 5px 10px;
+    color: #010087;
+    border-color: #010087;
+    text-decoration: none;
+}
+
+    .blue-outline-button:hover {
+        border-color: #8ba5ff;
+        cursor: pointer;
+    }
+
+    .blue-outline-button:active {
+        background-color: #ebebff;
+        border-color: #010087;
+    } 

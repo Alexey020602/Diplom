@@ -1,5 +1,6 @@
 ﻿@using DataBase.Models
 @using Client.Services;
+@using Client.Shared;
 
 @page "/partners/{id:int}"
 
@@ -9,21 +10,58 @@
     Назад
 </NavLink>
 
-@if(partner != null)
+@if (partner != null)
 {
-    <h3>@partner.ShortName</h3>
-    <h4>@partner.FullName</h4>
+    <div>
+        <h3>@partner.ShortName</h3>
+        <h4>@partner.FullName</h4>
+
+        @if (partner.PartnerType != null)
+        {
+            <TextWithTitle Title="Тип партнера" Text=@partner.PartnerType.ToString() />
+        }
+
+        @if (partner.ContactData != null)
+        {
+            <TextWithTitle Title="Контактные данные" Text=@partner.ContactData />
+        }
+
+        @if (partner.Address != null)
+        {
+            <TextWithTitle Title="Адрес" Text=@partner.Address />
+        }
+
+        @if (partner.City != null)
+        {
+            <TextWithTitle Title="Город" Text=@partner.City />
+        }
+
+        @if (partner.Site != null)
+        {
+            <TextWithTitle Title="Сайт" Text=@partner.Site />
+        }
+
+        <div>
+            <p>Направления</p>
+            @foreach (var direction in partner.Directions)
+            {
+                <p>@direction.Name</p>
+            }
+        </div>
+
+        <div>
+            <NavLink class="blue-outline-button" href=@($"partners/{Id}/edit")>
+                Редактировать
+            </NavLink>
+        </div>
+    </div>
 }
 else
 {
     <p>Загрузка...</p>
 }
 
-    <div>
-        <NavLink href=@($"partners/{Id}/edit")>
-            Редактировать
-        </NavLink>
-    </div>
+
 
 
 
@@ -33,6 +71,10 @@ else
 
     private Partner? partner;
 
+    // private string PartnerTypeName => partner?.PartnerType?.Name ?? "Тип партнера отсутствует";
+    // private string ContactData => partner?.ContactData ?? "Контактные данные отсутствуют";
+    // private string Address => partner?.Address ?? "Адрес отсутствует";
+
     protected async override Task OnParametersSetAsync()
     {
         try
@@ -40,7 +82,7 @@ else
             Console.WriteLine($"{Id}");
             partner = await PartnersService.GetPartnerById(Id);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex);
         }

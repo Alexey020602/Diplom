@@ -4,12 +4,15 @@
 
 @inject IPartnersService PartnersService
 
-<Form Partner="@partner" OnSubmit="@UpdatePartner"/>
+@if (partner is not null)
+{
+    <Form Partner="@partner" OnSubmit="@UpdatePartner"/>
+}
 
 @code {
     [Parameter]
     public int Id { get; set; }
-    private Partner partner = null!;
+    private Partner? partner;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -18,6 +21,7 @@
 
     private async Task UpdatePartner() 
     {
+        if (partner is null) return;
         await PartnersService.UpdatePartner(partner);
     }
 }

@@ -8,8 +8,8 @@
 
         .patrners-list > ul > li {
             box-shadow: 0px 0px 5px 2px #d2d4e7;
-            padding: 10px;
-            padding-left: 20px;
+/*            padding: 10px;
+            padding-left: 20px;*/
             border-radius: 20px;
             width: 200px;
             margin-top: 10px;
@@ -69,6 +69,23 @@ button.none {
     font: inherit;
     cursor: pointer;
     outline: none;
+}
+
+::deep .nav-link  {
+    text-decoration: none;
+    color: black;
+    padding: 10px 20px;
+    background-color: yellow;
+    min-width: 160px;
+}
+
+.list-element {
+
+}
+
+::deep a.list-element {
+    text-decoration: none;
+    color: black;
 }
 
 /*
