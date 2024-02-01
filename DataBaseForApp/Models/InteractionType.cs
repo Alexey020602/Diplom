@@ -9,7 +9,7 @@ public class InteractionType
     public int Id { get; set; }
     
     [MaxLength(100)]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     [JsonIgnore]
-    public ICollection<Interaction> Interactions { get; set; } = null!;
+    public ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
 }

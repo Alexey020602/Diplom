@@ -18,12 +18,12 @@ public class Partner
     /// Полное  название партнера
     /// </summary>
     [StringLength(200, MinimumLength = 1)]
-    public string FullName { get; set; } = null!;
+    public string FullName { get; set; } = string.Empty;
     /// <summary>
     /// Краткое название партнера
     /// </summary>
     [StringLength(50, MinimumLength = 1)]
-    public string ShortName { get; set; } = null!;
+    public string ShortName { get; set; } = string.Empty;
     /// <summary>
     /// Идентификатор типа партнера
     /// </summary>
@@ -54,10 +54,10 @@ public class Partner
     /// </summary>
     public PartnerType? PartnerType { get; set; } = null!;
     [JsonIgnore]
-    public IEnumerable<PartnerInAgreement>? PartnersInAgreement { get; set; }
+    public IEnumerable<PartnerInAgreement> PartnersInAgreement { get; set; } = new List<PartnerInAgreement>();
     [JsonIgnore]
-    public IEnumerable<Interaction>? Interactions { get; set; }
-    public List<Direction>? Directions { get; set; }
+    public IEnumerable<Interaction> Interactions { get; set; } = new List<Interaction>();
+    public List<Direction> Directions { get; set; } = [];
 
     public override string ToString() =>
         $"""
@@ -75,7 +75,7 @@ public class Partner
 /// <summary>
 /// Класс модели для сущности "Тип партнера"
 /// </summary>
-[Index("Name", IsUnique = true)]
+[Index(nameof(Name), IsUnique = true)]
 public class PartnerType
 {
     /// <summary>
@@ -86,17 +86,17 @@ public class PartnerType
     /// <summary>
     /// Название типа партнера
     /// </summary>
-    [MaxLength(50)] 
-    public string Name { get; set; } = null!;
+    [StringLength(50)] 
+    public string Name { get; set; } = string.Empty;
 
     ///<summary>
     ///Список партнеров соответсвующего типа
     /// </summary>
     [JsonIgnore]
-    public ICollection<Partner>? Partners { get; set; } = null!;
+    public ICollection<Partner> Partners { get; set; } = new List<Partner>();
 
     public override string ToString()
     {
-        return $"{Id} {Name}";
+        return $"{Name}";
     }
 }
