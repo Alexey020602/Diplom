@@ -12,4 +12,6 @@ public class InteractionType
     public string Name { get; set; } = string.Empty;
     [JsonIgnore]
     public ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
+
+    public override string ToString() => $"{Name}";
 }

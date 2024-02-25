@@ -3,7 +3,6 @@
 @using Microsoft.AspNetCore.Components.Web;
 @using Client.Services;
 @using Client.Shared;
-@* @rendermode RenderMode.Interactive *@
 
 @* @inject IPartnerTypesService PartnerTypesService;
 @inject IDirectionsService DirectionsService; *@
@@ -49,7 +48,8 @@
             }
         </div>
         <div>
-            <input type="submit" />
+            <input class="oval-button orange-fill" type="button" onclick="history.back()"  value="Отмена"/> 
+            <input class="oval-button blue-fill" type="submit" value="Сохранить"/>
         </div>
         <div>
             @if (Partner.Directions != null)

@@ -15,4 +15,6 @@ public class Agreement
     public ICollection<PartnerInAgreement> PartnerInAgreements { get; set; } = null!;
     public AgreementType AgreementType { get; set; } = null!;
     public AgreementStatus AgreementStatus { get; set; } = null!;
+
+    public override string ToString() => $"{AgreementNumber} {AgreementType} {StarDateTime} - {EndDateTime}";
 }

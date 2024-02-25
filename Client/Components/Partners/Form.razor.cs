@@ -7,9 +7,9 @@ namespace Client.Components.Partners;
 public partial class Form: ComponentBase
 {
     [Inject]
-    private IPartnerTypesService PartnerTypesService { get; set; }
+    private IPartnerTypesService PartnerTypesService { get; set; } = default!;
     [Inject]
-    private IDirectionsService DirectionsService { get; set; }
+    private IDirectionsService DirectionsService { get; set; } = default!;
 
     [Parameter]
     public Partner Partner { get; set; } = null!;
@@ -23,30 +23,35 @@ public partial class Form: ComponentBase
 
     protected async override Task OnParametersSetAsync()
     {
-        SetDirectionsToPartner();
         var directionsTask = LoadDirections();
         var partnerTypesTask = LoadPartnerTypes();
         await directionsTask;
         await partnerTypesTask;
     }
 
-    private void SetDirectionsToPartner()
-    {
-        if (Partner.Directions is not null) return;
-        Partner.Directions = [];
-    }
-
     private async Task LoadDirections()
     {
         try
         {
-            directions = await DirectionsService.GetDirections();
+            var directions = await DirectionsService.GetDirections();
+            Console.WriteLine(directions);
+            this.directions = directions
+                .Where(direction => !Partner.Directions.Contains(direction))
+                .ToList(); 
         }
         catch (Exception ex)
         {
             //TODO Добавить обработку исключений
             Console.WriteLine($"Исключение при загрузке списка направлений: {ex}");
         }
+    }
+
+    private void RemoveSelectedDirections()
+    {
+        if (directions is null) return;
+
+        foreach (var direction in Partner.Directions)
+            directions.Remove(direction);
     }
 
     private async Task LoadPartnerTypes()

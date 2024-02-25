@@ -5,9 +5,9 @@ namespace Client.Services;
 
 public class DirectionsService(HttpClient httpClient): IDirectionsService
 {
-    public async Task<List<Direction>> GetDirections()
+    public async Task<IEnumerable<Direction>> GetDirections()
     {
-        var directions = await httpClient.GetFromJsonAsync<List<Direction>>("directions");
+        var directions = await httpClient.GetFromJsonAsync<IEnumerable<Direction>>("directions");
 
         return directions ?? throw new Exception("Список направлений оказался null");
     }

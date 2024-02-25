@@ -1,3 +1,4 @@
+using Client;
 using DataBase.Data;
 using Diploma.Services;
 
@@ -15,7 +16,7 @@ builder.Services.AddSwaggerGen(o =>
 
 
 builder.Services.AddCors();
-
+//builder.Services.AddRazorComponents().AddInteractiveWebAssemblyComponents();
 var app = builder.Build();
 app.UseStaticFiles();
 app.UseBlazorFrameworkFiles();
@@ -32,11 +33,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
 //app.MapControllerRoute(
 //    name: "lists",
 //    pattern: "{controller=Partners}/{action}"
 //    );
-
+//app.MapRazorComponents<App>()
+//    .AddInteractiveWebAssemblyRenderMode(options => options.PathPrefix = "");
 app.MapFallbackToFile("index.html");
 app.Run();

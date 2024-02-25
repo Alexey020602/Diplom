@@ -4,68 +4,69 @@
 
 @page "/partners/{id:int}"
 
-@inject IPartnersService PartnersService
+<div>
+    <NavLink class="oval-button blue-fill" href="partners">
+        Назад
+    </NavLink>
 
-<NavLink href="partners">
-    Назад
-</NavLink>
-
-@if (partner != null)
-{
-    <div>
-        <h3>@partner.ShortName</h3>
-        <h4>@partner.FullName</h4>
-
-        @if (partner.PartnerType != null)
-        {
-            <TextWithTitle Title="Тип партнера" Text=@partner.PartnerType.ToString() />
-        }
-
-        @if (partner.ContactData != null)
-        {
-            <TextWithTitle Title="Контактные данные" Text=@partner.ContactData />
-        }
-
-        @if (partner.Address != null)
-        {
-            <TextWithTitle Title="Адрес" Text=@partner.Address />
-        }
-
-        @if (partner.City != null)
-        {
-            <TextWithTitle Title="Город" Text=@partner.City />
-        }
-
-        @if (partner.Site != null)
-        {
-            <TextWithTitle Title="Сайт" Text=@partner.Site />
-        }
-
+    @if (partner != null)
+    {
         <div>
-            <p>Направления</p>
-            @foreach (var direction in partner.Directions)
+            <h3>@partner.ShortName</h3>
+            <h4>@partner.FullName</h4>
+
+            @if (partner.PartnerType != null)
             {
-                <p>@direction.Name</p>
+                <TextWithTitle Title="Тип партнера" Text=@partner.PartnerType.ToString() />
             }
+
+            @if (partner.ContactData != null)
+            {
+                <TextWithTitle Title="Контактные данные" Text=@partner.ContactData />
+            }
+
+            @if (partner.Address != null)
+            {
+                <TextWithTitle Title="Адрес" Text=@partner.Address />
+            }
+
+            @if (partner.City != null)
+            {
+                <TextWithTitle Title="Город" Text=@partner.City />
+            }
+
+            @if (partner.Site != null)
+            {
+                <TextWithTitle Title="Сайт" Text=@partner.Site />
+            }
+
+            <div>
+                <p>Направления</p>
+                @foreach (var direction in partner.Directions)
+                {
+                    <p>@direction.Name</p>
+                }
+            </div>
+
+            <div>
+                <NavLink class="oval-button blue-outline" href=@($"partners/{Id}/edit")>
+                    Редактировать
+                </NavLink>
+            </div>
         </div>
+    }
+    else
+    {
+        <p>Загрузка...</p>
+    }
 
-        <div>
-            <NavLink class="blue-outline-button" href=@($"partners/{Id}/edit")>
-                Редактировать
-            </NavLink>
-        </div>
-    </div>
-}
-else
-{
-    <p>Загрузка...</p>
-}
-
-
+</div>
 
 
 
 @code {
+    [Inject]
+    private IPartnersService PartnersService { get; set; } = default!;
     [Parameter]
     public int Id { get; set; }
 

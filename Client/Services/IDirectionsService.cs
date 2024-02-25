@@ -4,7 +4,7 @@ namespace Client.Services;
 
 public interface IDirectionsService
 {
-    Task<List<Direction>> GetDirections();
+    Task<IEnumerable<Direction>> GetDirections();
     Task<Direction> GetDirection(int id);
     Task DeleteDirection(int id);
     Task UpdateDirection(Direction direction);

@@ -17,4 +17,12 @@ public class Direction
     public ICollection<Interaction>? Interactions { get; set; }
 
     public override string ToString() => $"{Name}:{Id}";
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (obj is not Direction direction) return false;
+
+        return Id == direction.Id;
+    }
 }

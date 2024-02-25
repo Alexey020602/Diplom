@@ -8,6 +8,7 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
 {
     public async Task<IEnumerable<Partner>> GetPartnersAsync() =>
         await context.Partners
+        .AsNoTracking()
         .Include(p => p.PartnerType)
         .ToListAsync();
 
@@ -15,6 +16,7 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
     public async Task<Partner> GetPartnerByIdAsync(int id)
     {
         var partner = await context.Partners
+            .AsNoTracking()
             .Include(p=> p.PartnerType)
             .Include(p=> p.Directions)
             .FirstOrDefaultAsync(partner => partner.Id == id) 
@@ -37,10 +39,7 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
 
     private void AttachDirections(IEnumerable<Direction> directions)
     {
-        foreach (var direction in directions)
-        {
-            context.Directions.Attach(direction);
-        }
+        context.Directions.AttachRange(directions);
     }
 
     public async Task<Partner> DeletePartnerByIdAsync(int id)
@@ -57,7 +56,18 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
 
     public async Task UpdatePartnerAsync(Partner partner)
     {
-        context.Partners.Update(partner);
+        var existingPartner = await context.Partners
+            .Include(p => p.Directions)
+            .FirstAsync(p => p.Id == partner.Id);
+        
+        if (existingPartner is null) throw new KeyNotFoundException($"{partner.Id} не найден");
+        context.Entry(existingPartner).CurrentValues.SetValues(partner);
+        existingPartner.Directions = partner.Directions;
         await context.SaveChangesAsync();
     }
-}
+
+    private void RemoveDirections(IEnumerable<Direction> directions)
+    {
+        context.Directions.RemoveRange(directions);
+    }
+ }

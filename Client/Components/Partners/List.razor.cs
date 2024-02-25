@@ -1,36 +1,45 @@
-﻿using DataBase.Models;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using SharedModel;
+using Client.Services;
 
 namespace Client.Components.Partners;
 
 public partial class List
 {
-    IEnumerable<PartnerForList> Partners { get; set; } = new List<PartnerForList>();
+    [Inject] private IPartnersService PartnersService { get; set; } = default!;
+    private IEnumerable<PartnerForList>? Partners { get; set; }
+    private IEnumerable<PartnerForList> ShowedPartners => Partners?.Where(partner => partner.name.Contains(ShortNameFilter)) ?? [];
+ 
+    private string message = string.Empty;
 
-    private string message = "Загрузка...";
-
-    async Task LoadPartners()
+    private string ShortNameInput { get; set; } = string.Empty;
+    private string ShortNameFilter { get; set; } = string.Empty;
+    private void ClearFilterField()
     {
-        Console.WriteLine("Начата загрузка списка партнеров");
+        ShortNameInput = string.Empty;
+        ShortNameFilter = string.Empty;
+    }
+
+    private void SetFilterField()
+    {
+        ShortNameFilter = ShortNameInput;
+    }
+    private async Task LoadPartners()
+    {
         try
         {
             Partners = await PartnersService.GetPartners();
+            message = string.Empty;
         }
         catch (Exception ex)
         {
             message = $"Поймали исключение на списке партнеров: {ex}";
         }
     }
-
-    void OpenPartnerDetails(Partner partner)
-    {
-        NavigationManager.NavigateTo("/person/" + partner.Id.ToString());
-    }
-
+    
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("On init");
+        message = "Загрузка...";
         await LoadPartners();
     }
 }

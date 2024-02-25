@@ -70,6 +70,17 @@ public class Partner
         Тип партнера: {PartnerType} 
         Направления:{Directions}
         """;
+
+    public bool Contains(string shortNameSubstring)
+    {
+        if (string.IsNullOrEmpty(shortNameSubstring)) return true; 
+        
+        return ShortName.Contains(shortNameSubstring);
+    }
+
+    public bool HasDirection(Direction direction) => Directions.Contains(direction);
+
+    public bool HasType(PartnerType partnerType) => PartnerTypeId == partnerType.Id;
 }
 
 /// <summary>

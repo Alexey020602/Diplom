@@ -20,6 +20,5 @@ builder.Services.AddTransient<IDirectionsService, DirectionsService>();
 builder.RootComponents.Add<App>("#app");
 
 var app = builder.Build();
-
 Console.WriteLine("App run");
 await app.RunAsync();
