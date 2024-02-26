@@ -17,7 +17,7 @@ builder.Services.AddTransient<IPartnersService, PartnersService>();
 builder.Services.AddTransient<IPartnerTypesService, PartnerTypesService>();
 builder.Services.AddTransient<IDirectionsService, DirectionsService>();
 
-builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<RoutingComponent>("#app");
 
 var app = builder.Build();
 Console.WriteLine("App run");
