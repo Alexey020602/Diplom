@@ -1,33 +1,40 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms;
 @using Client.Shared;
-@using SharedModel;
+@using DataBase.Models;
 
 @page "/partners"
 
 <PageTitle>Патнеры университета</PageTitle>
 <div>
-    <div>
-        <InputText @bind-Value=@ShortNameInput />
-        <button style="display:inline-block" onclick=@SetFilterField>Поиск</button>
-        <button style="display:inline-block" onclick=@ClearFilterField>Очистить</button>
+    <div style="float:left; width: 150px;">
+        <PartnerTypesSelect @bind-PartnerType:get=@PartnerType @bind-PartnerType:set=@SelectPartnerType/>
     </div>
-    <div>
-        <NavLink class="oval-button blue-fill" href="partners/create">
-            Добавить
-        </NavLink>
-    </div>
-    @if (Partners is not null)
-    {
-        @PartnersList
-    }
-    else
-    {
-        @NullPartners
-    }
+    <div style="margin-left: 150px;">
+        @Filter
+        <div>
+            <NavLink class="oval-button blue-fill" href="partners/create">
+                Добавить
+            </NavLink>
+        </div>
+        @if (ShowPartners)
+        {
+            @PartnersList
+        }
+        else
+        {
+            @NullPartners
+        }
 
+    </div>
 </div>
 
 @code {
+    private RenderFragment Filter =>@<div>
+        <InputText @bind-Value=@ShortNameInput />
+        <button style="display:inline-block" onclick=@SetFilterField class="oval-button blue-outline">Поиск</button>
+        <button style="display:inline-block" onclick=@ClearFilterField class="oval-button orange-outline">Очистить</button>
+    </div>;
+
     private RenderFragment NullPartners => @<div>@message</div>;
 
     private RenderFragment PartnersList => @<BaseList List=@ShowedPartners>
@@ -36,5 +43,5 @@
         </RowFragment>
     </BaseList>;
 
-    private RenderFragment PartnerLink(PartnerForList partner) => @<NavLink href="@($"partners/{partner.id}")">@partner.name</NavLink>;
+    private RenderFragment PartnerLink(Partner partner) => @<NavLink href="@($"partners/{partner.Id}")">@partner.ShortName</NavLink>;
 }

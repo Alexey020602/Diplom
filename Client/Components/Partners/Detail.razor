@@ -5,9 +5,14 @@
 @page "/partners/{id:int}"
 
 <div>
-    <NavLink class="oval-button blue-fill" href="partners">
-        Назад
-    </NavLink>
+    <div>
+        <NavLink class="oval-button blue-fill" style="display: inline-block" href="partners">
+            Назад
+        </NavLink>
+        <NavLink class="oval-button blue-outline" style="display: inline-block" href=@($"partners/{Id}/edit")>
+            Редактировать
+        </NavLink>
+    </div>
 
     @if (partner != null)
     {
@@ -39,20 +44,14 @@
             {
                 <TextWithTitle Title="Сайт" Text=@partner.Site />
             }
-
-            <div>
+            <ListWithTitle Title="Направления" Items=@partner.Directions/>
+@*             <div>
                 <p>Направления</p>
                 @foreach (var direction in partner.Directions)
                 {
                     <p>@direction.Name</p>
                 }
-            </div>
-
-            <div>
-                <NavLink class="oval-button blue-outline" href=@($"partners/{Id}/edit")>
-                    Редактировать
-                </NavLink>
-            </div>
+            </div> *@
         </div>
     }
     else

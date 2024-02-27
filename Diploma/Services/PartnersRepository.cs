@@ -1,37 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataBase.Data;
 using DataBase.Models;
-
+using Diploma.Extensions;
+using DataBase.SupportingClasses;
 namespace Diploma.Services;
 
 public class PartnersRepository(ApplicationContext context) : IPartnersRepository
 {
     public async Task<IEnumerable<Partner>> GetPartnersAsync() =>
-        await context.Partners
-        .AsNoTracking()
-        .Include(p => p.PartnerType)
+        await GetPartners()
+        .ToListAsync();
+    public async Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId) => 
+        await GetPartners(partnerTypeId, directionId)
         .ToListAsync();
 
-
-    public async Task<Partner> GetPartnerByIdAsync(int id)
-    {
-        var partner = await context.Partners
-            .AsNoTracking()
-            .Include(p=> p.PartnerType)
-            .Include(p=> p.Directions)
-            .FirstOrDefaultAsync(partner => partner.Id == id) 
+    private IQueryable<Partner> GetPartners(int? partnerTypeId, int? directionId) => GetPartnersWithPartnerTypesAndDirections()
+        .FilterByType(partnerTypeId)
+        .FilterByDirection(directionId);
+    private IQueryable<Partner> GetPartners() => context.Partners.AsNoTracking();
+    private IQueryable<Partner> GetPartnersWithPartnerTypesAndDirections() => GetPartners()
+        .Include(p => p.PartnerType)
+        .Include(p => p.Directions);
+    public async Task<Partner> GetPartnerByIdAsync(int id) => await GetPartnersWithPartnerTypesAndDirections()
+            .FirstOrDefaultAsync(partner => partner.Id == id)
            ?? throw new KeyNotFoundException("Partner not found");
-        
 
-        return partner;
-    }
 
     public async Task AddPartnerAsync(Partner partner)
     {
-        if (partner.Directions is not null)
-        {
-            AttachDirections(partner.Directions);
-        }
+        AttachDirections(partner.Directions);
+        if (partner.PartnerType is not null) context.PartnerTypes.Attach(partner.PartnerType);
         context.Partners.Add(partner);
         Console.WriteLine(partner);
         await context.SaveChangesAsync();
@@ -46,7 +44,7 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
     {
         var partner = await context.Partners.FirstOrDefaultAsync(p => p.Id == id) ??
             throw new KeyNotFoundException("Partner not found");
-        
+
 
         context.Partners.Remove(partner);
         await context.SaveChangesAsync();
@@ -58,16 +56,12 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
     {
         var existingPartner = await context.Partners
             .Include(p => p.Directions)
-            .FirstAsync(p => p.Id == partner.Id);
-        
-        if (existingPartner is null) throw new KeyNotFoundException($"{partner.Id} не найден");
+            .FirstAsync(p => p.Id == partner.Id) ??
+            throw new KeyNotFoundException($"{partner.Id} не найден");
+
         context.Entry(existingPartner).CurrentValues.SetValues(partner);
-        existingPartner.Directions = partner.Directions;
+        existingPartner.PartnerType = partner.PartnerType;
+        existingPartner.Directions.UpdateByEnumerable(partner.Directions);
         await context.SaveChangesAsync();
     }
-
-    private void RemoveDirections(IEnumerable<Direction> directions)
-    {
-        context.Directions.RemoveRange(directions);
-    }
- }
+}

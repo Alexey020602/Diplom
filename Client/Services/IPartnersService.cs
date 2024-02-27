@@ -4,7 +4,7 @@ namespace Client.Services;
 
 public interface IPartnersService
 {
-    Task<IEnumerable<PartnerForList>> GetPartners();
+    Task<IEnumerable<Partner>> GetPartners(int? partnerTypeId = null);
     Task<Partner> GetPartnerById(int id);
 
     Task DeletePartner(int id);

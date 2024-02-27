@@ -18,9 +18,6 @@ public partial class Form: ComponentBase
 
     private IEnumerable<PartnerType>? partnerTypes;
     private List<Direction>? directions;
-    private string PartnerTypeId => Partner.PartnerTypeId != 0 ? Partner.PartnerTypeId.ToString() : "Выберите опцию";
-
-
     protected async override Task OnParametersSetAsync()
     {
         var directionsTask = LoadDirections();
@@ -45,15 +42,6 @@ public partial class Form: ComponentBase
             Console.WriteLine($"Исключение при загрузке списка направлений: {ex}");
         }
     }
-
-    private void RemoveSelectedDirections()
-    {
-        if (directions is null) return;
-
-        foreach (var direction in Partner.Directions)
-            directions.Remove(direction);
-    }
-
     private async Task LoadPartnerTypes()
     {
         Console.WriteLine("Загрузка списка типов партнеров");
@@ -65,13 +53,6 @@ public partial class Form: ComponentBase
         {
             Console.WriteLine($"Исключение при загрузке списка типов партнеров: {ex}");
         }
-    }
-
-    private void OnPartnerTypeSelected(string id)
-    {
-        Console.WriteLine($"Выбран тип партнера {id}");
-        var partnerTypeId = int.Parse(id);
-        Partner.PartnerTypeId = partnerTypeId;
     }
 
     private async Task OnValidSubmit()

@@ -48,16 +48,16 @@ public class Partner
     /// </summary>
     [StringLength(100)]
     public string? City { get; set; }
-    public int PartnerTypeId { get; set; }
+    //public int PartnerTypeId { get; set; }
     /// <summary>
     /// Тип партнера
     /// </summary>
-    public PartnerType? PartnerType { get; set; } = null!;
+    [Required] public PartnerType? PartnerType { get; set; } = null!;
     [JsonIgnore]
-    public IEnumerable<PartnerInAgreement> PartnersInAgreement { get; set; } = new List<PartnerInAgreement>();
+    public IEnumerable<PartnerInAgreement> PartnersInAgreement { get; set; } = [];
     [JsonIgnore]
-    public IEnumerable<Interaction> Interactions { get; set; } = new List<Interaction>();
-    public List<Direction> Directions { get; set; } = [];
+    public IEnumerable<Interaction> Interactions { get; set; } = [];
+    [MinLength(1)] public List<Direction> Directions { get; set; } = [];
 
     public override string ToString() =>
         $"""
@@ -78,9 +78,9 @@ public class Partner
         return ShortName.Contains(shortNameSubstring);
     }
 
-    public bool HasDirection(Direction direction) => Directions.Contains(direction);
+    public bool HasDirection(int directionId) => Directions.Any(direction => direction.Id == directionId);
 
-    public bool HasType(PartnerType partnerType) => PartnerTypeId == partnerType.Id;
+    public bool HasType(int partnerTypeId) => PartnerType?.Id == partnerTypeId;
 }
 
 /// <summary>
@@ -104,7 +104,7 @@ public class PartnerType
     ///Список партнеров соответсвующего типа
     /// </summary>
     [JsonIgnore]
-    public ICollection<Partner> Partners { get; set; } = new List<Partner>();
+    public ICollection<Partner> Partners { get; set; } = [];
 
     public override string ToString()
     {

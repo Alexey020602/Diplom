@@ -11,17 +11,27 @@
 {
     <EditForm class="form" Model=@Partner OnValidSubmit="@OnValidSubmit">
         <DataAnnotationsValidator />
-            <InputWithFloatTitle Title="Краткое название" @bind-Value=@Partner.ShortName/>
-            <ValidationMessage For="@( () => Partner.ShortName )" />
-            <InputWithFloatTitle Title="Полное название" @bind-Value=@Partner.FullName/>
+        <InputWithFloatTitle Title="Краткое название" @bind-Value=@Partner.ShortName />
+        <ValidationMessage For="@( () => Partner.ShortName )" />
+        <InputWithFloatTitle Title="Полное название" @bind-Value=@Partner.FullName />
 
-            <InputWithFloatTitle Title="Адрес" @bind-Value=@Partner.Address/>
+        <InputWithFloatTitle Title="Адрес" @bind-Value=@Partner.Address />
         <div>
             <p>Контактные данные</p>
             <InputTextArea @bind-Value="Partner.ContactData" />
         </div>
-            <InputWithFloatTitle Title="Город" @bind-Value=@Partner.City/>
+        <InputWithFloatTitle Title="Город" @bind-Value=@Partner.City />
         <div>
+            <PartnerTypesSelect @bind-PartnerType=@Partner.PartnerType/>
+            @if(partnerTypes != null)
+            {
+                <SelectInList 
+                    Items=@partnerTypes
+                    GetStringFromItem=@(partnerType => partnerType.Id.ToString()) 
+                    @bind-SelectedItem=@Partner.PartnerType/>
+            }
+        </div>
+@*         <div>
             @if (partnerTypes != null)
             {
                 <InputSelect @bind-Value:get="@PartnerTypeId" @bind-Value:set="@OnPartnerTypeSelected">
@@ -34,11 +44,12 @@
                 </InputSelect>
                 <ValidationMessage For="@( () => Partner.PartnerType )" />
             }
-        </div>
+        </div> *@
         <div>
             @if (directions != null && Partner.Directions != null)
             {
                 <MultipleSelect NoSelected=@directions Selected=@Partner.Directions />
+                <ValidationMessage For=@( () => Partner.Directions) />
             }
             else
             {
@@ -48,8 +59,8 @@
             }
         </div>
         <div>
-            <input class="oval-button orange-fill" type="button" onclick="history.back()"  value="Отмена"/> 
-            <input class="oval-button blue-fill" type="submit" value="Сохранить"/>
+            <input class="oval-button orange-fill" type="button" onclick="history.back()" value="Отмена" />
+            <input class="oval-button blue-fill" type="submit" value="Сохранить" />
         </div>
         <div>
             @if (Partner.Directions != null)
@@ -66,7 +77,3 @@
         </div>
     </EditForm>
 }
-
-@code {
-
-                }

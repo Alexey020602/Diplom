@@ -89,3 +89,8 @@
         background-color: #C36A00;
         border-color: #C36A00;
     }
+
+.title {
+    font-size: small;
+    color: darkgray;
+}
