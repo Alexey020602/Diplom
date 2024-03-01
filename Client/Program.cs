@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Client;
 using Client.Services;
+using Refit;
+using System.Net.Http;
+using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -22,6 +25,7 @@ builder.Services.AddRefitClient<IPartnerTypesService>()
 builder.Services.AddTransient<IDirectionsService, DirectionsService>();
 
 builder.RootComponents.Add<RoutingComponent>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var app = builder.Build();
 Console.WriteLine("App run");
