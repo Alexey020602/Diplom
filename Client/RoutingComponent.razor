@@ -1,4 +1,5 @@
 ﻿@using Shared
+@rendermode RenderMode.InteractiveAuto
 <Router AppAssembly="@typeof(Program).Assembly" >
     <Found Context="routeData">
         <RouteView RouteData = "@routeData" DefaultLayout="@typeof(MainLayout)" />

@@ -1,5 +1,3 @@
 ﻿namespace SharedModel;
 
-public record PartnerForList(int id, string name)
-{
-}
+public record PartnerForList(int id, string name);

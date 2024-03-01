@@ -15,7 +15,6 @@ builder.Services.AddSwaggerGen(o =>
 
 
 builder.Services.AddCors();
-
 var app = builder.Build();
 app.UseStaticFiles();
 app.UseBlazorFrameworkFiles();
@@ -32,11 +31,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
-//app.MapControllerRoute(
-//    name: "lists",
-//    pattern: "{controller=Partners}/{action}"
-//    );
-
 app.MapFallbackToFile("index.html");
 app.Run();

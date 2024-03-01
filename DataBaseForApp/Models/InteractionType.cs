@@ -7,9 +7,7 @@ namespace DataBase.Models;
 public class InteractionType
 {
     public int Id { get; set; }
-    
-    [MaxLength(100)]
-    public string Name { get; set; }
-    [JsonIgnore]
-    public ICollection<Interaction> Interactions { get; set; } = null!;
+    [MaxLength(100)] public string Name { get; set; } = string.Empty;
+    [JsonIgnore] public ICollection<Interaction> Interactions { get; set; } = [];
+    public override string ToString() => $"{Name}";
 }

@@ -1,25 +1,16 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Client;
 using Client.Services;
+using Refit;
+using System.Net.Http;
+using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-Console.WriteLine("Begin");
-var baseAddress = builder.HostEnvironment.BaseAddress + "api/";
-Console.WriteLine(baseAddress);
-builder.Services.AddScoped(sp =>
-new HttpClient
-{
-    BaseAddress=new Uri(baseAddress)
-});
+var startup = new Startup(builder.HostEnvironment.BaseAddress);
+startup.ConfigureServices(builder.Services);
 
-builder.Services.AddTransient<IPartnersService, PartnersService>();
-builder.Services.AddTransient<IPartnerTypesService, PartnerTypesService>();
-builder.Services.AddTransient<IDirectionsService, DirectionsService>();
+builder.RootComponents.Add<RoutingComponent>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.RootComponents.Add<App>("#app");
-
-var app = builder.Build();
-
-Console.WriteLine("App run");
-await app.RunAsync();
+await builder.Build().RunAsync();

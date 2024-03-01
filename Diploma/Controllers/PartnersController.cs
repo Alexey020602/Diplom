@@ -7,28 +7,20 @@ namespace Diploma.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PartnersController : ControllerBase
+public class PartnersController(IPartnersRepository partnersRepository) : ControllerBase
 {
-    //private ApplicationContext _context { get; set; }
-    private IPartnersRepository _partnersRepository;
-
-    public PartnersController(IPartnersRepository partnersRepository)
-    {
-        _partnersRepository = partnersRepository;
-    }
-
     [HttpGet]
-    public async Task<IActionResult> ShowPartners()
+    public async Task<IActionResult> ShowPartners([FromQuery] int? partnerTypeId, [FromQuery] int? directionId)
     {
-        var partners = await _partnersRepository.GetPartnersAsync();
+        var partners = await partnersRepository.GetPartnersAsync(partnerTypeId, directionId);
 
-        return new JsonResult(from p in partners select new PartnerForList(p.Id, p.ShortName));
+        return new JsonResult(partners);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> ShowPartnerById(int id)
     {
-        var partner = await _partnersRepository.GetPartnerByIdAsync(id);
+        var partner = await partnersRepository.GetPartnerByIdAsync(id);
         if (partner == null)
         {
             return NotFound("Нет соответсвующего партнера");
@@ -42,27 +34,21 @@ public class PartnersController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> AddPartner([FromBody] Partner partner)
     {
-        await _partnersRepository.AddPartnerAsync(partner);
+        await partnersRepository.AddPartnerAsync(partner);
         return Ok();
     }
 
     [HttpPost]
     public async Task<IActionResult> UpdatePartner([FromBody] Partner partner)
     {
-        await _partnersRepository.UpdatePartnerAsync(partner);
+        await partnersRepository.UpdatePartnerAsync(partner);
         return Ok();
     }
 
     [HttpDelete("{id}")]
     public async Task DeletePartner(int id)
     {
-        await _partnersRepository.DeletePartnerByIdAsync(id);
+        await partnersRepository.DeletePartnerByIdAsync(id);
     }
-
-    //[HttpDelete]
-    //public async Task DeletePartner(Partner partner)
-    //{
-    //    await _partnersDataManager.DeletePartnerAsync(partner);
-    //}
 }
 

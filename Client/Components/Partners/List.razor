@@ -1,76 +1,51 @@
-﻿@using Microsoft.AspNetCore.Components.Web;
-@using System.Net.Http.Json;
+﻿@using Microsoft.AspNetCore.Components.Forms;
+@using Client.Shared;
 @using DataBase.Models;
-@using Client.Services;
-@using SharedModel;
 
 @page "/partners"
 
-@inject IPartnersService PartnersService
-@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
-
 <PageTitle>Патнеры университета</PageTitle>
 <div>
-    @if (partners is not null)
-    {
-        <div class="patrners-list">
-            <ul>
-                @foreach (var partner in partners)
-                {
-                    <li>
-                        <NavLink href="@($"partners/{partner.id}")">
-                            @partner.name
-                        </NavLink>
-                    </li>
-                }
-            </ul>
-        </div>
-    }
-    else
-    {
+    <div style="float:left; width: 150px;">
+        <PartnerTypesSelect @bind-PartnerType:get=@PartnerType @bind-PartnerType:set=@SelectPartnerType />
+        <button onclick=@ResetSelectedPartnerType>Сбросить</button>
+    </div>
+    <div style="margin-left: 150px;">
+        @Filter
         <div>
-            @message
+            <NavLink class="oval-button blue-fill" href="partners/create">
+                Добавить
+            </NavLink>
         </div>
-    }
-    <div>
-        <NavLink href="partners/create">
-            Добавить
-        </NavLink>
+        @if (ShowPartners)
+        {
+            @PartnersList
+        }
+        else
+        {
+            @NullPartners
+        }
+
     </div>
 </div>
 
-@*<button @onclick = "LoadPartners">Присоединить</button>*@
-
 @code {
-    // private string PartnerListClass => SelectedPartner != null ? "sidebar" : "patrners-list";
+    private RenderFragment Filter =>@<div>
+        <InputText @bind-Value=@ShortNameInput />
+        <button style="display:inline-block" onclick=@SetFilterField class="oval-button blue-outline">Поиск</button>
+        <button style="display:inline-block" onclick=@ClearFilterField class="oval-button orange-outline">Очистить</button>
+    </div>;
 
-    IEnumerable<PartnerForList> partners { get; set; } = null!;
+    private RenderFragment NullPartners => @<div>
+        @message
+        <button class="oval-button blue-fill" onclick=@LoadPartners>Загрузить</button>
+    </div>;
 
-    // Partner? SelectedPartner { get; set; } = null;
+    private RenderFragment PartnersList => @<BaseList List=@ShowedPartners>
+        <RowFragment Context="partner">
+            @PartnerLink(partner)
+        </RowFragment>
+    </BaseList>;
 
-    string message = "Загрузка...";
-
-    async Task LoadPartners()
-    {
-        Console.WriteLine("Начата загрузка списка партнеров");
-        try
-        {
-            partners = await PartnersService.GetPartners();
-        }
-        catch (Exception ex)
-        {
-            message = $"Поймали исключение на списке партнеров: {ex}";
-        }
-    }
-
-    void OpenPartnerDetails(Partner partner)
-    {
-        NavigationManager.NavigateTo("/person/" + partner.Id.ToString());
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        Console.WriteLine("On init");
-        await LoadPartners();
-    }
+    private RenderFragment PartnerLink(Partner partner) => @<NavLink href="@($"partners/{partner.Id}")">@partner.ShortName</NavLink>;
 }

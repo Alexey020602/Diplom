@@ -44,7 +44,7 @@ public class ApplicationContext: DbContext
     {
         optionsBuilder.UseNpgsql(
             "Host=localhost;Port=5432;Database=Diploma;Username=postgres;Password=11111111")
-            //.LogTo(Console.WriteLine)
+            .LogTo(Console.WriteLine)
             ;
     }
 

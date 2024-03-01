@@ -1,0 +1,13 @@
+﻿<button onclick=@OnClickButton>@Title</button>
+
+@code {
+    // [Inject]
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    private void OnClickButton() 
+    {
+
+    }
+}

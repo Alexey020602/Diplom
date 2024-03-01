@@ -8,5 +8,6 @@ public interface IPartnersRepository
     Task<Partner> DeletePartnerByIdAsync(int id);
     Task UpdatePartnerAsync(Partner partner);
     Task<IEnumerable<Partner>> GetPartnersAsync();
+    Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId);
     Task<Partner> GetPartnerByIdAsync(int id);
 }

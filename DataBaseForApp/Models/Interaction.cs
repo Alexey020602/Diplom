@@ -20,4 +20,6 @@ public class Interaction
     public DateTime EndingDateTime { get; set; }
     [JsonIgnore]
     public ICollection<Direction> Directions { get; set; } = null!;
+
+    public override string ToString() => $"{ContactCode} типа {InteractionType} от {SigningDateTime}, {BeginigDateTime} - {EndingDateTime}";
 }

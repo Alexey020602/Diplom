@@ -1,37 +1,79 @@
 ﻿@using DataBase.Models
 @using Client.Services;
+@using Client.Shared;
 
 @page "/partners/{id:int}"
 
-@inject IPartnersService PartnersService
-
-<NavLink href="partners">
-    Назад
-</NavLink>
-
-@if(partner != null)
-{
-    <h3>@partner.ShortName</h3>
-    <h4>@partner.FullName</h4>
-}
-else
-{
-    <p>Загрузка...</p>
-}
-
+<div>
     <div>
-        <NavLink href=@($"partners/{Id}/edit")>
+        <NavLink class="oval-button blue-fill" style="display: inline-block" href="partners">
+            Назад
+        </NavLink>
+        <NavLink class="oval-button blue-outline" style="display: inline-block" href=@($"partners/{Id}/edit")>
             Редактировать
         </NavLink>
     </div>
 
+    @if (partner != null)
+    {
+        <div>
+            <h3>@partner.ShortName</h3>
+            <h4>@partner.FullName</h4>
+
+            @if (partner.PartnerType != null)
+            {
+                <TextWithTitle Title="Тип партнера" Text=@partner.PartnerType.ToString() />
+            }
+
+            @if (partner.ContactData != null)
+            {
+                <TextWithTitle Title="Контактные данные" Text=@partner.ContactData />
+            }
+
+            @if (partner.Address != null)
+            {
+                <TextWithTitle Title="Адрес" Text=@partner.Address />
+            }
+
+            @if (partner.City != null)
+            {
+                <TextWithTitle Title="Город" Text=@partner.City />
+            }
+
+            @if (partner.Site != null)
+            {
+                <TextWithTitle Title="Сайт" Text=@partner.Site />
+            }
+            <ListWithTitle Title="Направления" Items=@partner.Directions/>
+@*             <div>
+                <p>Направления</p>
+                @foreach (var direction in partner.Directions)
+                {
+                    <p>@direction.Name</p>
+                }
+            </div> *@
+        </div>
+    }
+    else
+    {
+        <p>Загрузка...</p>
+    }
+
+</div>
+
 
 
 @code {
+    [Inject]
+    private IPartnersService PartnersService { get; set; } = default!;
     [Parameter]
     public int Id { get; set; }
 
     private Partner? partner;
+
+    // private string PartnerTypeName => partner?.PartnerType?.Name ?? "Тип партнера отсутствует";
+    // private string ContactData => partner?.ContactData ?? "Контактные данные отсутствуют";
+    // private string Address => partner?.Address ?? "Адрес отсутствует";
 
     protected async override Task OnParametersSetAsync()
     {
@@ -40,7 +82,7 @@ else
             Console.WriteLine($"{Id}");
             partner = await PartnersService.GetPartnerById(Id);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex);
         }

@@ -1,16 +1,21 @@
 ﻿@inherits LayoutComponentBase
+
 @using Microsoft.AspNetCore.Components.Routing
-<head>
-    <HeadOutlet/>
-</head>
+
+@rendermode RenderMode.InteractiveWebAssembly
+
 <header class="myHeader">
     <NavLink href="partners">Партнеры</NavLink>
     <NavLink href="divisions">Подразделения</NavLink>
     <NavLink>Соглашения</NavLink>
     <NavLink>Взаимодействия</NavLink>
+    <NavLink href="swagger/index.html">Обзор API</NavLink>
 </header>
 <div>
-    <div>
+    <div class="center">
         @Body
     </div>
 </div>
+<footer style="background-color:#E7E7E7">
+    @* Footer страницы *@
+</footer>

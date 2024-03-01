@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+<div class="float">
+    <InputText @bind-Value:get=@Value @bind-Value:set=@ValueChanged/>
+    <label>@Title</label>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+}
