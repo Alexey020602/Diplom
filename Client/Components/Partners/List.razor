@@ -7,7 +7,8 @@
 <PageTitle>Патнеры университета</PageTitle>
 <div>
     <div style="float:left; width: 150px;">
-        <PartnerTypesSelect @bind-PartnerType:get=@PartnerType @bind-PartnerType:set=@SelectPartnerType/>
+        <PartnerTypesSelect @bind-PartnerType:get=@PartnerType @bind-PartnerType:set=@SelectPartnerType />
+        <button onclick=@ResetSelectedPartnerType>Сбросить</button>
     </div>
     <div style="margin-left: 150px;">
         @Filter
@@ -35,7 +36,10 @@
         <button style="display:inline-block" onclick=@ClearFilterField class="oval-button orange-outline">Очистить</button>
     </div>;
 
-    private RenderFragment NullPartners => @<div>@message</div>;
+    private RenderFragment NullPartners => @<div>
+        @message
+        <button class="oval-button blue-fill" onclick=@LoadPartners>Загрузить</button>
+    </div>;
 
     private RenderFragment PartnersList => @<BaseList List=@ShowedPartners>
         <RowFragment Context="partner">

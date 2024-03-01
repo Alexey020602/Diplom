@@ -52,4 +52,10 @@ public partial class List
         PartnerType = partnerType;
         return LoadPartners();
     }
+
+    private Task ResetSelectedPartnerType()
+    {
+        PartnerType = null;
+        return LoadPartners();
+    }
 }
