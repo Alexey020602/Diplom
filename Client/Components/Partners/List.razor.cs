@@ -38,11 +38,12 @@ public partial class List
         }
         catch (Exception ex)
         {
-            message = $"Поймали исключение на списке партнеров: {ex}";
+            message = $"Поймали исключение на списке партнеров:\n{ex}";
         }
     }
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("Создан список партнеров");
         message = "Загрузка...";
         await LoadPartners();
     }

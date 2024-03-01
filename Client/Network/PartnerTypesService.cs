@@ -1,14 +1,15 @@
-﻿using DataBase.Models;
+﻿using Client.Services;
+using DataBase.Models;
 using System.Net.Http.Json;
 
-namespace Client.Services;
+namespace Client.Network;
 
-public class PartnerTypesService(HttpClient httpClient): IPartnerTypesService
+public class PartnerTypesService(HttpClient httpClient) : IPartnerTypesService
 {
     public async Task AddPartnerType(PartnerType partnerType) => await httpClient.PutAsJsonAsync("partnerTypes", partnerType);
-    
+
     public async Task DeletePartnerType(int id) => await httpClient.DeleteAsync($"partnerTypes/{id}");
-    
+
     public async Task<PartnerType> GetPartnerTypeAsync(int id)
     {
         var partner = await httpClient.GetFromJsonAsync<PartnerType>($"partnerTypes/{id}");

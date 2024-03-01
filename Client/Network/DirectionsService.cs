@@ -1,9 +1,10 @@
-﻿using DataBase.Models;
+﻿using Client.Services;
+using DataBase.Models;
 using System.Net.Http.Json;
 
-namespace Client.Services;
+namespace Client.Network;
 
-public class DirectionsService(HttpClient httpClient): IDirectionsService
+public class DirectionsService(HttpClient httpClient) : IDirectionsService
 {
     public async Task<IEnumerable<Direction>> GetDirections()
     {

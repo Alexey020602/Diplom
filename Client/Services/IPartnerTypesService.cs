@@ -6,14 +6,14 @@ namespace Client.Services;
 
 public interface IPartnerTypesService
 {
-    [Get("/partnerTypes")]
+    [Get("")]
     Task<IEnumerable<PartnerType>> GetPartnerTypesAsync();
-    [Get("/partnerTypes/{id}")]
+    [Get("/{id}")]
     Task<PartnerType> GetPartnerTypeAsync(int id);
-    [Post("/partnerTypes")]
+    [Post("")]
     Task UpdatePartnerType([Body] PartnerType partnerType);
-    [Put("/partnerTypes")]
+    [Put("")]
     Task AddPartnerType([Body] PartnerType partnerType);
-    [Delete("/partnerTypes/{id}")]
+    [Delete("/{id}")]
     Task DeletePartnerType(int id);
 }
