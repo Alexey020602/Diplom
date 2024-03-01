@@ -5,16 +5,20 @@ using Client.Services;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 Console.WriteLine("Begin");
-var baseAddress = builder.HostEnvironment.BaseAddress + "api/";
+var baseAddress = new Uri(builder.HostEnvironment.BaseAddress + "api");
+var otherBaseAddress = new Uri(baseAddress, "/api/");
 Console.WriteLine(baseAddress);
+Console.WriteLine(otherBaseAddress);
 builder.Services.AddScoped(sp =>
 new HttpClient
 {
-    BaseAddress=new Uri(baseAddress)
+    BaseAddress = otherBaseAddress
 });
 
 builder.Services.AddTransient<IPartnersService, PartnersService>();
-builder.Services.AddTransient<IPartnerTypesService, PartnerTypesService>();
+//builder.Services.AddTransient<IPartnerTypesService, PartnerTypesService>();
+builder.Services.AddRefitClient<IPartnerTypesService>()
+.ConfigureHttpClient(client => client.BaseAddress = baseAddress);
 builder.Services.AddTransient<IDirectionsService, DirectionsService>();
 
 builder.RootComponents.Add<RoutingComponent>("#app");
