@@ -1,0 +1,27 @@
+﻿@using Client.Shared
+@using SharedModel
+@page "/divisions"
+
+<PageTitle>Подразделения</PageTitle>
+@DivisionsView
+@code {
+    private RenderFragment DivisionsList =>@<BaseList List=@ShowedDivisions>
+        <RowFragment Context="division">
+            @DivisionLink(division)
+        </RowFragment>
+    </BaseList>
+    ;
+
+    private RenderFragment DivisionsView =>@<div>
+    @if(IsShowList) 
+    {
+        @DivisionsList
+    }
+    else
+    {
+        @Message
+    }
+    </div>;
+
+    private RenderFragment DivisionLink(DivisionShort division) =>@<NavLink href="@($"divisions/{division.Id}")">@division.Name</NavLink>;
+}
