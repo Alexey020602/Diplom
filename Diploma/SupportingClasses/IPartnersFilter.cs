@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataBase.SupportingClasses;
 
-public interface PartnersFilter
+public interface IPartnersFilter
 {
     public IQueryable<Partner> Filter(IQueryable<Partner> partners);
 }
 
-public abstract class PartnersFilterDecorator(PartnersFilter partnersFilter): PartnersFilter
+public abstract class PartnersFilterDecorator(IPartnersFilter partnersFilter): IPartnersFilter
 {
     public IQueryable<Partner> Filter(IQueryable<Partner> partners) => FilterPartners(partnersFilter.Filter(partners));
     
