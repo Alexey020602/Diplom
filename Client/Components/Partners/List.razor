@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms;
-@using Client.Shared;
+@using Client.Shared.Select;
+@using Client.Shared.List;
+@using Client.Shared.Text;
 @using SharedModel;
 @rendermode RenderMode.InteractiveWebAssembly
 @page "/"
@@ -39,11 +41,11 @@
         <button class="oval-button blue-fill" onclick=@LoadPartners>Загрузить</button>
     </div>;
 
-    private RenderFragment PartnersList => @<BaseList List=@ShowedPartners>
+    private RenderFragment PartnersList => @<StyledList List=@ShowedPartners>
         <RowFragment Context="partner">
             @PartnerLink(partner)
         </RowFragment>
-    </BaseList>;
+    </StyledList>;
 
     private RenderFragment PartnerLink(PartnerShort partner) => @<NavLink href="@($"partners/{partner.Id}")">@partner.Name</NavLink>;
 }

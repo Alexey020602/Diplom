@@ -1,6 +1,7 @@
 ﻿@using DataBase.Models
 @using Client.Services;
-@using Client.Shared;
+@using Client.Shared.Text;
+@using Client.Shared.List;
 
 @page "/partners/{id:int}"
 
@@ -45,13 +46,6 @@
                 <TextWithTitle Title="Сайт" Text=@partner.Site />
             }
             <ListWithTitle Title="Направления" Items=@partner.Directions/>
-@*             <div>
-                <p>Направления</p>
-                @foreach (var direction in partner.Directions)
-                {
-                    <p>@direction.Name</p>
-                }
-            </div> *@
         </div>
     }
     else
@@ -70,10 +64,6 @@
     public int Id { get; set; }
 
     private Partner? partner;
-
-    // private string PartnerTypeName => partner?.PartnerType?.Name ?? "Тип партнера отсутствует";
-    // private string ContactData => partner?.ContactData ?? "Контактные данные отсутствуют";
-    // private string Address => partner?.Address ?? "Адрес отсутствует";
 
     protected async override Task OnParametersSetAsync()
     {

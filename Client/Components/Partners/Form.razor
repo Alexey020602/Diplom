@@ -2,7 +2,8 @@
 @using Microsoft.AspNetCore.Components.Forms;
 @using Microsoft.AspNetCore.Components.Web;
 @using Client.Services;
-@using Client.Shared;
+@using Client.Shared.Text;
+@using Client.Shared.Select;
 @rendermode RenderMode.InteractiveWebAssembly
 @* @inject IPartnerTypesService PartnerTypesService;
 @inject IDirectionsService DirectionsService; *@
@@ -22,7 +23,7 @@
         </div>
         <InputWithFloatTitle Title="Город" @bind-Value=@Partner.City />
         <div>
-            <PartnerTypesSelect @bind-PartnerType=@Partner.PartnerType/>
+            <UniversalCustomSelect TItem=@PartnerType @bind-SelectedItem=@Partner.PartnerType/>
             @if(partnerTypes != null)
             {
                 <SelectInList 
