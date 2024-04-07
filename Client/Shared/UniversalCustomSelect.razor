@@ -1,0 +1,34 @@
+﻿@using Client.Services
+
+@typeparam TItem where TItem : class
+
+@inject IReadApi<TItem> service
+
+<SelectInList TItem=TItem
+              Items=@items
+              GetStringFromItem=@GetStringIdentifier
+              @bind-SelectedItem:get=@SelectedItem
+              @bind-SelectedItem:set=@SelectedItemChanged />
+
+@code {
+    private List<TItem> items = [];
+    [Parameter] public TItem? SelectedItem { get; set; }
+    [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set; }
+    [Parameter] public Func<TItem, string> GetStringIdentifier { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPartnerTypes();
+    }
+    private async Task LoadPartnerTypes()
+    {
+        try
+        {
+            items = await service.ReadAll();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при загрузке списка типов партнера {ex}");
+        }
+    }
+}

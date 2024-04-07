@@ -1,12 +1,12 @@
 ﻿@using DataBase.Models;
 @using Services;
 
-@inject IPartnerTypesService partnerTypesService
-
+@inject IReadApi<PartnerType> partnerTypesService
+<UniversalCustomSelect TItem=@DataBase.Models.PartnerType @bind-SelectedItem:get=@PartnerType @bind-SelectedItem:set=@PartnerTypeChanged GetStringIdentifier=@PartnerTypeStringIdentifier/>
 <SelectInList 
     TItem=@DataBase.Models.PartnerType
     Items=@PartnerTypes
-    GetStringFromItem=@(type => type.ToString()) 
+    GetStringFromItem=@PartnerTypeStringIdentifier
     @bind-SelectedItem:get=@PartnerType
     @bind-SelectedItem:set=@PartnerTypeChanged
     />
@@ -30,4 +30,6 @@
             Console.WriteLine($"Ошибка при загрузке списка типов партнера {ex}");
         }
     }
+
+    private string PartnerTypeStringIdentifier(PartnerType partnerType) => partnerType.Id.ToString();
 }

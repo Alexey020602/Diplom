@@ -14,7 +14,6 @@
     [Parameter] public TItem? SelectedItem { get; set; }
     [Parameter] public Func<TItem, string> GetStringFromItem { get; set; }
     [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set;}
-    // [Parameter] public Func<string, TItem?> GetItemFromString { get; set; }
     private string? ItemString
     {
         get
