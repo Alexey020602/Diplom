@@ -1,27 +1,16 @@
-﻿@using Client.Shared
+﻿@using Client.Shared.List;
 @using SharedModel
+
+@inherits SearchableStyledList<DivisionShort>
+
 @page "/divisions"
 
 <PageTitle>Подразделения</PageTitle>
-@DivisionsView
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@* <SearchableStyledList ListDelegate=@this /> *@
 @code {
-    private RenderFragment DivisionsList =>@<BaseList List=@ShowedDivisions>
-        <RowFragment Context="division">
-            @DivisionLink(division)
-        </RowFragment>
-    </BaseList>
-    ;
-
-    private RenderFragment DivisionsView =>@<div>
-    @if(IsShowList) 
-    {
-        @DivisionsList
-    }
-    else
-    {
-        @Message
-    }
-    </div>;
-
-    private RenderFragment DivisionLink(DivisionShort division) =>@<NavLink href="@($"divisions/{division.Id}")">@division.Name</NavLink>;
+    protected override RenderFragment Filters => @<div></div>;
 }

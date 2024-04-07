@@ -5,4 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SharedModel;
-public record DivisionShort(int Id, string Name);
+public record DivisionShort(int Id, string Name)
+{
+    public override string ToString() => Name;
+}

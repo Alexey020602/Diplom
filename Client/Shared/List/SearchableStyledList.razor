@@ -1,14 +1,17 @@
 ﻿@using Client.Shared.Text;
 @typeparam TItem
 
-<div>
-    <div style="float:lft; width:150px">
-        @ListDelegate.Filters
-    </div>;
-    <div style="margin-left: 150px;">
-        @Search
-        @LinkToCreate
-        @if (IsShowList)
+@Body
+
+@code {
+    protected RenderFragment Body =>@<div>
+        <div style="float:left; width:150px">
+            @Filters
+        </div>
+        <div style="margin-left: 150px;">
+            @Search
+            @LinkToCreate
+            @if (IsShowList)
         {
             @List
         }
@@ -16,51 +19,24 @@
         {
             @EmptyListButton
         }
-    </div>
-</div>
+        </div>
+    </div>;
 
-@code {
-    [Parameter]
-    public ISearchableListDelegate<TItem> ListDelegate { get; set; } = null!;
-    private List<TItem> items = [];
-    private string namesFilter = string.Empty;
-    private string message = string.Empty;
-    private const string EmptyListMessage = "Список подразделений пуст";
-    private const string LoadMessage = "Загрузка...";
-    private bool IsShowList => items.Any();
-
-    protected override Task OnInitializedAsync() => Load();
-
-    private async Task Load()
-    {
-        items = [];
-        message = LoadMessage;
-        try
-        {
-            items = await ListDelegate.LoadItems();
-            message = EmptyListMessage;
-        }
-        catch (Exception ex)
-        {
-            message = ex.Message;
-        }
-    }
-
-    private RenderFragment LinkToCreate =>@<NavLink class="oval-button blue-fill" href=@ListDelegate.PathForCreate>
+    private RenderFragment LinkToCreate =>@<NavLink class="oval-button blue-fill" href=@CreateHref>
         Добавить
     </NavLink>;
 
-    private RenderFragment List => @<StyledList List=@items>
+    private RenderFragment List => @<StyledList List=@ShowedItems>
         <RowFragment Context="item">
             @Row(item)
         </RowFragment>
     </StyledList>
     ;
-    private RenderFragment Row(TItem item) => @<NavLink href=@ListDelegate.Row(item)>@item</NavLink>;
+    private RenderFragment Row(TItem item) => @<NavLink href=@RowHref(item)>@item</NavLink>;
 
     private RenderFragment EmptyListButton =>@<div>
         @message
-        <button class="oval-button blue-fill" onclick=@Load>Загрузить</button>
+        <button class="oval-button blue-fill" onclick=@LoadItems>Загрузить</button>
     </div>;
 
     private RenderFragment Search =>@<SearchText @bind-Input=@namesFilter />;

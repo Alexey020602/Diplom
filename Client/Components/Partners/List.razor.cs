@@ -2,61 +2,48 @@
 using DataBase.Models;
 using Client.Services;
 using SharedModel;
+using Client.Shared.List;
 
 namespace Client.Components.Partners;
 
-public partial class List
+public partial class List: SearchableStyledList<PartnerShort>
 {
     [Inject] private IPartnersService PartnersService { get; set; } = default!;
-    private IEnumerable<PartnerShort>? Partners { get; set; }
     private PartnerType? PartnerType { get; set; }
-    private IEnumerable<PartnerShort> ShowedPartners => from partner in Partners ?? []
-                                                          where partner.Name.Contains(ShortNameFilter)
-                                                          orderby partner.Name
-                                                          select partner;
-        //Partners?.Where(partner => partner.name.Contains(ShortNameFilter)) ?? [];
-    private string message = string.Empty;
-    //private string ShortNameInput { get; set; } = string.Empty;
-    private string ShortNameFilter { get; set; } = string.Empty;
-    private bool ShowPartners => Partners != null && Partners.Any();
-    //private void ClearFilterField()
+    protected override string CreateHref => "partners/create";
+    protected override string RowHref(PartnerShort partner) => $"partners/{partner.Id}";
+    //private async Task LoadPartners()
     //{
-    //    ShortNameFilter = string.Empty;
+    //    Partners = [];
+    //    Console.WriteLine("Загрузка партнеров");
+    //    try
+    //    {
+    //        Partners = await Load();
+    //        message = string.Empty;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        message = $"Поймали исключение на списке партнеров:\n{ex}";
+    //    }
     //}
-    //private void SetFilterField()
+
+    protected override Task<List<PartnerShort>> Load() => PartnersService.ReadAll(PartnerType?.Id);
+    //protected override async Task OnInitializedAsync()
     //{
-    //    ShortNameFilter = ShortNameInput;
+    //    Console.WriteLine("Создан список партнеров");
+    //    message = "Загрузка...";
+    //    await LoadPartners();
     //}
-    private async Task LoadPartners()
-    {
-        Partners = [];
-        Console.WriteLine("Загрузка партнеров");
-        try
-        {
-            Partners = await PartnersService.ReadAll(PartnerType?.Id);
-            message = string.Empty;
-        }
-        catch (Exception ex)
-        {
-            message = $"Поймали исключение на списке партнеров:\n{ex}";
-        }
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        Console.WriteLine("Создан список партнеров");
-        message = "Загрузка...";
-        await LoadPartners();
-    }
 
     private Task SelectPartnerType(PartnerType? partnerType)
     {
         PartnerType = partnerType;
-        return LoadPartners();
+        return LoadItems();
     }
 
     private Task ResetSelectedPartnerType()
     {
         PartnerType = null;
-        return LoadPartners();
+        return LoadItems();
     }
 }
