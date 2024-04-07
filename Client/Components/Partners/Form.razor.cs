@@ -30,7 +30,7 @@ public partial class Form: ComponentBase
     {
         try
         {
-            var directions = await DirectionsService.GetDirections();
+            var directions = await DirectionsService.ReadAll();
             Console.WriteLine(directions);
             this.directions = directions
                 .Where(direction => !Partner.Directions.Contains(direction))
@@ -47,7 +47,7 @@ public partial class Form: ComponentBase
         Console.WriteLine("Загрузка списка типов партнеров");
         try
         {
-            partnerTypes = await PartnerTypesService.GetPartnerTypesAsync();
+            partnerTypes = await PartnerTypesService.ReadAll();
         }
         catch (Exception ex)
         {

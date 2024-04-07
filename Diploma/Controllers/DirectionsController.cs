@@ -29,17 +29,17 @@ public class DirectionsController(IDirectionsRepository directionsRepository): C
         return Ok();
     }
 
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> AddDirection([FromBody] Direction direction)
     {
         await directionsRepository.AddDirection(direction);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateDirection([FromBody] Direction direction)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateDirection(int id, [FromBody] Direction direction)
     {
-        await directionsRepository.UpdateDirection(direction);
+        await directionsRepository.UpdateDirection(id, direction);
         return Ok();
     }
 }

@@ -3,22 +3,23 @@ using System.Net.Http.Json;
 using System.Collections.Specialized;
 using System;
 using Client.Services;
+using SharedModel;
 
 namespace Client.Network;
 //TODO Сделать обработку кодов и исколючений
 public class PartnersService(HttpClient httpClient) : IPartnersService
 {
     private const string basePath = "partners/";
-    public async Task AddPartner(Partner partner)
+    public async Task Create(Partner partner)
     {
-        var result = await httpClient.PutAsJsonAsync(basePath, partner);
+        var result = await httpClient.PostAsJsonAsync(basePath, partner);
         result.EnsureSuccessStatusCode();
     }
-    private string CreatePathWithId(int id) => $"{basePath}{id}";
+    private static string CreatePathWithId(int id) => $"{basePath}{id}";
 
-    public Task DeletePartner(int id) => httpClient.DeleteAsync(CreatePathWithId(id));
+    public Task Delete(int id) => httpClient.DeleteAsync(CreatePathWithId(id));
 
-    public async Task<Partner> GetPartnerById(int id)
+    public async Task<Partner> ReadOne(int id)
     {
         var response = await httpClient.GetAsync(CreatePathWithId(id));
         var partners = await response.Content.ReadFromJsonAsync<Partner>() ??
@@ -27,13 +28,13 @@ public class PartnersService(HttpClient httpClient) : IPartnersService
         return partners;
     }
 
-    public async Task<IEnumerable<Partner>> GetPartners(int? partnerTypeId)
+    public async Task<List<PartnerShort>> ReadAll(int? partnerTypeId)
     {
         Console.WriteLine("Загрузка спика партнеров");
         Console.WriteLine(httpClient.BaseAddress);
 
         return await httpClient
-        .GetFromJsonAsync<IEnumerable<Partner>>(CreateUriForPartners(partnerTypeId)) ??
+        .GetFromJsonAsync<List<PartnerShort>>(CreateUriForPartners(partnerTypeId)) ??
             throw new Exception("Коллекция null почему-то");
     }
 
@@ -49,9 +50,9 @@ public class PartnersService(HttpClient httpClient) : IPartnersService
 
     }
 
-    public async Task UpdatePartner(Partner partner)
+    public async Task Update(int id, Partner partner)
     {
-        var result = await httpClient.PostAsJsonAsync(basePath, partner);
+        var result = await httpClient.PutAsJsonAsync($"{basePath}{id}", partner);
         result.EnsureSuccessStatusCode();
     }
 }

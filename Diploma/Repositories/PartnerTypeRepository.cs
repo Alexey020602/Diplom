@@ -1,10 +1,11 @@
 ﻿using DataBase.Data;
 using DataBase.Models;
+using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Diploma.Services;
+namespace Diploma.Repositories;
 
-public class PartnerTypeRepository(ApplicationContext context): IPartnerTypesRepository
+public class PartnerTypeRepository(ApplicationContext context) : IPartnerTypesRepository
 {
     public async Task AddPartnerTypeAsync(PartnerType partnerType)
     {
@@ -30,7 +31,7 @@ public class PartnerTypeRepository(ApplicationContext context): IPartnerTypesRep
     public async Task<IEnumerable<PartnerType>> GetAllPartnerTypesAsync() => await context.PartnerTypes.ToListAsync();
 
 
-    public async Task<PartnerType> GetPartnerTypeByIdAsync(int id) 
+    public async Task<PartnerType> GetPartnerTypeByIdAsync(int id)
     {
         var partnerType = await context.PartnerTypes.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -38,9 +39,11 @@ public class PartnerTypeRepository(ApplicationContext context): IPartnerTypesRep
     }
 
 
-    public async Task UpdatePartnerTypeAsync(PartnerType partnerType)
+    public async Task UpdatePartnerTypeAsync(int id, PartnerType partnerType)
     {
-        context.PartnerTypes.Update(partnerType);
+        var existingPartnerType = await context.PartnerTypes.FindAsync(id) ?? 
+            throw new KeyNotFoundException("Не найден тип партнера");
+        context.Entry(existingPartnerType).CurrentValues.SetValues(partnerType);
         await context.SaveChangesAsync();
     }
 }

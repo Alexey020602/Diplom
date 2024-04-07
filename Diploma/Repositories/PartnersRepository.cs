@@ -3,14 +3,16 @@ using DataBase.Data;
 using DataBase.Models;
 using Diploma.Extensions;
 using DataBase.SupportingClasses;
-namespace Diploma.Services;
+using Diploma.Services;
+
+namespace Diploma.Repositories;
 
 public class PartnersRepository(ApplicationContext context) : IPartnersRepository
 {
     public async Task<IEnumerable<Partner>> GetPartnersAsync() =>
         await GetPartners()
         .ToListAsync();
-    public async Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId) => 
+    public async Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId) =>
         await GetPartners(partnerTypeId, directionId)
         .ToListAsync();
 
@@ -52,11 +54,11 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         return partner;
     }
 
-    public async Task UpdatePartnerAsync(Partner partner)
+    public async Task UpdatePartnerAsync(int id, Partner partner)
     {
         var existingPartner = await context.Partners
             .Include(p => p.Directions)
-            .FirstAsync(p => p.Id == partner.Id) ??
+            .FirstAsync(p => p.Id == id) ??
             throw new KeyNotFoundException($"{partner.Id} не найден");
 
         context.Entry(existingPartner).CurrentValues.SetValues(partner);

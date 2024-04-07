@@ -80,7 +80,7 @@
         try
         {
             Console.WriteLine($"{Id}");
-            partner = await PartnersService.GetPartnerById(Id);
+            partner = await PartnersService.ReadOne(Id);
         }
         catch (Exception ex)
         {

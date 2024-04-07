@@ -9,5 +9,5 @@ public interface IPartnerTypesRepository
     Task DeletePartnerTypeByIdAsync(int id);
     Task<IEnumerable<PartnerType>> GetAllPartnerTypesAsync();
     Task<PartnerType> GetPartnerTypeByIdAsync(int id);
-    Task UpdatePartnerTypeAsync(PartnerType partnerType);
+    Task UpdatePartnerTypeAsync(int id, PartnerType partnerType);
 }

@@ -1,22 +1,26 @@
 ﻿using DataBase.Data;
 using DataBase.Models;
+using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Diploma.Services;
+namespace Diploma.Repositories;
 
-public class DirectionsRepository(ApplicationContext context): IDirectionsRepository
+public class DirectionsRepository(ApplicationContext context) : IDirectionsRepository
 {
     public async Task<IEnumerable<Direction>> GetDirections() => await context.Directions.ToListAsync();
-    public async Task<Direction> GetDirection(int  id)
+    public async Task<Direction> GetDirection(int id)
     {
         var direction = await context.Directions.FindAsync(id);
 
         return direction ?? throw new KeyNotFoundException("Не найдено направление");
     }
 
-    public async Task UpdateDirection(Direction direction)
+    public async Task UpdateDirection(int id, Direction direction)
     {
-        context.Directions.Update(direction);
+        var existingDirection = await context.Directions.FindAsync(id) ??
+            throw new KeyNotFoundException("Не найдено направление");
+
+        context.Entry(existingDirection).CurrentValues.SetValues(direction);
         await context.SaveChangesAsync();
     }
 
@@ -30,7 +34,7 @@ public class DirectionsRepository(ApplicationContext context): IDirectionsReposi
     {
         var direction = await context.Directions.FindAsync(id) ??
             throw new KeyNotFoundException("Не найдено направление");
-        
+
         context.Directions.Remove(direction);
         await context.SaveChangesAsync();
     }

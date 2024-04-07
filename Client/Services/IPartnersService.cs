@@ -3,16 +3,8 @@ using Refit;
 using SharedModel;
 namespace Client.Services;
 
-public interface IPartnersService
+public interface IPartnersService: IReadOneApi<Partner, int>, IDeleteApi<int>, IUpdateApi<Partner, int>, ICreateApi<Partner>
 {
     [Get("")]
-    Task<IEnumerable<Partner>> GetPartners(int? partnerTypeId = null);
-    [Get("/{id}")]
-    Task<Partner> GetPartnerById(int id);
-    [Delete("/{id}")]
-    Task DeletePartner(int id);
-    [Put("")]
-    Task AddPartner(Partner partner);
-    [Post("")]
-    Task UpdatePartner(Partner partner);
+    Task<List<PartnerShort>> ReadAll(int? partnerTypeId = null);
 }

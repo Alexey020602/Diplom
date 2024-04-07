@@ -20,13 +20,13 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        partner = await PartnersService.GetPartnerById(Id);
+        partner = await PartnersService.ReadOne(Id);
     }
 
     private async Task UpdatePartner()
     {
         if (partner is null) return;
-        await PartnersService.UpdatePartner(partner);
+        await PartnersService.Update(Id, partner);
         GoToPreviousScreen();
     }
 

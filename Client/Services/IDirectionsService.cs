@@ -5,13 +5,13 @@ namespace Client.Services;
 public interface IDirectionsService
 {
     [Get("")]
-    Task<IEnumerable<Direction>> GetDirections();
+    Task<List<Direction>> ReadAll();
     [Get("/{id}")]
-    Task<Direction> GetDirection(int id);
+    Task<Direction> ReadOne(int id);
     [Delete("/{id}")]
-    Task DeleteDirection(int id);
+    Task Delete(int id);
+    [Put("/{id}")]
+    Task Update(int id, Direction direction);
     [Post("")]
-    Task UpdateDirection(Direction direction);
-    [Put("")]
-    Task AddDirection(Direction direction);
+    Task Create(Direction direction);
 }

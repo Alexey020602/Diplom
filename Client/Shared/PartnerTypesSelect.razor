@@ -23,7 +23,7 @@
     {
         try
         {
-            PartnerTypes = await partnerTypesService.GetPartnerTypesAsync();
+            PartnerTypes = await partnerTypesService.ReadAll();
         }
         catch (Exception ex)
         {

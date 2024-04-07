@@ -1,39 +1,39 @@
 ﻿using Microsoft.AspNetCore.Components;
 using DataBase.Models;
 using Client.Services;
+using SharedModel;
 
 namespace Client.Components.Partners;
 
 public partial class List
 {
     [Inject] private IPartnersService PartnersService { get; set; } = default!;
-    private IEnumerable<Partner>? Partners { get; set; }
+    private IEnumerable<PartnerShort>? Partners { get; set; }
     private PartnerType? PartnerType { get; set; }
-    private IEnumerable<Partner> ShowedPartners => from partner in Partners ?? []
-                                                          where partner.ShortName.Contains(ShortNameFilter)
-                                                          orderby partner.ShortName
+    private IEnumerable<PartnerShort> ShowedPartners => from partner in Partners ?? []
+                                                          where partner.Name.Contains(ShortNameFilter)
+                                                          orderby partner.Name
                                                           select partner;
         //Partners?.Where(partner => partner.name.Contains(ShortNameFilter)) ?? [];
     private string message = string.Empty;
-    private string ShortNameInput { get; set; } = string.Empty;
+    //private string ShortNameInput { get; set; } = string.Empty;
     private string ShortNameFilter { get; set; } = string.Empty;
     private bool ShowPartners => Partners != null && Partners.Any();
-    private void ClearFilterField()
-    {
-        ShortNameInput = string.Empty;
-        ShortNameFilter = string.Empty;
-    }
-    private void SetFilterField()
-    {
-        ShortNameFilter = ShortNameInput;
-    }
+    //private void ClearFilterField()
+    //{
+    //    ShortNameFilter = string.Empty;
+    //}
+    //private void SetFilterField()
+    //{
+    //    ShortNameFilter = ShortNameInput;
+    //}
     private async Task LoadPartners()
     {
         Partners = [];
         Console.WriteLine("Загрузка партнеров");
         try
         {
-            Partners = await PartnersService.GetPartners(PartnerType?.Id);
+            Partners = await PartnersService.ReadAll(PartnerType?.Id);
             message = string.Empty;
         }
         catch (Exception ex)
