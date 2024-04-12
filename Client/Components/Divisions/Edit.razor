@@ -6,7 +6,7 @@
 @page "/divisions/{id:int}/edit"
 
 <PageTitle>Редактирование данных подразделения</PageTitle>
-<Form Division=division OnSubmit=@OnValidSubmit />
+<Form Item=division OnSubmit=@OnValidSubmit/>
 
 @code {
     [Parameter] public int Id { get; set; }

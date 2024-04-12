@@ -12,7 +12,7 @@
 @code {
     [Parameter] public IEnumerable<TItem> Items { get; set; } = [];
     [Parameter] public TItem? SelectedItem { get; set; }
-    [Parameter] public Func<TItem, string> GetStringFromItem { get; set; }
+    [Parameter] public Func<TItem, string> GetStringFromItem { get; set; } = null!;
     [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set;}
     private string? ItemString
     {

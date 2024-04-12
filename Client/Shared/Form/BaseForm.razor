@@ -1,0 +1,7 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+@typeparam TItem where TItem: class
+
+<EditForm class="form" Model=@Item OnValidSubmit=@OnValueSubmit>
+    @Content
+</EditForm>

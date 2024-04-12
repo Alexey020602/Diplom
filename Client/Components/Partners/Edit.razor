@@ -6,17 +6,14 @@
     @* <NavLink class="oval-button orange-fill" href=@PreviousScreenUri>Отмена</NavLink> *@
     @if (partner is not null)
     {
-        <Form Partner="@partner" OnSubmit="@UpdatePartner" />
+        <Form Item=@partner OnSubmit="@UpdatePartner"/>
     }
 </div>
 
 @code {
     [Inject] private IPartnersService PartnersService { get; set; } = default!;
-    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
     [Parameter] public int Id { get; set; }
     private Partner? partner;
-
-    private string PreviousScreenUri => $"/partners/{Id}";
 
     protected override async Task OnParametersSetAsync()
     {
@@ -27,11 +24,5 @@
     {
         if (partner is null) return;
         await PartnersService.Update(Id, partner);
-        GoToPreviousScreen();
-    }
-
-    private void GoToPreviousScreen()
-    {
-        NavigationManager.NavigateTo(PreviousScreenUri);
     }
 }

@@ -4,7 +4,7 @@
 @inject IDivisionsService api
 @page "/divisions/create"
 
-<Form Division=@division OnSubmit=@OnValidSubmit/>
+<Form Item=@division OnSubmit=@OnValidSubmit/>
 
 @code {
     private Division division = new();
