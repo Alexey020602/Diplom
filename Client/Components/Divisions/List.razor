@@ -1,5 +1,7 @@
 ﻿@using Client.Shared.List;
 @using SharedModel
+@using Client.Shared.Select;
+@using DataBase.Models;
 
 @inherits SearchableStyledList<DivisionShort>
 
@@ -12,5 +14,9 @@
 
 @* <SearchableStyledList ListDelegate=@this /> *@
 @code {
-    protected override RenderFragment Filters => @<div></div>;
+    protected override RenderFragment Filters => @<UniversalCustomSelect 
+    TItem=Faculty 
+    @bind-SelectedItem:get=@faculty 
+    @bind-SelectedItem:set=@SelectFaculty
+    GetStringIdentifier=@(faculty => faculty.Id.ToString())/>;
 }

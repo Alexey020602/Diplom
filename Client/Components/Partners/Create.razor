@@ -10,13 +10,7 @@
 @* <Form Partner=@partner OnSubmit="@CreatePartner"/> *@
 
 @code {
-    private Partner partner = new()
-        {
-            Directions = new List<Direction>()
-        };
+    private Partner partner = new();
 
-    private async Task CreatePartner()
-    {
-        await PartnersService.Create(partner);
-    }
+    private Task CreatePartner() => PartnersService.Create(partner);
 }

@@ -2,14 +2,16 @@
 @using Client.Services;
 @using Client.Shared.Text;
 @using Client.Shared.List;
+@using Client.Shared.Buttons
 
 @page "/partners/{id:int}"
 
 <div>
     <div>
-        <NavLink class="oval-button blue-fill" style="display: inline-block" href="partners">
+        <button class="oval-button blue-fill" onclick="history.back()">Назад</button>
+@*         <NavLink class="oval-button blue-fill" style="display: inline-block" href="partners">
             Назад
-        </NavLink>
+        </NavLink> *@
         <NavLink class="oval-button blue-outline" style="display: inline-block" href=@($"partners/{Id}/edit")>
             Редактировать
         </NavLink>

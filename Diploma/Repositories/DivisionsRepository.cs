@@ -23,17 +23,24 @@ public class DivisionsRepository(ApplicationContext context): IDivisionRepositor
 
     public async Task DeleteDivision(int id)
     {
-        var division = await context.Divisions.FindAsync(id) 
+        var division = await context.Divisions
+            .FindAsync(id) 
             ?? throw new KeyNotFoundException("Не найдено подразделение");
         context.Divisions.Remove(division);
         await context.SaveChangesAsync();
     }
 
-    public async Task<Division> GetDivision(int id) => await  context.Divisions.FindAsync(id)
-        ?? throw new KeyNotFoundException("Не найдено подразделение");
+    public Task<Division> GetDivision(int id) => context.Divisions
+            .Include(d => d.Faculty)
+            .Include(d => d.Directions)
+            .FirstAsync(d => d.Id == id);
 
-    public async Task<IEnumerable<Division>> GetDivisions() => await context.Divisions.ToListAsync();
-
+    public async Task<IEnumerable<Division>> GetDivisions(int? facultyId) => await GetDivisionWithFaculty()
+        .FilterByFaculty(facultyId)
+        .ToListAsync();
+    private IQueryable<Division> GetDivisionWithFaculty() =>
+        context.Divisions
+        .Include(d => d.Faculty);
     public async Task UpdateDivision(int id, Division division)
     {
         var existingDivision = await context.Divisions.Include(d => d.Directions).Include(d => d.Faculty).FirstAsync(d => d.Id == id);

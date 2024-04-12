@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Components.Forms;
+@using Microsoft.AspNetCore.Components.Web
+@using Client.Shared.Text
+@using Client.Shared.Select
+@using DataBase.Models;
+
+@if (Division is not null)
+{
+    <EditForm class="form" Model=@Division OnValidSubmit=@OnValidSubmit>
+        <DataAnnotationsValidator />
+        <InputWithFloatTitle Title="Краткое название" @bind-Value=@Division.ShortName />
+        <ValidationMessage For=@( () => Division.ShortName ) />
+        <InputWithFloatTitle Title="Полное название" @bind-Value=@Division.FullName />
+        <InputWithFloatTitle Title="Сайт" @bind-Value=@Division.Site />
+        <div>
+            <p>Контактные данные</p>
+            <InputTextArea @bind-Value=@Division.Contacts />
+        </div>
+        <UniversalCustomSelect TItem=@Faculty @bind-SelectedItem=@Division.Faculty/>
+        <UniversalMultipleSelect TItem=@Direction Selected=@Division.Directions/>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public Division Division { get; set; } = null!;
+    [Parameter] public EventCallback OnSubmit { get; set; }
+    private Task OnValidSubmit() => OnSubmit.InvokeAsync();
+}

@@ -10,4 +10,6 @@ public class Faculty
     public string Name { get; set; } = null!;
     [JsonIgnore]
     public ICollection<Division> Divisions { get; set; } = null!;
+
+    public override string ToString() => Name;
 }

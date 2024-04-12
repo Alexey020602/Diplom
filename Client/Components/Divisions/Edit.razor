@@ -1,0 +1,21 @@
+﻿@using DataBase.Models
+@using Client.Services
+
+@inject IDivisionsService DivisionsService
+
+@page "/divisions/{id:int}/edit"
+
+<PageTitle>Редактирование данных подразделения</PageTitle>
+<Form Division=division OnSubmit=@OnValidSubmit />
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Division division = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        division = await DivisionsService.ReadOne(Id);
+    }
+
+    private Task OnValidSubmit() => DivisionsService.Update(Id, division);
+}
