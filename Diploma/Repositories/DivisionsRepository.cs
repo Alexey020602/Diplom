@@ -43,7 +43,7 @@ public class DivisionsRepository(ApplicationContext context): IDivisionRepositor
         .Include(d => d.Faculty);
     public async Task UpdateDivision(int id, Division division)
     {
-        var existingDivision = await context.Divisions.Include(d => d.Directions).Include(d => d.Faculty).FirstAsync(d => d.Id == id);
+        var existingDivision = await context.Divisions.Include(d => d.Directions).FirstAsync(d => d.Id == id);
         /*?? throw new KeyNotFoundException("Не найдено подразделение")*/;
 
         context.Entry(existingDivision).CurrentValues.SetValues(division);

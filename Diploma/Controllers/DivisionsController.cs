@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharedModel;
+using DataBase.Models;
 
 namespace Diploma.Controllers;
 
@@ -15,4 +16,21 @@ public class DivisionsController(IDivisionRepository repository) : ControllerBas
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetDivision(int id) => new JsonResult( await repository.GetDivision(id));
+
+    [HttpPost]
+    public async Task<IActionResult> CreateDivision(Division division)
+    {
+        await repository.AddDivision(division);
+        return Ok();
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateDivision(int id, Division division)
+    {
+        await repository.UpdateDivision(id, division);
+        return Ok();
+    }
+
+    [HttpDelete("{id:int}")]
+    public Task DeleteDivision(int id) => repository.DeleteDivision(id);
 }
