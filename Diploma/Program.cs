@@ -13,6 +13,8 @@ builder.Services.AddScoped<IPartnerTypesRepository, PartnerTypeRepository>();
 builder.Services.AddScoped<IPartnersRepository, PartnersRepository>();
 builder.Services.AddScoped<IDirectionsRepository, DirectionsRepository>();
 builder.Services.AddTransient<IDivisionRepository, DivisionsRepository>();
+builder.Services.AddTransient<IAgreementRepository, AgreementRepository>();
+builder.Services.AddTransient<IFacultyRepository, FacultyRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
     {

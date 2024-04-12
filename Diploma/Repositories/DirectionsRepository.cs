@@ -8,12 +8,8 @@ namespace Diploma.Repositories;
 public class DirectionsRepository(ApplicationContext context) : IDirectionsRepository
 {
     public async Task<IEnumerable<Direction>> GetDirections() => await context.Directions.ToListAsync();
-    public async Task<Direction> GetDirection(int id)
-    {
-        var direction = await context.Directions.FindAsync(id);
-
-        return direction ?? throw new KeyNotFoundException("Не найдено направление");
-    }
+    public async Task<Direction> GetDirection(int id) => 
+        await context.Directions.FindAsync(id) ?? throw new KeyNotFoundException("Не найдено направление");
 
     public async Task UpdateDirection(int id, Direction direction)
     {
