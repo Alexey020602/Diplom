@@ -1,4 +1,5 @@
-﻿using DataBase.Models;
+﻿using Client.Services.BaseApi;
+using DataBase.Models;
 using Refit;
 using SharedModel;
 namespace Client.Services;

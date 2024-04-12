@@ -1,6 +1,6 @@
 ﻿using Refit;
 
-namespace Client.Services;
+namespace Client.Services.BaseApi;
 
 public interface IReadOneApi<T, in Id> where T : class
 {

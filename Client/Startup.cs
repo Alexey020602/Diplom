@@ -1,4 +1,5 @@
 ﻿using Client.Services;
+using Client.Services.BaseApi;
 using DataBase.Models;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Refit;
@@ -22,14 +23,24 @@ public class Startup(string baseAddress)
         services.AddRefitClient<IDirectionsService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("directions"));
 
+        services.AddTransient<IReadApi<Direction>>(p => p.GetRequiredService<IDirectionsService>());
+
         services.AddRefitClient<IDivisionsService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"));
 
         services.AddRefitClient<IReadApi<Faculty>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"));
 
+        services.AddRefitClient<IReadApi<AgreementType>>()
+            .ConfigureHttpClient(ConfigureHttpClientForPath("agreementTypes"));
+
+        services.AddRefitClient<IReadApi<AgreementStatus>>()
+            .ConfigureHttpClient(ConfigureHttpClientForPath("agreementStatuses"));
+
         services.AddRefitClient<IReadApi<PartnerType>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
+        services.AddRefitClient<IAgreementService>()
+            .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"));
     }
     private string ApiAddress => baseAddress + "api/";
     //private Uri ApiBaseAddress => new(ApiAddress, UriKind.Absolute);
