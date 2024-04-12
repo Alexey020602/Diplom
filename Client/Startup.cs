@@ -26,7 +26,7 @@ public class Startup(string baseAddress)
         services.AddTransient<IReadApi<Direction>>(p => p.GetRequiredService<IDirectionsService>());
 
         services.AddRefitClient<IDivisionsService>()
-            .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("divisions")); 
 
         services.AddRefitClient<IReadApi<Faculty>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"));

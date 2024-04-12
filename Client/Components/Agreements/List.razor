@@ -1,0 +1,13 @@
+﻿@using Shared.List;
+@using SharedModel;
+
+@page "/agreements"
+@inherits SearchableStyledList<ListItem>
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    protected override RenderFragment Filters =>@<div></div>;
+}
