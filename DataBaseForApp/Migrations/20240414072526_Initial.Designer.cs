@@ -9,18 +9,18 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.Data.Migrations
+namespace DataBase.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230410140007_DefaultData")]
-    partial class DefaultData
+    [Migration("20240414072526_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -36,7 +36,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("AgreementNumber")
                         .IsRequired()
                         .HasMaxLength(15)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<int>("AgreementStatusId")
                         .HasColumnType("integer");
@@ -73,7 +73,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(13)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -94,7 +94,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -115,7 +115,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -132,7 +132,7 @@ namespace DataBase.Data.Migrations
 
                     b.Property<string>("Contacts")
                         .HasMaxLength(500)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<int>("FacultyId")
                         .HasColumnType("integer");
@@ -140,16 +140,16 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<string>("ShortName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<string>("Site")
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -175,7 +175,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("DivisionInAgreementId", "AgreementId");
 
@@ -197,7 +197,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -218,7 +218,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("ContactCode")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<int>("DivisionId")
                         .HasColumnType("integer");
@@ -238,7 +238,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Theme")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -262,7 +262,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -279,20 +279,20 @@ namespace DataBase.Data.Migrations
 
                     b.Property<string>("Address")
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<string>("City")
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<string>("ContactData")
                         .HasMaxLength(500)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<int>("PartnerTypeId")
                         .HasColumnType("integer");
@@ -300,11 +300,11 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("ShortName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<string>("Site")
                         .HasMaxLength(100)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -327,7 +327,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("ContactPersons")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.Property<int>("PartnerId")
                         .HasColumnType("integer");
@@ -353,7 +353,7 @@ namespace DataBase.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("char");
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 

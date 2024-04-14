@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataBase.Data.Migrations
+namespace DataBase.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -18,7 +18,7 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "char(13)", maxLength: 13, nullable: false)
+                    Name = table.Column<string>(type: "varchar", maxLength: 13, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +31,7 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "char(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "varchar", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,7 +44,7 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "char(200)", maxLength: 200, nullable: false)
+                    Name = table.Column<string>(type: "varchar", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,7 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "char(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "varchar", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,7 +70,7 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "char(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "varchar", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,7 +83,7 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "char(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +96,7 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AgreementNumber = table.Column<string>(type: "char(15)", maxLength: 15, nullable: false),
+                    AgreementNumber = table.Column<string>(type: "varchar", maxLength: 15, nullable: false),
                     StarDateTime = table.Column<DateTime>(type: "date", nullable: false),
                     EndDateTime = table.Column<DateTime>(type: "date", nullable: false),
                     AgreementTypeId = table.Column<int>(type: "integer", nullable: false),
@@ -125,11 +125,11 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FullName = table.Column<string>(type: "char(200)", maxLength: 200, nullable: false),
-                    ShortName = table.Column<string>(type: "char(50)", maxLength: 50, nullable: false),
+                    FullName = table.Column<string>(type: "varchar", maxLength: 200, nullable: false),
+                    ShortName = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
                     FacultyId = table.Column<int>(type: "integer", nullable: false),
-                    Contacts = table.Column<string>(type: "char(500)", maxLength: 500, nullable: true),
-                    Site = table.Column<string>(type: "char(100)", maxLength: 100, nullable: true)
+                    Contacts = table.Column<string>(type: "varchar", maxLength: 500, nullable: true),
+                    Site = table.Column<string>(type: "varchar", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -148,12 +148,12 @@ namespace DataBase.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FullName = table.Column<string>(type: "char(200)", maxLength: 200, nullable: false),
-                    ShortName = table.Column<string>(type: "char(50)", maxLength: 50, nullable: false),
-                    Address = table.Column<string>(type: "char(100)", maxLength: 100, nullable: true),
-                    Site = table.Column<string>(type: "char(100)", maxLength: 100, nullable: true),
-                    ContactData = table.Column<string>(type: "char(500)", maxLength: 500, nullable: true),
-                    City = table.Column<string>(type: "char(100)", maxLength: 100, nullable: true),
+                    FullName = table.Column<string>(type: "varchar", maxLength: 200, nullable: false),
+                    ShortName = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "varchar", maxLength: 100, nullable: true),
+                    Site = table.Column<string>(type: "varchar", maxLength: 100, nullable: true),
+                    ContactData = table.Column<string>(type: "varchar", maxLength: 500, nullable: true),
+                    City = table.Column<string>(type: "varchar", maxLength: 100, nullable: true),
                     PartnerTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -197,7 +197,7 @@ namespace DataBase.Data.Migrations
                 {
                     DivisionInAgreementId = table.Column<int>(type: "integer", nullable: false),
                     AgreementId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "char(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "varchar", maxLength: 100, nullable: false),
                     DivisionId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -250,8 +250,8 @@ namespace DataBase.Data.Migrations
                     PartnerId = table.Column<int>(type: "integer", nullable: false),
                     DivisionId = table.Column<int>(type: "integer", nullable: false),
                     InteractionTypeId = table.Column<int>(type: "integer", nullable: false),
-                    Theme = table.Column<string>(type: "char(500)", maxLength: 500, nullable: false),
-                    ContactCode = table.Column<string>(type: "char(9)", maxLength: 9, nullable: false),
+                    Theme = table.Column<string>(type: "varchar", maxLength: 500, nullable: false),
+                    ContactCode = table.Column<string>(type: "varchar", maxLength: 9, nullable: false),
                     SigningDateTime = table.Column<DateTime>(type: "date", nullable: false),
                     BeginigDateTime = table.Column<DateTime>(type: "date", nullable: false),
                     EndingDateTime = table.Column<DateTime>(type: "date", nullable: false)
@@ -285,7 +285,7 @@ namespace DataBase.Data.Migrations
                 {
                     AgreementId = table.Column<int>(type: "integer", nullable: false),
                     PartnerInAgreementId = table.Column<int>(type: "integer", nullable: false),
-                    ContactPersons = table.Column<string>(type: "char(500)", maxLength: 500, nullable: false),
+                    ContactPersons = table.Column<string>(type: "varchar", maxLength: 500, nullable: false),
                     PartnerId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

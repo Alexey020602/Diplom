@@ -35,17 +35,8 @@ public class ApplicationContext: DbContext
     /// </summary>
     public DbSet<Direction> Directions { get; set; }
 
-    public ApplicationContext():base()
+    public ApplicationContext(DbContextOptions<ApplicationContext> options):base(options)
     {
-        Database.Migrate();
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql(
-            "Host=localhost;Port=5432;Database=Diploma;Username=postgres;Password=11111111")
-            .LogTo(Console.WriteLine)
-            ;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
