@@ -9,37 +9,185 @@ using System.Threading.Tasks;
 
 namespace DataBase.Data;
 
-public static class ApplicationContextSeed
+public class ApplicationContextSeed(ApplicationContext context, ILogger logger, bool isDevelopment)
 {
-    public static void Seed(ApplicationContext context, ILogger logger, int retry = 0)
+    public void Seed(int retry = 0)
     {
         try
         {
-            SeedThrows(context);
+            SeedThrows();
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
             if (retry >= 10) throw;
             retry++;
-
-            logger.LogError(ex.Message);
-            Seed(context, logger, retry);
+            logger.LogError("{Message}", ex.Message);
+            Seed(retry);
             throw;
         }
     }
 
-    private static void SeedThrows(ApplicationContext context)
-    {
-        if (context.Database.IsRelational())
-        {
-            context.Database.Migrate();
-        }
-    }
-    private static void AddPartnerTypes(DbSet<PartnerType> partnerTypes)
+    private void Migrate()
     {
 
+        if (!context.Database.IsRelational()) return;
+        context.Database.Migrate();
     }
-    private static void AddFaculties(DbSet<Faculty> faculties)
+
+    private void SeedThrows()
+    {
+        Migrate();
+        if (!isDevelopment) return;
+        SeedData();
+    }
+
+    private void SeedData()
+    {
+        AddFaculties();
+        AddPartnerTypes();
+        AddDirections();
+        AddInteractionTypes();
+        AddAgreementStatuses();
+        AddAgreementTypes();
+    }
+
+    private void AddInteractionTypes()
+    {
+        var interactionTypes = new List<InteractionType>()
+        {
+            new () { Id = 1, Name = "Первый"},
+            new () { Id = 2, Name = "Второй"},
+            new () { Id = 3, Name = "Третий"},
+            new () { Id = 4, Name = "Четвертый"},
+        };
+
+        foreach (var interactionType in interactionTypes)
+        {
+            Add(interactionType);
+        }
+
+        context.SaveChanges();
+    }
+
+    private void AddAgreementTypes()
+    {
+        var agreementTypes = new List<AgreementType>()
+        {
+            new () { Id = 1, Name = "Первый"},
+            new () { Id = 2, Name = "Вторый"},
+            new () { Id = 3, Name = "Третий"},
+            new () { Id = 4, Name = "Четвертый"},
+        };
+
+        foreach(var agreementType in agreementTypes)
+        {
+            Add(agreementType);
+        }
+        context.SaveChanges();
+    }
+    private void AddAgreementStatuses()
+    {
+        var agreementsStatuses = new List<AgreementStatus>()
+        {
+            new () { Id = 1, Name = "Ожидает"},
+            new () { Id = 2, Name = "Действует"},
+            new () { Id = 3, Name = "Приостановлено"},
+            new () { Id = 4, Name = "Завершено"},
+        };
+
+        foreach( var agreementStatus in agreementsStatuses)
+        {
+            Add(agreementStatus);
+        }
+
+        context.SaveChanges();
+    }
+    private void Add(InteractionType interactionType)
+    {
+        var storedInteractionType = context.InteractionTypes.FirstOrDefault(type => type.Id == interactionType.Id);
+        if (storedInteractionType is null)
+        {
+            context.InteractionTypes.Add(interactionType);
+        }
+    }
+    private void Add(AgreementType agreementType )
+    {
+        var storedAgreementType = context.AgreementType.FirstOrDefault(type => type.Id == agreementType.Id);
+        if (storedAgreementType is null)
+        {
+            context.AgreementType.Add(agreementType);
+        }
+    }
+
+    private void Add(AgreementStatus agreementStatus)
+    {
+        var storedAgreementStatus = context.AgreementStatus.FirstOrDefault(status => status.Id == agreementStatus.Id);
+        if (storedAgreementStatus is null)
+        {
+            context.AgreementStatus.Add(agreementStatus);
+        }
+    }
+
+    private void AddPartnerTypes()
+    {
+        var dictionary = new Dictionary<int, string>()
+        {
+            { 1, "НИИ" },
+            { 2, "ВУЗ" },
+            { 3, "НПК" },
+            { 4, "ЦНИИ" },
+        };
+
+        foreach(var pair in dictionary)
+        {
+            AddPartnerType(pair.Key, pair.Value);
+        }
+        context.SaveChanges();
+    }
+
+    private void AddPartnerType(int id,  string name)
+    {
+        var storedPartnerType = context.PartnerTypes.FirstOrDefault(t => t.Id == id);
+        if (storedPartnerType is null)
+        {
+            context.PartnerTypes.Add(new()
+            {
+                Id = id,
+                Name = name,
+            });
+        }
+    }
+
+    private void AddDirections()
+    {
+        var dictionary = new Dictionary<int, string>()
+        {
+            { 1, "АСУ ТП" },
+            { 2, "МВЭ" },
+            { 3, "САПР" },
+            { 4, "ЭТПТ" },
+        };
+
+        foreach(var pair in dictionary)
+        {
+            AddDirection(pair.Key, pair.Value);
+        }
+        context.SaveChanges();
+    }
+
+    private void AddDirection(int id, string name)
+    {
+        var storedDirection = context.Directions.FirstOrDefault(d => d.Id == id);
+        if ( storedDirection is null)
+        {
+            context.Directions.Add(new()
+            {
+                Id = id,
+                Name = name,
+            });
+        }
+    }
+    private void AddFaculties()
     {
         var dictionary = new Dictionary<int, string>()
         {
@@ -55,11 +203,12 @@ public static class ApplicationContextSeed
        
         foreach (var faculty in dictionary)
         {
-            var storedFaculty = faculties.FirstOrDefault(f => f.Id == faculty.Key);
+            var storedFaculty = context.Faculties.FirstOrDefault(f => f.Id == faculty.Key);
             if (storedFaculty is null)
             {
-                faculties.Add(new() { Id = faculty.Key, Name = faculty.Value });
+                 context.Faculties.Add(new() { Id = faculty.Key, Name = faculty.Value });
             }
         }
+         context.SaveChanges();
     }
 }

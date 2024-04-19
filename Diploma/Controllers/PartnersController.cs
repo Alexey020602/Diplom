@@ -35,6 +35,17 @@ public class PartnersController(IPartnersRepository partnersRepository) : Contro
         }
     }
 
+    [HttpGet("{id:int}/agreements")]
+    public async Task<IActionResult> GetAgreementsForPartner(int id)
+    {
+        return new JsonResult((await partnersRepository.GetAgreementsForPartnerWithId(id)).Select(a => new AgreementShort(a.Id, a.ToString())));
+    }
+
+    [HttpGet("{id:int}/interactions")]
+    public async Task<IActionResult> GetInteractionsForPartner(int id) => new JsonResult(
+        (await partnersRepository.GetInteractionsForPartnerWithId(id)).Select(i => new InteractionShort(i.Id, i.ToString()))
+        );
+
     [HttpPost]
     public async Task<IActionResult> AddPartner([FromBody] Partner partner)
     {

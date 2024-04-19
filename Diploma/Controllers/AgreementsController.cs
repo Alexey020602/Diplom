@@ -13,6 +13,6 @@ public class AgreementsController(IAgreementRepository repository) : ControllerB
     public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId) =>
         new JsonResult(
             (await repository.GetAgreements(agreementTypeId, agreementStatusId))
-            .Select(agreement =>  new ListItem(agreement.Id, agreement.ToString())) 
+            .Select(agreement =>  new AgreementShort(agreement.Id, agreement.ToString())) 
             );
 }

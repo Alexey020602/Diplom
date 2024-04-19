@@ -1,0 +1,19 @@
+﻿@using Client.Shared.List
+@using Client.Services
+@using SharedModel
+
+@inherits SearchableStyledList<InteractionShort>
+
+@page "/interactions"
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Inject] private IIntetactionsService InteractionService { get; set; } = null!;
+    protected override Task<List<InteractionShort>> Load() => InteractionService.ReadAll();
+    protected override string CreateHref => "/interactions/create";
+    protected override string RowHref(InteractionShort item) => $"/interactions/{item.Id}";
+    protected override RenderFragment Filters =>@<div></div>;
+}

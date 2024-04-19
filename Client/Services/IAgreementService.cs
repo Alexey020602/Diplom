@@ -1,10 +1,12 @@
-﻿using Refit;
+﻿using Client.Services.BaseApi;
+using DataBase.Models;
+using Refit;
 using SharedModel;
 
 namespace Client.Services;
 
-public interface IAgreementService
+public interface IAgreementService: IReadOneApi<Agreement, int>
 {
     [Get("")]
-    Task<List<ListItem>> ReadAll(int? agreementTypeId = null, int? agreementStatusId = null);
+    Task<List<AgreementShort>> ReadAll(int? agreementTypeId = null, int? agreementStatusId = null);
 }

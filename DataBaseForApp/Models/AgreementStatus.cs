@@ -12,4 +12,6 @@ public class AgreementStatus
     [MaxLength(13)] public string Name { get; set; } = null!;
     [JsonIgnore]
     public ICollection<Agreement> Agreements { get; set; } = null!;
+
+    public override string ToString() => Name;
 }

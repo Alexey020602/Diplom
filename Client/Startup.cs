@@ -26,7 +26,7 @@ public class Startup(string baseAddress)
         services.AddTransient<IReadApi<Direction>>(p => p.GetRequiredService<IDirectionsService>());
 
         services.AddRefitClient<IDivisionsService>()
-            .ConfigureHttpClient(ConfigureHttpClientForPath("divisions")); 
+            .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"));
 
         services.AddRefitClient<IReadApi<Faculty>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"));
@@ -41,6 +41,9 @@ public class Startup(string baseAddress)
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
         services.AddRefitClient<IAgreementService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"));
+
+        services.AddRefitClient<IIntetactionsService>()
+            .ConfigureHttpClient(ConfigureHttpClientForPath("interactons"));
     }
     private string ApiAddress => baseAddress + "api/";
     //private Uri ApiBaseAddress => new(ApiAddress, UriKind.Absolute);

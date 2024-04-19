@@ -9,17 +9,11 @@ public class Interaction
     public Partner Partner { get; set; } = null!;
     public Division Division { get; set; } = null!;
     public InteractionType InteractionType { get; set; } = null!;
-
-    [MaxLength(500)]
-    public string Theme { get; set; } = null!;
-
-    [MaxLength(9)]
-    public string ContactCode { get; set; } = null!;
+    [MaxLength(500)] public string Theme { get; set; } = null!;
+    [MaxLength(9)] public string ContactCode { get; set; } = null!;
     public DateTime SigningDateTime { get; set; }
     public DateTime BeginigDateTime { get; set; }
     public DateTime EndingDateTime { get; set; }
-    [JsonIgnore]
-    public ICollection<Direction> Directions { get; set; } = null!;
-
+    [JsonIgnore] public ICollection<Direction> Directions { get; set; } = null!;
     public override string ToString() => $"{ContactCode} типа {InteractionType} от {SigningDateTime}, {BeginigDateTime} - {EndingDateTime}";
 }

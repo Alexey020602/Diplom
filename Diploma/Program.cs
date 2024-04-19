@@ -11,12 +11,18 @@ builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString).LogTo(Console.WriteLine));
-builder.Services.AddScoped<IPartnerTypesRepository, PartnerTypeRepository>();
-builder.Services.AddScoped<IPartnersRepository, PartnersRepository>();
-builder.Services.AddScoped<IDirectionsRepository, DirectionsRepository>();
+
+builder.Services.AddTransient<IPartnerTypesRepository, PartnerTypeRepository>();
+builder.Services.AddTransient<IPartnersRepository, PartnersRepository>();
+builder.Services.AddTransient<IDirectionsRepository, DirectionsRepository>();
 builder.Services.AddTransient<IDivisionRepository, DivisionsRepository>();
 builder.Services.AddTransient<IAgreementRepository, AgreementRepository>();
 builder.Services.AddTransient<IFacultyRepository, FacultyRepository>();
+builder.Services.AddTransient<IInteractionRepository, InteractionRepository>();
+builder.Services.AddTransient<IInteractionTypeRepository, InteractionTypeRepository>();
+builder.Services.AddTransient<IAgreementStatusRepository,  AgreementStatusRepository>();
+builder.Services.AddTransient<IAgreementTypeRepository, AgreementTypeRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
     {
@@ -28,7 +34,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-    await context.Database.MigrateAsync();
+    new ApplicationContextSeed(context, app.Logger, app.Environment.IsDevelopment()).Seed();
 }
     app.UseStaticFiles();
 app.UseBlazorFrameworkFiles();

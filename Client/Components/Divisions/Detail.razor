@@ -19,21 +19,11 @@
             <h3>@division.ShortName</h3>
             <h4>@division.FullName</h4>
 
-            <TextWithTitle Title="Факультет" Text=@division.Faculty?.ToString()/>
-            @if (division.Contacts is not null)
-            {
-                <TextWithTitle Title="Контактные данные" Text=@division.Contacts/>
-            }
+            <TextWithTitle Title="Факультет" Text=@division.Faculty?.ToString() />
+            <TextWithTitle Title="Контактные данные" Text=@division.Contacts />
+            <TextWithTitle Title="Сайт" Text=@division.Site />
+            <ListWithTitle Title="Направления" Items=@division.Directions />
 
-            @if (division.Site is not null)
-            {
-                <TextWithTitle Title="Сайт" Text=@division.Site/>
-            }
-
-            @if (division.Directions.Any())
-            {
-                <ListWithTitle Title="Направления" Items=@division.Directions/>
-            }
         }
     </div>
 </div>
@@ -50,6 +40,7 @@
         } 
         catch(Exception ex)
         {
+            //TODO Добавить обработку исключений
             Console.WriteLine(ex);
         }
     }

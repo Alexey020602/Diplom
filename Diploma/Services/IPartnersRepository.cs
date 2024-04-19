@@ -10,4 +10,6 @@ public interface IPartnersRepository
     Task<IEnumerable<Partner>> GetPartnersAsync();
     Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId);
     Task<Partner> GetPartnerByIdAsync(int id);
+    Task<List<Agreement>> GetAgreementsForPartnerWithId(int id);
+    Task<List<Interaction>> GetInteractionsForPartnerWithId(int id);
 }

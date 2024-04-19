@@ -9,6 +9,18 @@ namespace Diploma.Repositories;
 
 public class PartnersRepository(ApplicationContext context) : IPartnersRepository
 {
+    public async Task<List<Agreement>> GetAgreementsForPartnerWithId(int id) => (await context.Partners
+        .Include(p => p.PartnersInAgreement)
+        .FirstAsync(p => p.Id == id))
+        .PartnersInAgreement
+        .Select(p => p.Agreement)
+        .ToList();
+
+    public async Task<List<Interaction>> GetInteractionsForPartnerWithId(int id) => (await context.Partners
+        .Include(p => p.Interactions)
+        .FirstAsync(p => p.Id == id))
+        .Interactions
+        .ToList();
     public async Task<IEnumerable<Partner>> GetPartnersAsync() =>
         await GetPartners()
         .ToListAsync();

@@ -1,13 +1,30 @@
 ﻿@using Shared.List;
 @using SharedModel;
+@using Client.Shared.Select
+@using DataBase.Models
 
 @page "/agreements"
-@inherits SearchableStyledList<ListItem>
+@inherits SearchableStyledList<AgreementShort>
 
 @{
     base.BuildRenderTree(__builder);
 }
 
 @code {
-    protected override RenderFragment Filters =>@<div></div>;
+    protected override RenderFragment Filters =>@<div>
+        @TypeFilter
+        @StatusFilter
+    </div>;
+
+    private RenderFragment TypeFilter => @<UniversalCustomSelect 
+    TItem=@AgreementType 
+    GetStringIdentifier=@(type => type.Id.ToString())
+    SelectedItem=@agreementType 
+    SelectedItemChanged=@Select />;
+
+    private RenderFragment StatusFilter => @<UniversalCustomSelect
+    TItem=@AgreementStatus 
+    GetStringIdentifier=@(status => status.Id.ToString())
+    SelectedItem=@agreementStatus
+    SelectedItemChanged=@Select />;
 }

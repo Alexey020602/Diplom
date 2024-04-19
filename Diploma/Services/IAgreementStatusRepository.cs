@@ -4,7 +4,7 @@ namespace Diploma.Services;
 
 public interface IAgreementStatusRepository
 {
-    public Task<IEnumerable<AgreementStatus>> GetAgreementStatuses();
+    public Task<List<AgreementStatus>> GetAgreementStatuses();
     public Task<AgreementStatus> GetAgreementStatus(int id);
     public Task DeleteAgreementStatus(int id);
     public Task UpdateAgreementStatus(int id, AgreementStatus agreementStatus);

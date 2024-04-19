@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharedModel;
 
-public record class ListItem(int Id, string Name)
+public record class AgreementShort(int Id, string Name)
 {
     public override string ToString() => Name;
 }

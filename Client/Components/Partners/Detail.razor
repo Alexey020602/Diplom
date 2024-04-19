@@ -3,6 +3,7 @@
 @using Client.Shared.Text;
 @using Client.Shared.List;
 @using Client.Shared.Buttons
+@using SharedModel
 
 @page "/partners/{id:int}"
 
@@ -20,31 +21,14 @@
             <h3>@partner.ShortName</h3>
             <h4>@partner.FullName</h4>
 
-            @if (partner.PartnerType != null)
-            {
-                <TextWithTitle Title="Тип партнера" Text=@partner.PartnerType.ToString() />
-            }
-
-            @if (partner.ContactData != null)
-            {
-                <TextWithTitle Title="Контактные данные" Text=@partner.ContactData />
-            }
-
-            @if (partner.Address != null)
-            {
-                <TextWithTitle Title="Адрес" Text=@partner.Address />
-            }
-
-            @if (partner.City != null)
-            {
-                <TextWithTitle Title="Город" Text=@partner.City />
-            }
-
-            @if (partner.Site != null)
-            {
-                <TextWithTitle Title="Сайт" Text=@partner.Site />
-            }
+            <TextWithTitle Title="Тип партнера" Text=@partner.PartnerType?.ToString() />
+            <TextWithTitle Title="Контактные данные" Text=@partner.ContactData />
+            <TextWithTitle Title="Адрес" Text=@partner.Address />
+            <TextWithTitle Title="Город" Text=@partner.City />
+            <TextWithTitle Title="Сайт" Text=@partner.Site />
             <ListWithTitle Title="Направления" Items=@partner.Directions/>
+            <ListWithTitle Title="Соглашения" Items=@agreements/>
+            <ListWithTitle Title="Взаимодействия" Items=@interactions/>
         </div>
     }
     else
@@ -63,6 +47,8 @@
     public int Id { get; set; }
 
     private Partner? partner;
+    private List<AgreementShort> agreements = [];
+    private List<InteractionShort> interactions = [];
 
     protected async override Task OnParametersSetAsync()
     {
@@ -70,6 +56,8 @@
         {
             Console.WriteLine($"{Id}");
             partner = await PartnersService.ReadOne(Id);
+            agreements = await PartnersService.ReadAllAgreements(Id);
+            interactions = await PartnersService.ReadAllInteractions(Id);
         }
         catch (Exception ex)
         {

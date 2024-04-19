@@ -1,0 +1,34 @@
+﻿@using Client.Services
+@using DataBase.Models
+
+@page "/agreements/{id:int}"
+
+<div>
+    <div>
+        <button onclick="history.back()" class="oval-button orange-outline">Назад</button>
+        <NavLink class="oval-button blue-outline" href=@($"/agreements/{Id}/edit")>Редактировать</NavLink>
+    </div>
+    @if (agreement is not null)
+    {
+        <h3>@agreement.AgreementNumber</h3>
+    }
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Inject] private IAgreementService AgreementService { get; set; } = null!;
+    private Agreement? agreement;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            agreement = await AgreementService.ReadOne(Id);
+        } 
+        catch(Exception ex)
+        {
+            //TODO Добавить обработку исключений
+            Console.WriteLine(ex);
+        }
+    }
+}
