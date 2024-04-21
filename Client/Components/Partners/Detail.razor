@@ -1,67 +1,74 @@
-﻿@using DataBase.Models
-@using Client.Services;
-@using Client.Shared.Text;
-@using Client.Shared.List;
-@using Client.Shared.Buttons
-@using SharedModel
+﻿@using Client.Services
+@using Client.Shared.Text
+@using Client.Shared.List
+@using Client.Shared
+@using Model.Agreements
+@using Model.Interactions
+@using Partner = Model.Partners.Partner
+
+@inherits DetailPage<Partner>
 
 @page "/partners/{id:int}"
 
-<div>
-    <div>
-        <button class="oval-button blue-fill" onclick="history.back()">Назад</button>
-        <NavLink class="oval-button blue-outline" style="display: inline-block" href=@($"partners/{Id}/edit")>
-            Редактировать
-        </NavLink>
-    </div>
+@* <div> *@
+@*     @if (item != null) *@
+@*     { *@
+@*         <PageTitle></PageTitle>    *@
+@*         <div style="justify-content: space-between"> *@
+@*             <button class="oval-button blue-fill" style="display: inline-block" onclick="history.back()">Назад</button> *@
+@*             <NavLink class="oval-button blue-outline" style="display: inline-block" href=@($"partners/{Id}/edit")> *@
+@*                 Редактировать *@
+@*             </NavLink> *@
+@*         </div> *@
+@*          *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*         <p>Загрузка...</p> *@
+@*     } *@
+@* *@
+@* </div> *@
 
-    @if (partner != null)
-    {
-        <div>
-            <h3>@partner.ShortName</h3>
-            <h4>@partner.FullName</h4>
-
-            <TextWithTitle Title="Тип партнера" Text=@partner.PartnerType?.ToString() />
-            <TextWithTitle Title="Контактные данные" Text=@partner.ContactData />
-            <TextWithTitle Title="Адрес" Text=@partner.Address />
-            <TextWithTitle Title="Город" Text=@partner.City />
-            <TextWithTitle Title="Сайт" Text=@partner.Site />
-            <ListWithTitle Title="Направления" Items=@partner.Directions/>
-            <ListWithTitle Title="Соглашения" Items=@agreements/>
-            <ListWithTitle Title="Взаимодействия" Items=@interactions/>
-        </div>
-    }
-    else
-    {
-        <p>Загрузка...</p>
-    }
-
-</div>
-
-
+@{
+    base.BuildRenderTree(__builder);
+}
 
 @code {
     [Inject]
     private IPartnersService PartnersService { get; set; } = default!;
-    [Parameter]
-    public int Id { get; set; }
-
-    private Partner? partner;
     private List<AgreementShort> agreements = [];
     private List<InteractionShort> interactions = [];
 
-    protected async override Task OnParametersSetAsync()
+    protected override async Task OnParametersSetAsync()
     {
         try
         {
             Console.WriteLine($"{Id}");
-            partner = await PartnersService.ReadOne(Id);
+            item = await PartnersService.ReadOne(Id);
             agreements = await PartnersService.ReadAllAgreements(Id);
             interactions = await PartnersService.ReadAllInteractions(Id);
         }
         catch (Exception ex)
         {
+            //TODO Обработка исключений
             Console.WriteLine(ex);
         }
     }
+    
+    protected override RenderFragment Content => @<div>
+        <h3>@item?.ShortName</h3>
+        <h4>@item?.FullName</h4>
+
+        <TextWithTitle Title="Тип партнера" Text=@item?.Type?.ToString() />
+        <TextWithTitle Title="Контактные данные" Text=@item?.ContactData />
+        <TextWithTitle Title="Адрес" Text=@item?.Address />
+        <TextWithTitle Title="Город" Text=@item?.City />
+        <TextWithTitle Title="Сайт" Text=@item?.Site />
+        <ListWithTitle Title="Направления" Items=@item?.Directions/>
+        <ListWithTitle Title="Соглашения" Items=@item?.Agreements/>
+        <ListWithTitle Title="Взаимодействия" Items=@item?.Interactions/>
+    </div>;
+
+    protected override string EntitiesPath => "partners";
+    protected override string? Title => item?.ShortName;
 }

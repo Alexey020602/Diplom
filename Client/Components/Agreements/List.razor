@@ -1,10 +1,9 @@
 ﻿@using Shared.List;
-@using SharedModel;
 @using Client.Shared.Select
 @using DataBase.Models
 
 @page "/agreements"
-@inherits SearchableStyledList<AgreementShort>
+@inherits SearchableStyledList<Model.Agreements.AgreementShort>
 
 @{
     base.BuildRenderTree(__builder);

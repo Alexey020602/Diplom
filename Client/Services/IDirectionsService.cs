@@ -1,4 +1,4 @@
-﻿using DataBase.Models;
+﻿using Model;
 using Refit;
 using Client.Services.BaseApi;
 namespace Client.Services;

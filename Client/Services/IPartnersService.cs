@@ -1,7 +1,10 @@
 ﻿using Client.Services.BaseApi;
-using DataBase.Models;
+using Model.Agreements;
+using Model.Interactions;
+using Model.Partners;
 using Refit;
-using SharedModel;
+using Partner = Model.Partners.Partner;
+
 namespace Client.Services;
 
 public interface IPartnersService: IReadOneApi<Partner, int>, IDeleteApi<int>, IUpdateApi<Partner, int>, ICreateApi<Partner>

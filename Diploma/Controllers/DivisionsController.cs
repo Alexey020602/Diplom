@@ -1,8 +1,8 @@
 ﻿using Diploma.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SharedModel;
 using DataBase.Models;
+using Model.Divisions;
 
 namespace Diploma.Controllers;
 

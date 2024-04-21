@@ -2,7 +2,8 @@
 using Diploma.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SharedModel;
+using Model.Interactions;
+using Interaction = DataBase.Models.Interaction;
 
 namespace Diploma.Controllers
 {

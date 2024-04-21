@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataBaseForApp\DataBaseForApp.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
     <ProjectReference Include="..\SharedModel\SharedModel.csproj" />
   </ItemGroup>
 

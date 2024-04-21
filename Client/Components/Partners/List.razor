@@ -2,7 +2,8 @@
 @using Client.Shared.Select;
 @using Client.Shared.List;
 @using Client.Shared.Text;
-@using SharedModel;
+@using global::Model.Partners
+@using Type = Model.Partners.Type
 
 @inherits SearchableStyledList<PartnerShort>
 
@@ -15,44 +16,6 @@
     base.BuildRenderTree(__builder);
 }
 
-@*<div>
-    <div style="float:left; width: 150px;">
-        @Filters
-        <button onclick=@ResetSelectedPartnerType>Сбросить</button>
-    </div>
-    <div style="margin-left: 150px;">
-        @Search
-        <div>
-            <NavLink class="oval-button blue-fill" href="partners/create">
-                Добавить
-            </NavLink>
-        </div>
-        @if (ShowPartners)
-        {
-            @PartnersList
-        }
-        else
-        {
-            @NullPartners
-        }
-
-    </div>
-</div>*@
-
 @code {
-    // private RenderFragment Search =>@<SearchText @bind-Input=@ShortNameFilter/>;
-
-    // private RenderFragment NullPartners => @<div>
-    //     @message
-    //     <button class="oval-button blue-fill" onclick=@LoadPartners>Загрузить</button>
-    // </div>;
-
-    // private RenderFragment PartnersList => @<StyledList List=@ShowedPartners>
-    //     <RowFragment Context="partner">
-    //         @PartnerLink(partner)
-    //     </RowFragment>
-    // </StyledList>;
-
-    // private RenderFragment PartnerLink(PartnerShort partner) => @<NavLink href="@($"partners/{partner.Id}")">@partner.Name</NavLink>;
-    protected override RenderFragment Filters => @<UniversalCustomSelect TItem=@DataBase.Models.PartnerType @bind-SelectedItem:get=@PartnerType @bind-SelectedItem:set=@SelectPartnerType GetStringIdentifier=@(type => type.Id.ToString()) />;
+    protected override RenderFragment Filters => @<UniversalCustomSelect TItem=@Type @bind-SelectedItem:get=@PartnerType @bind-SelectedItem:set=@SelectPartnerType GetStringIdentifier=@(type => type.Id.ToString()) />;
 }

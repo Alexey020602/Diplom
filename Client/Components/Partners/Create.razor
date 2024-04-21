@@ -1,10 +1,12 @@
-﻿@using DataBase.Models;
-@using Client.Services;
+﻿@using Client.Services;
+@using Model.Partners
 @rendermode RenderMode.InteractiveWebAssembly
+
 @page "/partners/create"
 @inject IPartnersService PartnersService
 
 <p>Создание</p>
+<PageTitle>Добавление партнера</PageTitle>
 <Form Item=@partner OnSubmit=@CreatePartner/>
 
 @code {

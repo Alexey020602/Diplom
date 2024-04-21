@@ -1,7 +1,7 @@
 ﻿using Refit;
-using SharedModel;
 using DataBase.Models;
 using Client.Services.BaseApi;
+using Model.Divisions;
 
 namespace Client.Services;
 

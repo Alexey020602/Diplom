@@ -3,6 +3,7 @@ using Client.Services.BaseApi;
 using DataBase.Models;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Refit;
+using Type = Model.Partners.Type;
 
 namespace Client;
 
@@ -23,7 +24,7 @@ public class Startup(string baseAddress)
         services.AddRefitClient<IDirectionsService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("directions"));
 
-        services.AddTransient<IReadApi<Direction>>(p => p.GetRequiredService<IDirectionsService>());
+        services.AddTransient<IReadApi<Model.Direction>>(p => p.GetRequiredService<IDirectionsService>());
 
         services.AddRefitClient<IDivisionsService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"));
@@ -37,12 +38,12 @@ public class Startup(string baseAddress)
         services.AddRefitClient<IReadApi<AgreementStatus>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreementStatuses"));
 
-        services.AddRefitClient<IReadApi<PartnerType>>()
+        services.AddRefitClient<IReadApi<Type>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
         services.AddRefitClient<IAgreementService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"));
 
-        services.AddRefitClient<IIntetactionsService>()
+        services.AddRefitClient<IInteractionsService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("interactons"));
     }
     private string ApiAddress => baseAddress + "api/";

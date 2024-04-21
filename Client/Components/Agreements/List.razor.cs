@@ -1,7 +1,8 @@
 ﻿using Client.Services;
 using DataBase.Models;
 using Microsoft.AspNetCore.Components;
-using SharedModel;
+using Model.Agreements;
+using AgreementType = DataBase.Models.AgreementType;
 
 namespace Client.Components.Agreements;
 

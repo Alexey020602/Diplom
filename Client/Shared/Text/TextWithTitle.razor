@@ -1,8 +1,11 @@
 ﻿<div>
-    <p>
-        <span class="title">@Title</span><br/>
-        @Text
-    </p>
+    @if(ShowContent)
+    {
+        <p>
+            <span class="title">@Title</span><br/>
+            @Text
+        </p>
+    }
 </div>
 
 
@@ -11,4 +14,8 @@
     public string? Title { get; set; }
     [Parameter]
     public string? Text { get; set; }
+
+    private bool ShowContent => !(TitleNotSuitableForDisplay || TextNotSuitableForDisplay);
+    private bool TitleNotSuitableForDisplay => string.IsNullOrWhiteSpace(Title);
+    private bool TextNotSuitableForDisplay => string.IsNullOrWhiteSpace(Text);
 }

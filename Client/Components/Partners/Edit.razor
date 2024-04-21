@@ -1,11 +1,12 @@
 ﻿@page "/partners/{id:int}/edit"
 @using Client.Services;
-@using DataBase.Models;
-
+@using Model.Partners
+@* @using global::Model.Partners *@
 <div>
     @* <NavLink class="oval-button orange-fill" href=@PreviousScreenUri>Отмена</NavLink> *@
     @if (partner is not null)
     {
+        <PageTitle>@partner.ShortName</PageTitle>
         <Form Item=@partner OnSubmit="@UpdatePartner"/>
     }
 </div>

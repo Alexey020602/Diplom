@@ -12,4 +12,5 @@ public class DivisionInAgreement
     public Division Division { get; set; } = null!;
     public int AgreementId { get; set; }
    public Agreement Agreement { get; set; } = null!;
+   public string ContactPersons { get; set; } = string.Empty;
 }

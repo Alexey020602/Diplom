@@ -1,9 +1,10 @@
-﻿@using DataBase.Models;
-@using Microsoft.AspNetCore.Components.Forms;
+﻿@using Microsoft.AspNetCore.Components.Forms;
 @* @using Microsoft.AspNetCore.Components.Web; *@
 @using Client.Shared.Text;
 @using Client.Shared.Select;
 @using Client.Shared.Form
+@using Model.Partners
+@using Type = Model.Partners.Type
 
 @inherits BaseForm<Partner>
 
@@ -26,7 +27,7 @@
         </div>
         <InputWithFloatTitle Title="Город" @bind-Value=@Item.City />
         <div>
-            <UniversalCustomSelect TItem=@PartnerType @bind-SelectedItem=@Item.PartnerType GetStringIdentifier=@(type => type.Id.ToString()) />
+            <UniversalCustomSelect TItem=@Type @bind-SelectedItem=@Item.Type GetStringIdentifier=@(type => type.Id.ToString()) />
         </div> 
         <UniversalMultipleSelect Selected=@Item.Directions/>
         <div>

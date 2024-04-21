@@ -41,52 +41,51 @@ public class ApplicationContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //Запрещаем каскадное удаление
-        var onDelete = DeleteBehavior.Restrict;
+        const DeleteBehavior deleteBehavior = DeleteBehavior.Restrict;
         modelBuilder.Entity<Partner>()
             .HasOne(p => p.PartnerType)
             .WithMany(p => p.Partners)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<Division>()
             .HasOne(d => d.Faculty)
             .WithMany(f => f.Divisions)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<Agreement>()
             .HasOne(a => a.AgreementType)
             .WithMany(t => t.Agreements)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<Agreement>()
             .HasOne(a => a.AgreementStatus)
             .WithMany(s => s.Agreements)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<Interaction>()
             .HasOne(i => i.InteractionType)
             .WithMany(t => t.Interactions)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<Interaction>()
             .HasOne(i => i.Division)
             .WithMany(d => d.Interactions)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<Interaction>()
             .HasOne(i => i.Partner)
             .WithMany(p=>p.Interactions)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<DivisionInAgreement>()
             .HasOne(d => d.Division)
             .WithMany(d => d.DivisionsInAgreement)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<DivisionInAgreement>()
             .HasOne(d => d.Agreement)
             .WithMany(a => a.DivisionInAgreements)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<PartnerInAgreement>()
             .HasOne(p => p.Partner)
             .WithMany(p => p.PartnersInAgreement)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         modelBuilder.Entity<PartnerInAgreement>()
             .HasOne(p => p.Agreement)
             .WithMany(a => a.PartnerInAgreements)
-            .OnDelete(onDelete);
+            .OnDelete(deleteBehavior);
         
         //Устанавливаем конвертацию системных типов в типы PostgreSQL по-умолчанию
         

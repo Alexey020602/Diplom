@@ -52,7 +52,7 @@ public class Partner
     /// <summary>
     /// Тип партнера
     /// </summary>
-    [Required] public PartnerType? PartnerType { get; set; } = null!;
+    public PartnerType PartnerType { get; set; } = null!;
     [JsonIgnore]
     public IEnumerable<PartnerInAgreement> PartnersInAgreement { get; set; } = [];
     [JsonIgnore]

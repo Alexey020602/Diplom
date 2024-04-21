@@ -14,7 +14,7 @@
     private List<TItem> items = [];
     [Parameter] public TItem? SelectedItem { get; set; }
     [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set; }
-    [Parameter] public Func<TItem, string> GetStringIdentifier { get; set; }
+    [Parameter] public Func<TItem, string> GetStringIdentifier { get; set; } = (item => item.ToString() ?? string.Empty);
 
     protected override async Task OnInitializedAsync()
     {

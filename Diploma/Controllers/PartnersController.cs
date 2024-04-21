@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using DataBase.Models;
+using Model.Partners;
+using Diploma.Extensions.ModelToDao;
 using Diploma.Services;
-using SharedModel;
+using Model.Agreements;
+using Model.Interactions;
 
 namespace Diploma.Controllers;
 
@@ -24,7 +26,7 @@ public class PartnersController(IPartnersRepository partnersRepository) : Contro
     [HttpGet("{id}")]
     public async Task<IActionResult> ShowPartnerById(int id)
     {
-        var partner = await partnersRepository.GetPartnerByIdAsync(id);
+        var partner = (await partnersRepository.GetPartnerByIdAsync(id)).ConvertToModel();
         if (partner == null)
         {
             return NotFound("Нет соответсвующего партнера");
@@ -47,16 +49,16 @@ public class PartnersController(IPartnersRepository partnersRepository) : Contro
         );
 
     [HttpPost]
-    public async Task<IActionResult> AddPartner([FromBody] Partner partner)
+    public async Task<IActionResult> AddPartner([FromBody] Model.Partners.Partner partner)
     {
-        await partnersRepository.AddPartnerAsync(partner);
+        await partnersRepository.AddPartnerAsync(partner.ConvertToDao());
         return Ok();
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePartner(int id, [FromBody] Partner partner)
+    public async Task<IActionResult> UpdatePartner(int id, [FromBody] Model.Partners.Partner partner)
     {
-        await partnersRepository.UpdatePartnerAsync(id, partner);
+        await partnersRepository.UpdatePartnerAsync(id, partner.ConvertToDao());
         return Ok();
     }
 

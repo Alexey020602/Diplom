@@ -1,6 +1,6 @@
 ﻿@using Client.Shared.List
 @using Client.Services
-@using SharedModel
+@using Model.Interactions
 
 @inherits SearchableStyledList<InteractionShort>
 
@@ -11,7 +11,7 @@
 }
 
 @code {
-    [Inject] private IIntetactionsService InteractionService { get; set; } = null!;
+    [Inject] private IInteractionsService InteractionService { get; set; } = null!;
     protected override Task<List<InteractionShort>> Load() => InteractionService.ReadAll();
     protected override string CreateHref => "/interactions/create";
     protected override string RowHref(InteractionShort item) => $"/interactions/{item.Id}";

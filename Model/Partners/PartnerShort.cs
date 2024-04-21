@@ -1,4 +1,4 @@
-﻿namespace SharedModel;
+﻿namespace Model.Partners;
 
 public record PartnerShort(int Id, string Name)
 {
