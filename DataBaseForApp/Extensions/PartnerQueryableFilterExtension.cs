@@ -1,8 +1,8 @@
 ﻿using DataBase.Models;
 
-namespace Diploma.Extensions;
+namespace DataBase.Extensions;
 
-public static class PartnerQuiryableFilterExtension
+public static class PartnerQueryableFilterExtension
 {
     public static IQueryable<Partner> FilterByType(this IQueryable<Partner> query, int? partnerTypeId)
     {
@@ -10,7 +10,6 @@ public static class PartnerQuiryableFilterExtension
 
         return query.Where(partner => partner.PartnerType.Id == partnerTypeId.Value);
     }
-    
     public static IQueryable<Partner> FilterByDirection(this IQueryable<Partner> query, int? directionId)
     {
         if (!directionId.HasValue) return query;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataBase.Data;
+using DataBase.Extensions;
 using DataBase.Models;
 using Diploma.Extensions;
 using DataBase.SupportingClasses;

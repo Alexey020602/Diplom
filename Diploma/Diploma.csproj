@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Client\Client.csproj" />
       <ProjectReference Include="..\DataBaseForApp\DataBaseForApp.csproj" />
       <ProjectReference Include="..\Model\Model.csproj" />
       <ProjectReference Include="..\SharedModel\SharedModel.csproj" />
@@ -23,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Extensions\ModelToDao\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 

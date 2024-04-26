@@ -1,7 +1,8 @@
 using DataBase.Models;
+using Diploma.Extensions.ModelToDao;
 using Agreement = Model.Partners.Agreement;
 
-namespace Diploma.Extensions.ModelToDao;
+namespace Model.Extensions;
 
 public static class PartnerExtensions
 {
@@ -15,7 +16,8 @@ public static class PartnerExtensions
         ContactData = partner.ContactData ?? string.Empty,
         Type = partner.PartnerType.ConvertToModel(),
         Agreements = partner.PartnersInAgreement.Select(PartnerExtensions.ConvertToModel).ToList(),
-        Interactions = partner.Interactions.Select(PartnerExtensions.ConvertToModel).ToList()
+        Interactions = partner.Interactions.Select(PartnerExtensions.ConvertToModel).ToList(),
+        Directions = partner.Directions.Select(DirectionExtensions.ConvertToModel).ToList(),
     };
     public static Agreement ConvertToModel(this PartnerInAgreement partnerInAgreement) => new()
     {
@@ -37,5 +39,6 @@ public static class PartnerExtensions
         Site = partner.Site,
         ContactData = partner.ContactData,
         PartnerType = (partner.Type ?? throw new ArgumentNullException("Type", "Тип партнера не задан")).ConvertToDao(),
+        Directions = partner.Directions.Select(DirectionExtensions.ConvertToDao).ToList(),
     };
 }

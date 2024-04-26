@@ -3,6 +3,7 @@ using Model.Partners;
 using Diploma.Extensions.ModelToDao;
 using Diploma.Services;
 using Model.Agreements;
+using Model.Extensions;
 using Model.Interactions;
 
 namespace Diploma.Controllers;
