@@ -19,10 +19,9 @@ public class Interaction
     [StringLength(9, ErrorMessage = "Код не может быть больше 9 символов")] 
     [Required(ErrorMessage = "Необходимо ввести код взаимодействия")]
     public string ContactCode { get; set; } = string.Empty;
-
-    public DateTime SigningDate { get; set; }
-    public DateTime Begin { get; set; }
-    public DateTime End { get; set; }
+    public DateTime SigningDate { get; set; } = DateTime.Today;
+    public DateTime Begin { get; set; } = DateTime.Today;
+    public DateTime End { get; set; } = DateTime.Today;
     [MinLength(1)] public List<Direction> Directions { get; set; } = [];
 
     public override string ToString() => $"{ContactCode} типа {Type} от {SigningDate}, {Begin} - {End}";

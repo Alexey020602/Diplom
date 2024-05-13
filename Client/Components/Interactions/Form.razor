@@ -3,7 +3,9 @@
 @using Client.Shared.Select
 @using Microsoft.AspNetCore.Components.Forms;
 @using Model
+@using Model.Divisions
 @using Model.Interactions
+@using PartnerShort = Model.Partners.PartnerShort
 
 @inherits BaseForm<Interaction>
 
@@ -12,14 +14,24 @@
 }
 
 @code {
+
     protected override RenderFragment Content =>
         @<div>
-            <p>Форма</p>
-            <p>@Item.ContactCode</p>
-            <InputText bind-Value=@Item.ContactCode>Код</InputText>
             <UniversalMultipleSelect TItem=@Direction Selected=@Item.Directions/>
-            <InputWithFloatTitle Title="Код" Value=@Item.ContactCode/>
-            <ValidationMessage For=@(() => Item.ContactCode)/>
-        </div>;
+            <InputWithFloatTitle Title="Код" @bind-Value=@Item.ContactCode/>
+            <InputWithFloatTitle Title="Тема" @bind-Value=@Item.Theme/>
+            <UniversalCustomSelect
+                TItem=@PartnerShort                @bind-SelectedItem=@Item.Partner
+                GetStringIdentifier=@(partner => partner.Id.ToString())/>
+            <UniversalCustomSelect
+                TItem=@DivisionShort                @bind-SelectedItem=@Item.Division
+                GetStringIdentifier=@(division => division.Id.ToString())/>
+            <UniversalCustomSelect
+                TItem=@Model.Interactions.Type                @bind-SelectedItem=@Item.Type
+                GetStringIdentifier=@(type => type.Id.ToString())/>
+            <InputDate @bind-Value=@Item.Begin>Начало</InputDate>
+            <InputDate @bind-Value=@Item.End>Конец</InputDate>
+            <InputDate @bind-Value=@Item.SigningDate>Дата подписания</InputDate>
+    </div>;
 
 }

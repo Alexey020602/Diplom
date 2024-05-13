@@ -12,9 +12,7 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
 {
     public async Task<List<Agreement>> GetAgreementsForPartnerWithId(int id) => 
         (
-            await context.Partners
-            .Include(p => p.PartnersInAgreement)
-            .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement)
+            await GetPartnersWithAgreements()
             .FirstAsync(p => p.Id == id)
         )
         .PartnersInAgreement
@@ -22,28 +20,20 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         .ToList();
     public async Task<List<Interaction>> GetInteractionsForPartnerWithId(int id) => 
         (
-            await context.Partners
-            .Include(p => p.Interactions)
+            await GetPartnersWithInteractions()
             .FirstAsync(p => p.Id == id)
         )
         .Interactions
         .ToList();
-    public async Task<IEnumerable<Partner>> GetPartnersAsync() =>
-        await GetPartners()
-            .ToListAsync();
     public async Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId) =>
         await GetPartners(partnerTypeId, directionId)
             .ToListAsync();
-    public async Task<Partner> GetPartnerByIdAsync(int id) => await GetPartnersWithPartnerTypesAndDirections()
-        // .Include(p => p.PartnersInAgreement)
-        // .ThenInclude(p => p.Agreement)
-        // .Include(p => p.Interactions)
+    public async Task<Partner> GetPartnerByIdAsync(int id) => await GetPartnersWithTypesAndDirections()
         .FirstAsync(partner => partner.Id == id);
     public async Task AddPartnerAsync(Partner partner)
     {
         AttachDirections(partner.Directions);
-        // if (partner.PartnerType is not null) 
-            context.PartnerTypes.Attach(partner.PartnerType);
+        context.PartnerTypes.Attach(partner.PartnerType);
         context.Partners.Add(partner);
         Console.WriteLine(partner);
         await context.SaveChangesAsync();
@@ -55,7 +45,6 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         
         context.Partners.Remove(partner);
         await context.SaveChangesAsync();
-
         return partner;
     }
     public async Task UpdatePartnerAsync(int id, Partner partner)
@@ -70,17 +59,22 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         existingPartner.Directions.UpdateByEnumerable(partner.Directions);
         await context.SaveChangesAsync();
     }
+
+    private IQueryable<Partner> GetPartnersWithAgreements() => context.Partners
+        .Include(p => p.PartnersInAgreement)
+        .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement);
+    private IQueryable<Partner> GetPartnersWithInteractions() => context.Partners
+        .Include(p => p.Interactions);
     private void AttachDirections(IEnumerable<Direction> directions)
     {
         context.Directions.AttachRange(directions);
     }
     private IQueryable<Partner> GetPartners(int? partnerTypeId, int? directionId) =>
-        GetPartnersWithPartnerTypesAndDirections()
+        GetPartnersWithTypesAndDirections()
             .FilterByType(partnerTypeId)
             .FilterByDirection(directionId);
-
     private IQueryable<Partner> GetPartners() => context.Partners.AsNoTracking();
-    private IQueryable<Partner> GetPartnersWithPartnerTypesAndDirections() => GetPartners()
+    private IQueryable<Partner> GetPartnersWithTypesAndDirections() => GetPartners()
         .Include(p => p.PartnerType)
         .Include(p => p.Directions);
 }

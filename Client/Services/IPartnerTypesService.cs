@@ -1,10 +1,7 @@
 ﻿using Client.Services.BaseApi;
-using DataBase.Data;
-using DataBase.Models;
-using Refit;
 
 namespace Client.Services;
 
-public interface IPartnerTypesService: IReadApi<PartnerType>
+public interface IPartnerTypesService: IReadApi<Model.Partners.Type>
 {
 }

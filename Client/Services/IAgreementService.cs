@@ -1,8 +1,6 @@
 ﻿using Client.Services.BaseApi;
-using DataBase.Models;
 using Model.Agreements;
 using Refit;
-using Agreement = DataBase.Models.Agreement;
 
 namespace Client.Services;
 

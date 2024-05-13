@@ -1,9 +1,12 @@
 @using Client.Services
 @using Model.Interactions
-
+@using Client.Shared
+@inherits DetailPage<Interaction>
 @page "/interactions/{id:int}"
 
-
+@{
+    base.BuildRenderTree(__builder);
+}
 
 @code {
     [Parameter] public int Id { get; set; }
@@ -14,4 +17,9 @@
     {
         interaction = await InteractionsService.ReadOne(Id);
     }
+
+    protected override RenderFragment Content => @<div></div>;
+    protected override string? Title => interaction?.ToString();
+    protected override string EntitiesPath => "interactions";
+    protected override bool CanDelete => true;
 }

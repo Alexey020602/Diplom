@@ -1,5 +1,5 @@
 ﻿@using Client.Services
-@using DataBase.Models
+@using Model.Agreements
 
 @page "/agreements/{id:int}"
 
@@ -10,7 +10,7 @@
     </div>
     @if (agreement is not null)
     {
-        <h3>@agreement.AgreementNumber</h3>
+        <h3>@agreement.Number</h3>
     }
 </div>
 

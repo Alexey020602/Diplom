@@ -1,9 +1,10 @@
 ﻿using Client.Services;
 using Client.Services.BaseApi;
-using DataBase.Models;
 using Model.Divisions;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Model.Partners;
 using Refit;
+using AgreementType = Model.Agreements.Type;
+using AgreementStatus = Model.Agreements.Status;
 using Type = Model.Partners.Type;
 
 namespace Client;
@@ -18,6 +19,7 @@ public class Startup(string baseAddress)
         //}); ;
         services.AddRefitClient<IPartnersService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("partners"));
+        services.AddTransient<IReadApi<PartnerShort>>(p => p.GetRequiredService<IPartnersService>());
 
         services.AddRefitClient<IPartnerTypesService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
@@ -29,6 +31,7 @@ public class Startup(string baseAddress)
         //services.AddTransient<IReadApi<Model.Divisions.>>()
         services.AddRefitClient<IDivisionsService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"));
+        services.AddTransient<IReadApi<DivisionShort>>(p => p.GetRequiredService<IDivisionsService>());
 
         services.AddRefitClient<IReadApi<Model.Divisions.Faculty>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"));
@@ -38,6 +41,9 @@ public class Startup(string baseAddress)
 
         services.AddRefitClient<IReadApi<AgreementStatus>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreementStatuses"));
+
+        services.AddRefitClient<IReadApi<Model.Interactions.Type>>()
+            .ConfigureHttpClient(ConfigureHttpClientForPath("interactiontypes"));
 
         services.AddRefitClient<IReadApi<Type>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));

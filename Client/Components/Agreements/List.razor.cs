@@ -1,8 +1,8 @@
 ﻿using Client.Services;
-using DataBase.Models;
 using Microsoft.AspNetCore.Components;
 using Model.Agreements;
-using AgreementType = DataBase.Models.AgreementType;
+using AgreementType = Model.Agreements.Type;
+using AgreementStatus = Model.Agreements.Status;
 
 namespace Client.Components.Agreements;
 

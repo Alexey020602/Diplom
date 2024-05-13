@@ -69,6 +69,7 @@
         <ListWithTitle Title="Взаимодействия" Items=@item?.Interactions/>
     </div>;
 
+    protected override bool CanDelete => !agreements.Any() && !interactions.Any();
     protected override string EntitiesPath => "partners";
     protected override string? Title => item?.ShortName;
 }
