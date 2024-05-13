@@ -1,6 +1,17 @@
+@using Client.Services
+@using Model.Interactions
+
+@page "/interactions/{id:int}"
 
 
 
 @code {
-    
+    [Parameter] public int Id { get; set; }
+    [Inject] private IInteractionsService InteractionsService { get; set; } = null!;
+    private Interaction? interaction;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        interaction = await InteractionsService.ReadOne(Id);
+    }
 }

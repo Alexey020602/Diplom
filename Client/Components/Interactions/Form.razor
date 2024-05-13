@@ -1,0 +1,25 @@
+@using Client.Shared.Form
+@using Client.Shared.Text
+@using Client.Shared.Select
+@using Microsoft.AspNetCore.Components.Forms;
+@using Model
+@using Model.Interactions
+
+@inherits BaseForm<Interaction>
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    protected override RenderFragment Content =>
+        @<div>
+            <p>Форма</p>
+            <p>@Item.ContactCode</p>
+            <InputText bind-Value=@Item.ContactCode>Код</InputText>
+            <UniversalMultipleSelect TItem=@Direction Selected=@Item.Directions/>
+            <InputWithFloatTitle Title="Код" Value=@Item.ContactCode/>
+            <ValidationMessage For=@(() => Item.ContactCode)/>
+        </div>;
+
+}

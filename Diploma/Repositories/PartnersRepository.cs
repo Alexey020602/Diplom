@@ -10,58 +10,54 @@ namespace Diploma.Repositories;
 
 public class PartnersRepository(ApplicationContext context) : IPartnersRepository
 {
-    public async Task<List<Agreement>> GetAgreementsForPartnerWithId(int id) => (await context.Partners
+    public async Task<List<Agreement>> GetAgreementsForPartnerWithId(int id) => 
+        (
+            await context.Partners
             .Include(p => p.PartnersInAgreement)
-            .FirstAsync(p => p.Id == id))
+            .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement)
+            .FirstAsync(p => p.Id == id)
+        )
         .PartnersInAgreement
         .Select(p => p.Agreement)
         .ToList();
-
-    public async Task<List<Interaction>> GetInteractionsForPartnerWithId(int id) => (await context.Partners
+    public async Task<List<Interaction>> GetInteractionsForPartnerWithId(int id) => 
+        (
+            await context.Partners
             .Include(p => p.Interactions)
-            .FirstAsync(p => p.Id == id))
+            .FirstAsync(p => p.Id == id)
+        )
         .Interactions
         .ToList();
-
     public async Task<IEnumerable<Partner>> GetPartnersAsync() =>
         await GetPartners()
             .ToListAsync();
-
     public async Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId) =>
         await GetPartners(partnerTypeId, directionId)
             .ToListAsync();
-
     public async Task<Partner> GetPartnerByIdAsync(int id) => await GetPartnersWithPartnerTypesAndDirections()
-        .Include(p => p.PartnersInAgreement)
-        .ThenInclude(p => p.Agreement)
-        .Include(p => p.Interactions)
+        // .Include(p => p.PartnersInAgreement)
+        // .ThenInclude(p => p.Agreement)
+        // .Include(p => p.Interactions)
         .FirstAsync(partner => partner.Id == id);
     public async Task AddPartnerAsync(Partner partner)
     {
         AttachDirections(partner.Directions);
-        if (partner.PartnerType is not null) context.PartnerTypes.Attach(partner.PartnerType);
+        // if (partner.PartnerType is not null) 
+            context.PartnerTypes.Attach(partner.PartnerType);
         context.Partners.Add(partner);
         Console.WriteLine(partner);
         await context.SaveChangesAsync();
     }
-
-    private void AttachDirections(IEnumerable<Direction> directions)
-    {
-        context.Directions.AttachRange(directions);
-    }
-
     public async Task<Partner> DeletePartnerByIdAsync(int id)
     {
         var partner = await context.Partners.FirstOrDefaultAsync(p => p.Id == id) ??
                       throw new KeyNotFoundException("Partner not found");
-
-
+        
         context.Partners.Remove(partner);
         await context.SaveChangesAsync();
 
         return partner;
     }
-
     public async Task UpdatePartnerAsync(int id, Partner partner)
     {
         var existingPartner = await context.Partners
@@ -74,14 +70,16 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         existingPartner.Directions.UpdateByEnumerable(partner.Directions);
         await context.SaveChangesAsync();
     }
-
+    private void AttachDirections(IEnumerable<Direction> directions)
+    {
+        context.Directions.AttachRange(directions);
+    }
     private IQueryable<Partner> GetPartners(int? partnerTypeId, int? directionId) =>
         GetPartnersWithPartnerTypesAndDirections()
             .FilterByType(partnerTypeId)
             .FilterByDirection(directionId);
 
     private IQueryable<Partner> GetPartners() => context.Partners.AsNoTracking();
-
     private IQueryable<Partner> GetPartnersWithPartnerTypesAndDirections() => GetPartners()
         .Include(p => p.PartnerType)
         .Include(p => p.Directions);

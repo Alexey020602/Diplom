@@ -9,7 +9,7 @@ namespace Diploma.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InteractonsController(IInteractionRepository interactionRepository): ControllerBase
+    public class InteractionsController(IInteractionRepository interactionRepository): ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> Get(int? interactionTypeId = null) => new JsonResult(
