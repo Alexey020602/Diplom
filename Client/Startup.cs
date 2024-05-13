@@ -1,6 +1,7 @@
 ﻿using Client.Services;
 using Client.Services.BaseApi;
 using DataBase.Models;
+using Model.Divisions;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Refit;
 using Type = Model.Partners.Type;
@@ -25,11 +26,11 @@ public class Startup(string baseAddress)
             .ConfigureHttpClient(ConfigureHttpClientForPath("directions"));
 
         services.AddTransient<IReadApi<Model.Direction>>(p => p.GetRequiredService<IDirectionsService>());
-
+        //services.AddTransient<IReadApi<Model.Divisions.>>()
         services.AddRefitClient<IDivisionsService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"));
 
-        services.AddRefitClient<IReadApi<Faculty>>()
+        services.AddRefitClient<IReadApi<Model.Divisions.Faculty>>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"));
 
         services.AddRefitClient<IReadApi<AgreementType>>()
@@ -44,7 +45,7 @@ public class Startup(string baseAddress)
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"));
 
         services.AddRefitClient<IInteractionsService>()
-            .ConfigureHttpClient(ConfigureHttpClientForPath("interactons"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("interactions"));
     }
     private string ApiAddress => baseAddress + "api/";
     //private Uri ApiBaseAddress => new(ApiAddress, UriKind.Absolute);

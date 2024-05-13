@@ -1,7 +1,6 @@
 ﻿using Client.Services;
 using Microsoft.AspNetCore.Components;
 using Client.Shared.List;
-using DataBase.Models;
 using Model.Divisions;
 
 namespace Client.Components.Divisions;
