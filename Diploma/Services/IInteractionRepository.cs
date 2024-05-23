@@ -8,5 +8,5 @@ public interface IInteractionRepository
     public Task<Interaction> GetInteractionById(int id);
     public Task DeleteInteractionById(int id);
     public Task UpdateInteraction(int id, Interaction interaction);
-    public Task AddInteraction(Interaction interaction);
+    public Task AddInteraction(Model.Interactions.Interaction interaction);
 }

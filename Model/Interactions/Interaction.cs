@@ -26,8 +26,5 @@ public class Interaction
 
     public override string ToString() => $"{ContactCode} типа {Type} от {SigningDate}, {Begin} - {End}";
 
-    public static Interaction Default => new()
-    {
-        Theme = "Загрузка..."
-    };
+    public static Interaction Default => new();
 }

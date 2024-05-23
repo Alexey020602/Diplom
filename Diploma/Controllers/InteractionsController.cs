@@ -2,6 +2,7 @@
 using Diploma.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Model.Extensions;
 using Model.Interactions;
 using Interaction = DataBase.Models.Interaction;
 
@@ -21,7 +22,7 @@ namespace Diploma.Controllers
             await interactionRepository.GetInteractionById(id)
             );
 
-        [HttpPost] public async Task<IActionResult> AddInteraction(Interaction interaction)
+        [HttpPost] public async Task<IActionResult> AddInteraction(Model.Interactions.Interaction interaction)
         {
             await interactionRepository.AddInteraction(interaction);
             return Ok();
