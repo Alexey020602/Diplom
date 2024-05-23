@@ -49,9 +49,9 @@ public class Partner
     /// </summary>
     public PartnerType PartnerType { get; set; } = null!;
     [JsonIgnore]
-    public IEnumerable<PartnerInAgreement> PartnersInAgreement { get; set; } = [];
+    public List<PartnerInAgreement> PartnersInAgreement { get; set; } = [];
     [JsonIgnore]
-    public IEnumerable<Interaction> Interactions { get; set; } = [];
+    public List<Interaction> Interactions { get; set; } = [];
     [MinLength(1)] public List<Direction> Directions { get; set; } = [];
 
     public override string ToString() =>

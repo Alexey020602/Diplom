@@ -14,6 +14,6 @@ public class Interaction
     public DateTime SigningDateTime { get; set; }
     public DateTime BeginigDateTime { get; set; }
     public DateTime EndingDateTime { get; set; }
-    [JsonIgnore] public List<Direction> Directions { get; set; } = null!;
+    public List<Direction> Directions { get; set; } = new ();
     public override string ToString() => $"{ContactCode} ���� {InteractionType} �� {SigningDateTime}, {BeginigDateTime} - {EndingDateTime}";
 }

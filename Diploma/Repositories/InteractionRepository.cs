@@ -12,13 +12,14 @@ using Partner = DataBase.Models.Partner;
 
 namespace Diploma.Repositories;
 
-public class InteractionRepository(ApplicationContext context): IInteractionRepository
+public class InteractionRepository(ApplicationContext context) : IInteractionRepository
 {
     public async Task AddInteraction(Model.Interactions.Interaction interaction)
     {
         var newInteraction = await ConvertToDatabaseModel(interaction);
         AttachDirections(newInteraction.Directions);
-        context.Interactions.Add(newInteraction);
+        context.Attach(newInteraction.InteractionType);
+        await context.Interactions.AddAsync(newInteraction);
         await context.SaveChangesAsync();
     }
 
@@ -33,7 +34,7 @@ public class InteractionRepository(ApplicationContext context): IInteractionRepo
     }
 
     public Task<List<Interaction>> GetInteractions(int? interactionTypeId) => context
-        .Interactions.Include(i => i.InteractionType).FilterByType(interactionTypeId).ToListAsync();
+        .Interactions.AsNoTracking().Include(i => i.InteractionType).FilterByType(interactionTypeId).ToListAsync();
 
     public Task UpdateInteraction(int id, Interaction interaction)
     {
@@ -57,13 +58,24 @@ public class InteractionRepository(ApplicationContext context): IInteractionRepo
         Partner = await GetPartnerFromPartnerShort(interaction.Partner!),
         Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
     };
-    
+
     private void AttachDirections(List<Direction> directions)
     {
         context.AttachRange(directions);
     }
-    private Task<Partner> GetPartnerFromPartnerShort(PartnerShort partner) =>
-        context.Partners.FirstAsync(p => p.Id == partner.Id);
-    private Task<Division> GetDivisionFormDivisionShort(DivisionShort division) =>
-        context.Divisions.FirstAsync(d => d.Id == division.Id);
+
+    private async Task<Partner> GetPartnerFromPartnerShort(PartnerShort partner)
+    {
+        var exitingPartner = await context.Partners.FirstAsync(p => p.Id == partner.Id);
+        context.Attach(exitingPartner);
+        return exitingPartner;
+    }
+
+    private async Task<Division> GetDivisionFormDivisionShort(DivisionShort division) 
+    {
+        var existingDivision = await context.Divisions.FirstAsync(d => d.Id == division.Id);
+        context.Attach(existingDivision);
+        return existingDivision;
+    }
+
 }

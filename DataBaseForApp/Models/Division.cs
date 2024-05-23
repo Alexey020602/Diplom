@@ -21,9 +21,8 @@ public class Division
     
     [MaxLength(100)]
     public string? Site { get; set; }
-    [JsonIgnore]
-    public ICollection<DivisionInAgreement>? DivisionsInAgreement { get; set; }
-    [JsonIgnore]
-    public ICollection<Interaction>? Interactions { get; set; } 
+
+    [JsonIgnore] public List<DivisionInAgreement> DivisionsInAgreement { get; set; } = [];
+    [JsonIgnore] public List<Interaction> Interactions { get; set; } = [];
     public List<Direction> Directions { get; set; } = [];
 }
