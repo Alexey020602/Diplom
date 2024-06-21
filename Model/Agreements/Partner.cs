@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Client.Shared.Select;
 
 namespace Model.Agreements;
 
-public class Partner
+public class Partner: ISelectionWithTextElement
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -12,4 +13,6 @@ public class Partner
         {Name}
         {ContactPersons}
         """;
+    public string Text { get => ContactPersons; set => ContactPersons = value; }
+    public string NonInputDescription => Name;
 }

@@ -6,8 +6,6 @@ namespace DataBase.Models;
 [PrimaryKey(nameof(DivisionInAgreementId), nameof(AgreementId))]
 public class DivisionInAgreement
 {
-    [MaxLength(100)] 
-    public string Name { get; set; } = null!;
     public int DivisionInAgreementId { get; set; }
     public Division Division { get; set; } = null!;
     public int AgreementId { get; set; }

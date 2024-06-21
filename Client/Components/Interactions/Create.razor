@@ -7,7 +7,7 @@
 <Form Item=@interaction OnSubmit=@OnSubmit></Form>
 
 @code {
-    private Interaction interaction = Interaction.Default;
+    private readonly Interaction interaction = Interaction.Default;
 
     private Task OnSubmit() => InteractionService.Create(interaction);
 }

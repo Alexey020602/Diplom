@@ -6,10 +6,10 @@ public class Agreement
 {
     public int Id { get; set; }
     [StringLength(15)] public string Number { get; set; } = string.Empty;
-    public Type? Type { get; set; }
-    public Status? Status { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    [Required] public Type? Type { get; set; }
+    [Required] public Status? Status { get; set; }
+    public DateTime Start { get; set; } = DateTime.Now;
+    public DateTime End { get; set; } = DateTime.Now;
     [MinLength(1)] public List<Division> Divisions { get; set; } = [];
     [MinLength(1)] public List<Partner> Partners { get; set; } = [];
     public override string ToString() => $"{Number} {Type} {Start} - {End}";

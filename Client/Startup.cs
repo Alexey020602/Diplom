@@ -1,4 +1,5 @@
-﻿using Client.Services;
+﻿using Client.Network;
+using Client.Services;
 using Client.Services.BaseApi;
 using Model.Divisions;
 using Model.Partners;
@@ -17,6 +18,8 @@ public class Startup(string baseAddress)
         //{
         //    BaseAddress = ApiBaseAddress,
         //}); ;
+        services.AddTransient<IPartnersForAgreementService, PartnersForAgreementService>();
+        services.AddTransient<IDivisionsForAgreementService, DivisionsForAgreementService>();
         services.AddRefitClient<IPartnersService>()
             .ConfigureHttpClient(ConfigureHttpClientForPath("partners"));
         services.AddTransient<IReadApi<PartnerShort>>(p => p.GetRequiredService<IPartnersService>());

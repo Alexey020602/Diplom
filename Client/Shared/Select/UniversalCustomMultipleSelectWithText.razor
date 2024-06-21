@@ -1,0 +1,34 @@
+@typeparam TItem where TItem: class, ISelectionWithTextElement
+@typeparam TBaseItem where TBaseItem: class 
+@typeparam TApi where TApi: class, Client.Services.BaseApi.IReadApi<TBaseItem>
+
+<MultipleSelectWithText
+    Selected=@Selected
+    NoSelected=@noSelected
+    />
+
+@code {
+    [Inject] private TApi Api { get; set; } = null!;
+    [Parameter] public List<TItem> Selected { get; set; } = [];
+    [Parameter] public Func<TBaseItem, TItem> Convert { get; set; } = null!;
+    private List<TItem> noSelected = [];
+
+    protected override Task OnParametersSetAsync() => LoadItems();
+
+    private async Task LoadItems()
+    {
+        try
+        {
+            noSelected = FilterItem(await Api.ReadAll());
+        }
+        catch
+        {
+            
+        }
+    }
+
+    private List<TItem> FilterItem(IEnumerable<TBaseItem> items) => items
+        .Select(Convert)
+        .Where(item => !Selected.Contains(item))
+        .ToList();
+}

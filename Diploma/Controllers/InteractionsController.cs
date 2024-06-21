@@ -28,7 +28,7 @@ namespace Diploma.Controllers
             return Ok();
         }
 
-        [HttpPut("{id:int}")] public async Task<IActionResult> UpdateInteraction(int id, Interaction interaction)
+        [HttpPut("{id:int}")] public async Task<IActionResult> UpdateInteraction(int id, Model.Interactions.Interaction interaction)
         {
             await interactionRepository.UpdateInteraction(id, interaction);
             return Ok();

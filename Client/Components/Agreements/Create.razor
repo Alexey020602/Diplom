@@ -1,0 +1,11 @@
+@page "/agreements/create"
+@using Client.Services
+@using Model.Agreements
+@inject IAgreementService AgreementsService
+
+<PageTitle>Добавление соглашения</PageTitle>
+<Form Item=@_agreement OnSubmit=@OnSubmit></Form>
+@code {
+    private readonly Agreement _agreement = new();
+    private Task OnSubmit() => AgreementsService.Create(_agreement);
+}
