@@ -1,0 +1,25 @@
+@typeparam TItem
+
+<div>
+    @if (item != null)
+    {
+    <PageTitle>@Title</PageTitle>
+    <div style="justify-content: space-between">
+        <button class="oval-button blue-fill" style="display: inline-block" onclick="history.back()">Назад</button>
+        <NavLink class="oval-button blue-outline" style="display: inline-block" href=@EditPath>
+            Редактировать
+        </NavLink>
+    </div>
+    <div>
+        @Content
+    </div>
+    }
+    else
+    {
+    <p>Загрузка...</p>
+    }
+
+</div>
+
+@code {
+}

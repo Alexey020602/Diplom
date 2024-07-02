@@ -1,0 +1,43 @@
+﻿@using Client.Shared.Text;
+@typeparam TItem
+
+@Body
+
+@code {
+    protected RenderFragment Body =>@<div>
+        <div style="float:left; width:150px">
+            @Filters
+        </div>
+        <div style="margin-left: 150px;">
+            @Search
+            @LinkToCreate
+            @if (IsShowList)
+        {
+            @List
+        }
+        else
+        {
+            @EmptyListButton
+        }
+        </div>
+    </div>;
+
+    private RenderFragment LinkToCreate =>@<NavLink class="oval-button blue-fill" href=@CreateHref>
+        Добавить
+    </NavLink>;
+
+    private RenderFragment List => @<StyledList List=@ShowedItems>
+        <RowFragment Context="item">
+            @Row(item)
+        </RowFragment>
+    </StyledList>
+    ;
+    private RenderFragment Row(TItem item) => @<NavLink href=@RowHref(item)>@item</NavLink>;
+
+    private RenderFragment EmptyListButton =>@<div>
+        @message
+        <button class="oval-button blue-fill" onclick=@LoadItems>Загрузить</button>
+    </div>;
+
+    private RenderFragment Search =>@<SearchText @bind-Input=@namesFilter />;
+}

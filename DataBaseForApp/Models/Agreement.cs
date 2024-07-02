@@ -7,14 +7,11 @@ public class Agreement
 {
     public int Id { get; set; }
     [MaxLength(15)] public string AgreementNumber { get; set; } = null!;
-    
-    // [Column(TypeName = "date")]
     public DateTime StarDateTime { get; set; }
     public DateTime EndDateTime { get; set; }
-    public ICollection<DivisionInAgreement> DivisionInAgreements { get; set; } = null!;
-    public ICollection<PartnerInAgreement> PartnerInAgreements { get; set; } = null!;
+    [MinLength(1)] public List<DivisionInAgreement> DivisionInAgreements { get; set; } = [];
+    [MinLength(1)] public List<PartnerInAgreement> PartnerInAgreements { get; set; } = [];
     public AgreementType AgreementType { get; set; } = null!;
     public AgreementStatus AgreementStatus { get; set; } = null!;
-
-    public override string ToString() => $"{AgreementNumber} {AgreementType} {StarDateTime} - {EndDateTime}";
+    public override string ToString() => $"{AgreementNumber} {AgreementType} {StarDateTime.ToShortDateString()} - {EndDateTime.ToShortDateString()}";
 }

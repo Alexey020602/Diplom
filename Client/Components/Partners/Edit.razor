@@ -1,37 +1,27 @@
 ﻿@page "/partners/{id:int}/edit"
 @using Client.Services;
-@using DataBase.Models;
-
+@using Model.Partners
 <div>
-    @* <NavLink class="oval-button orange-fill" href=@PreviousScreenUri>Отмена</NavLink> *@
     @if (partner is not null)
     {
-        <Form Partner="@partner" OnSubmit="@UpdatePartner" />
+        <PageTitle>@partner.ShortName</PageTitle>
+        <Form Item=@partner OnSubmit=@UpdatePartner></Form>
     }
 </div>
 
 @code {
     [Inject] private IPartnersService PartnersService { get; set; } = default!;
-    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
     [Parameter] public int Id { get; set; }
     private Partner? partner;
 
-    private string PreviousScreenUri => $"/partners/{Id}";
-
     protected override async Task OnParametersSetAsync()
     {
-        partner = await PartnersService.GetPartnerById(Id);
+        partner = await PartnersService.ReadOne(Id);
     }
 
     private async Task UpdatePartner()
     {
         if (partner is null) return;
-        await PartnersService.UpdatePartner(partner);
-        GoToPreviousScreen();
-    }
-
-    private void GoToPreviousScreen()
-    {
-        NavigationManager.NavigateTo(PreviousScreenUri);
+        await PartnersService.Update(Id, partner);
     }
 }

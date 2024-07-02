@@ -1,0 +1,13 @@
+@page "/interactions/Create"
+@using Client.Services
+@using Model.Interactions
+@inject IInteractionsService InteractionService
+
+<PageTitle>Создание взаимодействия</PageTitle>
+<Form Item=@interaction OnSubmit=@OnSubmit></Form>
+
+@code {
+    private readonly Interaction interaction = Interaction.Default;
+
+    private Task OnSubmit() => InteractionService.Create(interaction);
+}

@@ -21,7 +21,7 @@ public class PartnerTypesController(IPartnerTypesRepository partnerTypesReposito
         return new JsonResult(partnerType);
     }
  
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> AddPartnerType(PartnerType partnerType)
     {
         await partnerTypesRepository.AddPartnerTypeAsync(partnerType);
@@ -40,9 +40,9 @@ public class PartnerTypesController(IPartnerTypesRepository partnerTypesReposito
         await partnerTypesRepository.DeletePartnerTypeAsync(partnerType);
     }
 
-    [HttpPost] 
-    public async Task UpdatePartnerType(PartnerType partnerType)
+    [HttpPut("{id}")] 
+    public async Task UpdatePartnerType(int id,PartnerType partnerType)
     {
-        await partnerTypesRepository.UpdatePartnerTypeAsync(partnerType);
+        await partnerTypesRepository.UpdatePartnerTypeAsync(id,partnerType);
     }
 }

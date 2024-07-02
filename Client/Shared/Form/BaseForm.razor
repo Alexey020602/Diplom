@@ -1,0 +1,12 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+@typeparam TItem where TItem: class
+
+<EditForm Model=@Item OnValidSubmit=@OnValueSubmit>
+    <DataAnnotationsValidator/>
+    @Content
+    <div>
+        <input class="oval-button orange-fill" type="button" onclick="history.back()" value="Отмена" />
+        <input class="oval-button blue-fill" type="submit" value="Сохранить" />
+    </div>
+</EditForm>

@@ -7,7 +7,7 @@ namespace DataBase.Models;
 public class Direction : IEquatable<Direction>
 {
     public int Id { get; set; }
-    [MaxLength(200)]
+    [StringLength(200)]
     public string Name { get; set; } = null!;
     [JsonIgnore]
     public ICollection<Partner>? Partners { get; set; }

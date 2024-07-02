@@ -1,0 +1,27 @@
+﻿@using Services.BaseApi
+
+@typeparam TItem where TItem : class
+@typeparam TApi where TApi: IReadApi<TItem>
+
+@inject IReadApi<TItem> Api
+
+<MultipleSelect NoSelected=@items
+                Selected=@Selected />
+
+@code {
+    [Parameter]
+    public List<TItem> Selected { get; set; } = [];
+    private List<TItem> items = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await Api.ReadAll();
+        this.items = items
+        .Where(item => !Selected.Contains(item))
+        .ToList();
+    }
+
+    // private RenderFragment Select => @<MultipleSelect NoSelected=@items
+    //                 Selected=@Selected />
+    // ;
+}

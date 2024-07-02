@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 namespace DataBase.Models;
@@ -7,7 +6,7 @@ namespace DataBase.Models;
 /// <summary>
 /// Класс модели для сущности Патрнер
 /// </summary>
-[Index("ShortName", IsUnique = true)]
+[Index(nameof(ShortName), IsUnique = true)]
 public class Partner
 {
     /// <summary>
@@ -17,17 +16,13 @@ public class Partner
     /// <summary>
     /// Полное  название партнера
     /// </summary>
-    [StringLength(200, MinimumLength = 1)]
+    [StringLength(200)]
     public string FullName { get; set; } = string.Empty;
     /// <summary>
     /// Краткое название партнера
     /// </summary>
-    [StringLength(50, MinimumLength = 1)]
+    [StringLength(50)]
     public string ShortName { get; set; } = string.Empty;
-    /// <summary>
-    /// Идентификатор типа партнера
-    /// </summary>
-    //public int PartnerTypeId { get; set; }
     /// <summary>
     /// Адрес партнера
     /// </summary>
@@ -52,11 +47,11 @@ public class Partner
     /// <summary>
     /// Тип партнера
     /// </summary>
-    [Required] public PartnerType? PartnerType { get; set; } = null!;
+    public PartnerType PartnerType { get; set; } = null!;
     [JsonIgnore]
-    public IEnumerable<PartnerInAgreement> PartnersInAgreement { get; set; } = [];
+    public List<PartnerInAgreement> PartnersInAgreement { get; set; } = [];
     [JsonIgnore]
-    public IEnumerable<Interaction> Interactions { get; set; } = [];
+    public List<Interaction> Interactions { get; set; } = [];
     [MinLength(1)] public List<Direction> Directions { get; set; } = [];
 
     public override string ToString() =>
@@ -97,8 +92,7 @@ public class PartnerType
     /// <summary>
     /// Название типа партнера
     /// </summary>
-    [StringLength(50)] 
-    public string Name { get; set; } = string.Empty;
+    [StringLength(50)] public string Name { get; set; } = string.Empty;
 
     ///<summary>
     ///Список партнеров соответсвующего типа
@@ -106,8 +100,6 @@ public class PartnerType
     [JsonIgnore]
     public ICollection<Partner> Partners { get; set; } = [];
 
-    public override string ToString()
-    {
-        return $"{Name}";
-    }
+    public override string ToString() => Name;
+    
 }

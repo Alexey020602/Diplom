@@ -1,22 +1,16 @@
-﻿@using DataBase.Models;
-@using Client.Services;
+﻿@using Client.Services;
+@using Model.Partners
 @rendermode RenderMode.InteractiveWebAssembly
+
 @page "/partners/create"
 @inject IPartnersService PartnersService
 
 <p>Создание</p>
-<Form Partner=@partner OnSubmit="@CreatePartner" />
-
-@* <Form Partner=@partner OnSubmit="@CreatePartner"/> *@
+<PageTitle>Добавление партнера</PageTitle>
+<Form Item=@partner OnSubmit=@CreatePartner></Form>
 
 @code {
-    private Partner partner = new()
-        {
-            Directions = new List<Direction>()
-        };
+    private Partner partner = new();
 
-    private async Task CreatePartner()
-    {
-        await PartnersService.AddPartner(partner);
-    }
+    private Task CreatePartner() => PartnersService.Create(partner);
 }

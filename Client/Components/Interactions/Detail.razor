@@ -1,0 +1,20 @@
+@using Client.Services
+@using Model.Interactions
+@using Client.Shared
+@using Model.Agreements
+@inherits DetailPage<Interaction>
+@page "/interactions/{id:int}"
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Inject] private IInteractionsService InteractionsService { get; set; } = null!;
+    protected override Task<Interaction> LoadItem() => InteractionsService.ReadOne(Id);
+
+    protected override RenderFragment Content => @<div></div>;
+    protected override string? Title => item?.ToString();
+    protected override string EntitiesPath => "interactions";
+    protected override bool CanDelete => true;
+}

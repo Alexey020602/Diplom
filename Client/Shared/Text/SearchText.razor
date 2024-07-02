@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Components.Forms;
+
+<div>
+        <InputText @bind-Value=@Value />
+        <button style="display:inline-block" onclick=@SendUpdatedValue class="oval-button blue-outline">Поиск</button>
+        <button style="display:inline-block" onclick=@ClearFilterField class="oval-button orange-outline">Очистить</button>
+    </div>
+
+@code {
+    [Parameter] public string Input { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> InputChanged { get; set; }
+    private string Value = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        Value = Input;
+    }
+
+    private Task SendUpdatedValue() => InputChanged.InvokeAsync(Value);
+
+    private Task ClearFilterField()
+    {
+        Value = string.Empty;
+        return SendUpdatedValue();
+    }
+}

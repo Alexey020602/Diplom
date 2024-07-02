@@ -9,5 +9,7 @@ public class Faculty
     [StringLength(100)]
     public string Name { get; set; } = null!;
     [JsonIgnore]
-    public ICollection<Division> Divisions { get; set; } = null!;
+    public ICollection<Division> Divisions { get; set; } = [];
+
+    public override string ToString() => Name;
 }

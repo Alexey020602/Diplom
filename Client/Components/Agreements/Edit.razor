@@ -1,0 +1,45 @@
+@page "/agreements/{id:int}/Edit"
+@using Client.Services
+@using Model.Agreements
+
+@if (_agreement is not null)
+{
+    <Form OnSubmit=@UpdateInteraction Item=@_agreement></Form>
+}
+else
+{
+    @_message
+}
+@code {
+    private static string LoadingMessage = "Загрузка...";
+    [Parameter] public int Id { get; set; }
+    [Inject] private IAgreementService AgreementService { get; set; } = null!;
+    private Agreement? _agreement;
+    private string _message = LoadingMessage;
+    protected override Task OnParametersSetAsync() => LoadAgreement();
+
+    private async Task LoadAgreement()
+    {
+        try
+        {
+            _agreement = await AgreementService.ReadOne(Id);
+        }
+        catch (Exception ex)
+        {
+            _message = ex.Message;
+        }
+    }
+
+    private async Task UpdateInteraction()
+    {
+        if (_agreement is null) return;
+        try
+        {
+            await AgreementService.Update(Id, _agreement);
+        }
+        catch
+        {
+            //TODO Обработка исключения
+        }
+    }
+}

@@ -1,51 +1,26 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms;
-@using Client.Shared;
-@using DataBase.Models;
+@using Client.Shared.Select;
+@using Client.Shared.List;
+@using Client.Shared.Text;
+@using Model.Partners
+@using Type = Model.Partners.Type
 
+@inherits SearchableStyledList<PartnerShort>
+
+@rendermode RenderMode.InteractiveWebAssembly
+@page "/"
 @page "/partners"
 
 <PageTitle>Патнеры университета</PageTitle>
-<div>
-    <div style="float:left; width: 150px;">
-        <PartnerTypesSelect @bind-PartnerType:get=@PartnerType @bind-PartnerType:set=@SelectPartnerType />
-        <button onclick=@ResetSelectedPartnerType>Сбросить</button>
-    </div>
-    <div style="margin-left: 150px;">
-        @Filter
-        <div>
-            <NavLink class="oval-button blue-fill" href="partners/create">
-                Добавить
-            </NavLink>
-        </div>
-        @if (ShowPartners)
-        {
-            @PartnersList
-        }
-        else
-        {
-            @NullPartners
-        }
-
-    </div>
-</div>
+@{
+    base.BuildRenderTree(__builder);
+}
 
 @code {
-    private RenderFragment Filter =>@<div>
-        <InputText @bind-Value=@ShortNameInput />
-        <button style="display:inline-block" onclick=@SetFilterField class="oval-button blue-outline">Поиск</button>
-        <button style="display:inline-block" onclick=@ClearFilterField class="oval-button orange-outline">Очистить</button>
-    </div>;
-
-    private RenderFragment NullPartners => @<div>
-        @message
-        <button class="oval-button blue-fill" onclick=@LoadPartners>Загрузить</button>
-    </div>;
-
-    private RenderFragment PartnersList => @<BaseList List=@ShowedPartners>
-        <RowFragment Context="partner">
-            @PartnerLink(partner)
-        </RowFragment>
-    </BaseList>;
-
-    private RenderFragment PartnerLink(Partner partner) => @<NavLink href="@($"partners/{partner.Id}")">@partner.ShortName</NavLink>;
+    protected override RenderFragment Filters => 
+        @<UniversalCustomSelect 
+             TItem=@Type 
+                          @bind-SelectedItem:get=@PartnerType 
+                                                    @bind-SelectedItem:set=@SelectPartnerType 
+             GetStringIdentifier=@(type => type.Id.ToString()) />;
 }

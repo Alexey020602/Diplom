@@ -1,0 +1,47 @@
+@page "/interactions/{id:int}/edit"
+@using Client.Services
+@using Model.Interactions
+
+@if (_interaction is not null)
+{
+    <Form OnSubmit=@UpdateInteraction Item=@_interaction></Form>
+}
+else
+{
+    @message
+}
+
+@code {
+    private static string LoadingMessage = "Загрузка...";
+    [Parameter] public int Id { get; set; }
+    [Inject] private IInteractionsService InteractionsService { get; set; } = null!;
+    private Interaction? _interaction;
+    private string message = LoadingMessage;
+    
+    protected override Task OnParametersSetAsync() => LoadInteraction();
+
+    private async Task LoadInteraction()
+    {
+        try
+        {
+            _interaction = await InteractionsService.ReadOne(Id);
+        }
+        catch(Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private async Task UpdateInteraction()
+    {
+        if (_interaction is null) return;
+        try
+        {
+            await InteractionsService.Update(Id, _interaction);
+        }
+        catch
+        {
+            
+        }
+    }
+}

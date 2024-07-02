@@ -1,18 +1,15 @@
-﻿using DataBase.Models;
+﻿using Client.Services.BaseApi;
+using Model.Agreements;
+using Model.Interactions;
+using Model.Partners;
 using Refit;
-using SharedModel;
+using Partner = Model.Partners.Partner;
+
 namespace Client.Services;
 
-public interface IPartnersService
+public interface IPartnersService: IReadApi<PartnerShort>, IReadOneApi<Partner, int>, IDeleteApi<int>, IUpdateApi<Partner, int>, ICreateApi<Partner>
 {
-    [Get("")]
-    Task<IEnumerable<Partner>> GetPartners(int? partnerTypeId = null);
-    [Get("/{id}")]
-    Task<Partner> GetPartnerById(int id);
-    [Delete("/{id}")]
-    Task DeletePartner(int id);
-    [Put("")]
-    Task AddPartner(Partner partner);
-    [Post("")]
-    Task UpdatePartner(Partner partner);
+    [Get("")] Task<List<PartnerShort>> ReadAll(int? partnerTypeId = null);
+    [Get("/{id}/agreements")] Task<List<AgreementShort>> ReadAllAgreements(int id);
+    [Get("/{id}/interactions")] Task<List<InteractionShort>> ReadAllInteractions(int id);
 }

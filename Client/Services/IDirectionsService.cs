@@ -1,17 +1,8 @@
-﻿using DataBase.Models;
+﻿using Model;
 using Refit;
+using Client.Services.BaseApi;
 namespace Client.Services;
 
-public interface IDirectionsService
+public interface IDirectionsService: IReadApi<Direction>, IReadOneApi<Direction, int>, IDeleteApi<int>, IUpdateApi<Direction, int>, ICreateApi<Direction>
 {
-    [Get("")]
-    Task<IEnumerable<Direction>> GetDirections();
-    [Get("/{id}")]
-    Task<Direction> GetDirection(int id);
-    [Delete("/{id}")]
-    Task DeleteDirection(int id);
-    [Post("")]
-    Task UpdateDirection(Direction direction);
-    [Put("")]
-    Task AddDirection(Direction direction);
 }
