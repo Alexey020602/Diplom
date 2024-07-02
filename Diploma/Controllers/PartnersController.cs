@@ -1,3 +1,4 @@
+using Diploma.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Model.Partners;
 using Diploma.Extensions.ModelToDao;
@@ -41,7 +42,7 @@ public class PartnersController(IPartnersRepository partnersRepository) : Contro
     [HttpGet("{id:int}/agreements")]
     public async Task<IActionResult> GetAgreementsForPartner(int id)
     {
-        return new JsonResult((await partnersRepository.GetAgreementsForPartnerWithId(id)).Select(a => new AgreementShort(a.Id, a.ToString())));
+        return new JsonResult((await partnersRepository.GetAgreementsForPartnerWithId(id)).Select(a => a.ConvertToShortModel()));
     }
 
     [HttpGet("{id:int}/interactions")]

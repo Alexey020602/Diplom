@@ -17,7 +17,7 @@ namespace DataBase.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -160,25 +160,20 @@ namespace DataBase.Migrations
 
             modelBuilder.Entity("DataBase.Models.DivisionInAgreement", b =>
                 {
-                    b.Property<int>("DivisionInAgreementId")
+                    b.Property<int>("DivisionId")
                         .HasColumnType("integer");
 
                     b.Property<int>("AgreementId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("DivisionId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("ContactPersons")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(500)
                         .HasColumnType("varchar");
 
-                    b.HasKey("DivisionInAgreementId", "AgreementId");
+                    b.HasKey("DivisionId", "AgreementId");
 
                     b.HasIndex("AgreementId");
-
-                    b.HasIndex("DivisionId");
 
                     b.ToTable("DivisionsInAgreement");
                 });
@@ -318,7 +313,7 @@ namespace DataBase.Migrations
                     b.Property<int>("AgreementId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PartnerInAgreementId")
+                    b.Property<int>("PartnerId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ContactPersons")
@@ -326,13 +321,7 @@ namespace DataBase.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar");
 
-                    b.Property<int>("PartnerId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AgreementId", "PartnerInAgreementId");
-
-                    b.HasIndex("ContactPersons")
-                        .IsUnique();
+                    b.HasKey("AgreementId", "PartnerId");
 
                     b.HasIndex("PartnerId");
 

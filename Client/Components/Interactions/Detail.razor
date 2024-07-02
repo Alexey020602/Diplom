@@ -1,6 +1,7 @@
 @using Client.Services
 @using Model.Interactions
 @using Client.Shared
+@using Model.Agreements
 @inherits DetailPage<Interaction>
 @page "/interactions/{id:int}"
 
@@ -9,17 +10,11 @@
 }
 
 @code {
-    [Parameter] public int Id { get; set; }
     [Inject] private IInteractionsService InteractionsService { get; set; } = null!;
-    private Interaction? interaction;
-
-    protected override async Task OnParametersSetAsync()
-    {
-        interaction = await InteractionsService.ReadOne(Id);
-    }
+    protected override Task<Interaction> LoadItem() => InteractionsService.ReadOne(Id);
 
     protected override RenderFragment Content => @<div></div>;
-    protected override string? Title => interaction?.ToString();
+    protected override string? Title => item?.ToString();
     protected override string EntitiesPath => "interactions";
     protected override bool CanDelete => true;
 }

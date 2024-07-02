@@ -1,6 +1,7 @@
 ﻿@using Services.BaseApi
 
 @typeparam TItem where TItem : class
+@typeparam TApi where TApi: IReadApi<TItem>
 
 @inject IReadApi<TItem> Api
 

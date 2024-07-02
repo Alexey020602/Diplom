@@ -1,6 +1,4 @@
 ﻿using Diploma.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Model.Agreements;
 
@@ -13,22 +11,15 @@ public class AgreementsController(IAgreementRepository repository) : ControllerB
     [HttpGet]
     public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId) =>
         new JsonResult(
-            (await repository.GetAgreements(agreementTypeId, agreementStatusId))
-            .Select(agreement =>  new AgreementShort(agreement.Id, agreement.ToString())) 
-            );
+            await repository.GetAgreements(agreementTypeId, agreementStatusId)
+        );
 
-    public async Task<IActionResult> GetOne(int id) => new JsonResult(await repository.GetAgreementById(id));
+    [HttpGet("{id:int}")] public async Task<IActionResult> GetOne(int id) => new JsonResult(await repository.GetAgreementById(id));
 
-    [HttpPost] public async Task<IActionResult> Add(Agreement agreement)
+    [HttpPost]
+    public async Task<IActionResult> Add(Agreement agreement)
     {
-        try
-        {
-            await repository.AddAgreement(agreement);
-        }
-        catch(Exception ex)
-        {
-            return BadRequest(ex);
-        }
+        await repository.AddAgreement(agreement);
 
         return NoContent();
     }
@@ -40,7 +31,7 @@ public class AgreementsController(IAgreementRepository repository) : ControllerB
         {
             await repository.UpdateAgreement(id, agreement);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return BadRequest(ex);
         }
@@ -55,11 +46,11 @@ public class AgreementsController(IAgreementRepository repository) : ControllerB
         {
             await repository.DeleteAgreement(id);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return BadRequest(ex);
         }
-        
+
         return NoContent();
     }
 }

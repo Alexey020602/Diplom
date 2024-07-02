@@ -13,5 +13,5 @@ public class Agreement
     [MinLength(1)] public List<PartnerInAgreement> PartnerInAgreements { get; set; } = [];
     public AgreementType AgreementType { get; set; } = null!;
     public AgreementStatus AgreementStatus { get; set; } = null!;
-    public override string ToString() => $"{AgreementNumber} {AgreementType} {StarDateTime} - {EndDateTime}";
+    public override string ToString() => $"{AgreementNumber} {AgreementType} {StarDateTime.ToShortDateString()} - {EndDateTime.ToShortDateString()}";
 }

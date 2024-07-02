@@ -2,7 +2,7 @@
 
 namespace Client.Services.BaseApi;
 
-public interface ICreateApi<T> where T : class
+public interface ICreateApi<in T> where T : class
 {
     [Post("")]
     Task Create([Body] T payload);

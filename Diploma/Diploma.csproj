@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.3" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
         <PrivateAssets>all</PrivateAssets>
@@ -23,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions\ModelToDao\" />
+      <Folder Include="Services\Repositories\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 

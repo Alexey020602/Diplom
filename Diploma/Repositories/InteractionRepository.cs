@@ -119,7 +119,6 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         {
             Id = division.Id,
         };
-            //await context.Divisions.FirstAsync(d => d.Id == division.Id);
         context.Attach(existingDivision);
         return existingDivision;
     }

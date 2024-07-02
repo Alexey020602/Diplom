@@ -21,6 +21,8 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
     public async Task<List<Interaction>> GetInteractionsForPartnerWithId(int id) => 
         (
             await GetPartnersWithInteractions()
+                .Include(p => p.Interactions)
+                
             .FirstAsync(p => p.Id == id)
         )
         .Interactions
@@ -62,9 +64,15 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
 
     private IQueryable<Partner> GetPartnersWithAgreements() => context.Partners
         .Include(p => p.PartnersInAgreement)
-        .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement);
+        .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement)
+        .ThenInclude(agreement => agreement.AgreementType)
+        .Include(p => p.PartnersInAgreement)
+        .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement)
+        .ThenInclude(agreement => agreement.AgreementStatus)
+        ;
     private IQueryable<Partner> GetPartnersWithInteractions() => context.Partners
-        .Include(p => p.Interactions);
+        .Include(p => p.Interactions)
+        .ThenInclude(i => i.InteractionType);
     private void AttachDirections(IEnumerable<Direction> directions)
     {
         context.Directions.AttachRange(directions);

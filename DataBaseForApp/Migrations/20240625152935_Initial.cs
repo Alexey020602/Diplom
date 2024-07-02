@@ -195,14 +195,13 @@ namespace DataBase.Migrations
                 name: "DivisionsInAgreement",
                 columns: table => new
                 {
-                    DivisionInAgreementId = table.Column<int>(type: "integer", nullable: false),
+                    DivisionId = table.Column<int>(type: "integer", nullable: false),
                     AgreementId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "varchar", maxLength: 100, nullable: false),
-                    DivisionId = table.Column<int>(type: "integer", nullable: false)
+                    ContactPersons = table.Column<string>(type: "varchar", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DivisionsInAgreement", x => new { x.DivisionInAgreementId, x.AgreementId });
+                    table.PrimaryKey("PK_DivisionsInAgreement", x => new { x.DivisionId, x.AgreementId });
                     table.ForeignKey(
                         name: "FK_DivisionsInAgreement_Agreements_AgreementId",
                         column: x => x.AgreementId,
@@ -284,13 +283,12 @@ namespace DataBase.Migrations
                 columns: table => new
                 {
                     AgreementId = table.Column<int>(type: "integer", nullable: false),
-                    PartnerInAgreementId = table.Column<int>(type: "integer", nullable: false),
-                    ContactPersons = table.Column<string>(type: "varchar", maxLength: 500, nullable: false),
-                    PartnerId = table.Column<int>(type: "integer", nullable: false)
+                    PartnerId = table.Column<int>(type: "integer", nullable: false),
+                    ContactPersons = table.Column<string>(type: "varchar", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartnersInAgreement", x => new { x.AgreementId, x.PartnerInAgreementId });
+                    table.PrimaryKey("PK_PartnersInAgreement", x => new { x.AgreementId, x.PartnerId });
                     table.ForeignKey(
                         name: "FK_PartnersInAgreement_Agreements_AgreementId",
                         column: x => x.AgreementId,
@@ -389,11 +387,6 @@ namespace DataBase.Migrations
                 column: "AgreementId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DivisionsInAgreement_DivisionId",
-                table: "DivisionsInAgreement",
-                column: "DivisionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Interactions_DivisionId",
                 table: "Interactions",
                 column: "DivisionId");
@@ -417,12 +410,6 @@ namespace DataBase.Migrations
                 name: "IX_Partners_ShortName",
                 table: "Partners",
                 column: "ShortName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PartnersInAgreement_ContactPersons",
-                table: "PartnersInAgreement",
-                column: "ContactPersons",
                 unique: true);
 
             migrationBuilder.CreateIndex(

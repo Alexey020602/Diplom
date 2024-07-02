@@ -5,7 +5,7 @@ namespace Diploma.Services;
 
 public interface IAgreementRepository
 {
-    public Task<IEnumerable<AgreementShort>> GetAgreements(int? agreementTypeId, int? agreementStatusId);
+    public Task<List<AgreementShort>> GetAgreements(int? agreementTypeId, int? agreementStatusId);
     public Task<ModelAgreement> GetAgreementById(int id);
     public Task DeleteAgreement(int id);
     public Task UpdateAgreement(int id, ModelAgreement agreement);

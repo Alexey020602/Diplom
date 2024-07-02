@@ -1,6 +1,13 @@
 ﻿namespace Model.Agreements;
 
-public record class AgreementShort(int Id, string Name)
+public record AgreementShort(
+    int Id, 
+    string Number,
+    Type Type,
+    Status Status,
+    DateTime Start,
+    DateTime End
+    )
 {
-    public override string ToString() => Name;
+    public override string ToString() => $"Номер: {Number}, Тип: {Type}, Статус: {Status}. {Start.ToShortDateString()} - {End.ToShortDateString()}";
 }

@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Models;
-[PrimaryKey(nameof(DivisionInAgreementId), nameof(AgreementId))]
+[PrimaryKey(nameof(DivisionId), nameof(AgreementId))]
 public class DivisionInAgreement
 {
-    public int DivisionInAgreementId { get; set; }
+    public int DivisionId { get; set; }
     public Division Division { get; set; } = null!;
     public int AgreementId { get; set; }
-   public Agreement Agreement { get; set; } = null!;
-   public string ContactPersons { get; set; } = string.Empty;
+    public Agreement Agreement { get; set; } = null!;
+    [MaxLength(500)] public string ContactPersons { get; set; } = string.Empty;
 }

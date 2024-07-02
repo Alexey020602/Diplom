@@ -44,15 +44,16 @@
         try
         {
             Console.WriteLine($"{Id}");
-            item = await PartnersService.ReadOne(Id);
             agreements = await PartnersService.ReadAllAgreements(Id);
             interactions = await PartnersService.ReadAllInteractions(Id);
+            await base.OnParametersSetAsync();
         }
         catch (Exception ex)
         {
             //TODO Обработка исключений
             Console.WriteLine(ex);
         }
+
     }
     
     protected override RenderFragment Content => @<div>
@@ -72,4 +73,6 @@
     protected override bool CanDelete => !agreements.Any() && !interactions.Any();
     protected override string EntitiesPath => "partners";
     protected override string? Title => item?.ShortName;
+    protected override Task<Partner> LoadItem()  => PartnersService.ReadOne(Id);
+
 }

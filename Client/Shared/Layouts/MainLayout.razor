@@ -13,7 +13,10 @@
 </header>
 <div>
     <div class="center">
-        @Body
+        <ErrorBoundary>
+            <ChildContent>@Body</ChildContent>
+            <ErrorContent Context="exception">@exception.Message</ErrorContent>
+        </ErrorBoundary>
     </div>
 </div>
 <footer style="background-color:#E7E7E7">

@@ -2,11 +2,10 @@
 @using Client.Services;
 @using Model.Partners
 <div>
-    @* <NavLink class="oval-button orange-fill" href=@PreviousScreenUri>Отмена</NavLink> *@
     @if (partner is not null)
     {
         <PageTitle>@partner.ShortName</PageTitle>
-        <Form Item=@partner OnSubmit=@UpdatePartner/>
+        <Form Item=@partner OnSubmit=@UpdatePartner></Form>
     }
 </div>
 

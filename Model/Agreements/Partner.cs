@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Client.Shared.Select;
 
 namespace Model.Agreements;
@@ -13,6 +14,8 @@ public class Partner: ISelectionWithTextElement
         {Name}
         {ContactPersons}
         """;
+    [JsonIgnore]
     public string Text { get => ContactPersons; set => ContactPersons = value; }
+    [JsonIgnore]
     public string NonInputDescription => Name;
 }

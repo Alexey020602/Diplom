@@ -1,34 +1,34 @@
 ﻿@using Client.Services
+@using Client.Shared
 @using Model.Agreements
-
+@using Client.Shared.Text
+@using Client.Shared.List
+@inherits DetailPage<Agreement>
 @page "/agreements/{id:int}"
-
-<div>
-    <div>
-        <button onclick="history.back()" class="oval-button orange-outline">Назад</button>
-        <NavLink class="oval-button blue-outline" href=@($"/agreements/{Id}/edit")>Редактировать</NavLink>
-    </div>
-    @if (agreement is not null)
-    {
-        <h3>@agreement.Number</h3>
-    }
-</div>
+@{
+    base.BuildRenderTree(__builder);
+}
 
 @code {
-    [Parameter] public int Id { get; set; }
     [Inject] private IAgreementService AgreementService { get; set; } = null!;
-    private Agreement? agreement;
 
-    protected override async Task OnParametersSetAsync()
-    {
-        try
-        {
-            agreement = await AgreementService.ReadOne(Id);
-        } 
-        catch(Exception ex)
-        {
-            //TODO Добавить обработку исключений
-            Console.WriteLine(ex);
-        }
-    }
+    protected override Task<Agreement> LoadItem() => AgreementService.ReadOne(Id);
+    //TODO Доделать экраны деталей
+    protected override RenderFragment Content =>
+        @<div>
+            @if (item != null)
+            {
+                <TextWithTitle Title="Номер" Text=@item.Number/>
+                <TextWithTitle Title="Тип" Text=@item.Type?.Name/>
+                <TextWithTitle Title="Статус" Text=@item.Status?.Name/>
+                <TextWithTitle Title="Начало" Text=@item.Start.ToShortDateString()/>
+                <TextWithTitle Title="Конец" Text=@item.End.ToLongDateString()/>
+                <ListWithTitle Title="Подразделения" Items=@item.Divisions/>
+                <ListWithTitle Title="Партнеры" Items=@item.Partners/>
+            }
+    </div>;
+
+    protected override string? Title => item?.ToString();
+    protected override string EntitiesPath => "interactions";
+    protected override bool CanDelete => true;
 }

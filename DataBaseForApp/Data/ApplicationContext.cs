@@ -4,7 +4,7 @@ namespace DataBase.Data;
 /// <summary>
 /// Контекст приложения для подключения к БД
 /// </summary>
-public class ApplicationContext: DbContext
+public class ApplicationContext(DbContextOptions<ApplicationContext> options) : DbContext(options)
 {
     /// <summary>
     /// DbSet партнеров в база данных
@@ -34,10 +34,6 @@ public class ApplicationContext: DbContext
     /// DbSet факультета университета
     /// </summary>
     public DbSet<Direction> Directions { get; set; }
-
-    public ApplicationContext(DbContextOptions<ApplicationContext> options):base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -87,7 +83,6 @@ public class ApplicationContext: DbContext
             .WithMany(a => a.PartnerInAgreements)
             .OnDelete(deleteBehavior);
         
-        //Устанавливаем конвертацию системных типов в типы PostgreSQL по-умолчанию
         
     }
 
@@ -115,6 +110,7 @@ public class ApplicationContext: DbContext
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
+        //Устанавливаем конвертацию системных типов в типы PostgreSQL по-умолчанию
         configurationBuilder
             .Properties<DateTime>()
             .HaveColumnType("date");

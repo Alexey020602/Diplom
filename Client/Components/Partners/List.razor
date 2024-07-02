@@ -17,5 +17,10 @@
 }
 
 @code {
-    protected override RenderFragment Filters => @<UniversalCustomSelect TItem=@Type @bind-SelectedItem:get=@PartnerType @bind-SelectedItem:set=@SelectPartnerType GetStringIdentifier=@(type => type.Id.ToString()) />;
+    protected override RenderFragment Filters => 
+        @<UniversalCustomSelect 
+             TItem=@Type 
+                          @bind-SelectedItem:get=@PartnerType 
+                                                    @bind-SelectedItem:set=@SelectPartnerType 
+             GetStringIdentifier=@(type => type.Id.ToString()) />;
 }
