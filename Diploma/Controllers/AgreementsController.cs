@@ -4,9 +4,9 @@ using Model.Agreements;
 
 namespace Diploma.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class AgreementsController(IAgreementRepository repository) : ControllerBase
+// [Route("api/[controller]")]
+// [ApiController]
+public class AgreementsController(IAgreementRepository repository) : ApiControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId) =>

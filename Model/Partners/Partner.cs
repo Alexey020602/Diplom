@@ -13,11 +13,11 @@ public class Partner
     [StringLength(100)] public string Site { get; set; } = string.Empty;
     [StringLength(500)] public string ContactData { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
-    [Required] public Type? Type { get; set; }
+    [Required] public PartnerType? Type { get; set; }
     [MinLength(1, ErrorMessage = "Необходимо указать как минимум одно направление деятельности партнера")] 
     public List<Direction> Directions { get; set; } = [];
-    public List<Agreement> Agreements { get; set; } = [];
-    public List<Interaction> Interactions { get; set; } = [];
+    public List<AgreementInPartner> Agreements { get; set; } = [];
+    public List<InteractionInPartner> Interactions { get; set; } = [];
     public bool CanBeDeleted => !(AgreementsContained || InteractionsContained);
     private bool AgreementsContained => Agreements.Any();
     private bool InteractionsContained => Interactions.Any();

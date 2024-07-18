@@ -1,6 +1,6 @@
 ﻿using DataBase.Models;
 
-namespace Diploma.Extensions;
+namespace DataBase.Extensions;
 
 public static class InteractionQuiryableFilterExtensions
 {

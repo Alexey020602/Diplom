@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataBase.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace DataBase.Data;
 
@@ -49,6 +51,7 @@ public class ApplicationContextSeed(ApplicationContext context, ILogger logger, 
         AddInteractionTypes();
         AddAgreementStatuses();
         AddAgreementTypes();
+        AddUsers();
     }
 
     private void AddInteractionTypes()
@@ -211,4 +214,29 @@ public class ApplicationContextSeed(ApplicationContext context, ILogger logger, 
         }
          context.SaveChanges();
     }
+
+    private void AddUsers()
+    {
+        var hasher = new PasswordHasher<User>();
+        var users = new List<User>
+        {
+        new ()
+        {
+            Id = "login",
+            PasswordHash = hasher.HashPassword(null, "password"),
+            Role = Role.Admin,
+        }
+        };
+        foreach (var user in users)
+        {
+            var storedUser = context.Users.Find(user.Id);
+            if (storedUser is null)
+            {
+                context.Users.Add(user);
+            }
+        }
+
+        context.SaveChanges();
+    }
+    
 }

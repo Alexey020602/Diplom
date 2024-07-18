@@ -4,5 +4,5 @@ namespace Client.Services;
 
 public interface IPartnersForAgreementService
 {
-    Task<List<Partner>> GetPartners();
+    Task<List<PartnerInAgreement>> GetPartners();
 }

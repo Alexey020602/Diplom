@@ -4,7 +4,7 @@
 @using Client.Shared.Text
 @using Microsoft.AspNetCore.Components.Forms
 @using Client.Shared.Select
-@using Type = Model.Agreements.Type
+@using Type = Model.Agreements.AgreementType
 @inherits BaseForm<Agreement>
 @inject IDivisionsForAgreementService DivisionsService
 @inject IPartnersForAgreementService PartnersService
@@ -14,8 +14,8 @@
 }
 
 @code {
-    private List<Division> _divisions = [];
-    private List<Partner> _partners = [];
+    private List<DivisionInAgreement> _divisions = [];
+    private List<PartnerInAgreement> _partners = [];
 
     protected override RenderFragment Content => @<div>
         <InputWithFloatTitle @bind-Value=@Item.Number Title="Номер соглашения"/>

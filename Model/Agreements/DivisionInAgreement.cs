@@ -1,9 +1,8 @@
 using System.Text.Json.Serialization;
-using Client.Shared.Select;
 
 namespace Model.Agreements;
 
-public class Division: ISelectionWithTextElement
+public class DivisionInAgreement: ISelectionWithTextElement
 {
     public int Id { get; set; }
     public string Description { get; set; } = string.Empty;

@@ -2,48 +2,50 @@
 using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model.Extensions;
+using Type = Model.Partners.PartnerType;
 
 namespace Diploma.Repositories;
 
 public class PartnerTypeRepository(ApplicationContext context) : IPartnerTypesRepository
 {
-    public async Task AddPartnerTypeAsync(PartnerType partnerType)
+    public async Task AddPartnerTypeAsync(Type type)
     {
+        var partnerType = type.ConvertToDao();
         context.PartnerTypes.Add(partnerType);
         await context.SaveChangesAsync();
     }
 
-    public async Task DeletePartnerTypeAsync(PartnerType partnerType)
+    public async Task DeletePartnerTypeAsync(Type type)
     {
+        var partnerType = type.ConvertToDao();
         context.PartnerTypes.Remove(partnerType);
         await context.SaveChangesAsync();
     }
 
     public async Task DeletePartnerTypeByIdAsync(int id)
     {
-        var partnerType = context.PartnerTypes.FirstOrDefault(p => p.Id == id) ??
-            throw new KeyNotFoundException("Не найден тип партнера");
-
+        var partnerType = await context.PartnerTypes.FirstAsync(p => p.Id == id);
         context.PartnerTypes.Remove(partnerType);
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<PartnerType>> GetAllPartnerTypesAsync() => await context.PartnerTypes.ToListAsync();
+    public async Task<IEnumerable<Type>> GetAllPartnerTypesAsync() => await context.PartnerTypes.Select(t => t.ConvertToModel()).ToListAsync();
 
 
-    public async Task<PartnerType> GetPartnerTypeByIdAsync(int id)
+    public async Task<Type> GetPartnerTypeByIdAsync(int id)
     {
         var partnerType = await context.PartnerTypes.FirstOrDefaultAsync(p => p.Id == id);
 
-        return partnerType ?? throw new KeyNotFoundException("Не найден тип партнера");
+        return partnerType?.ConvertToModel() ?? throw new KeyNotFoundException("Не найден тип партнера");
     }
 
 
-    public async Task UpdatePartnerTypeAsync(int id, PartnerType partnerType)
+    public async Task UpdatePartnerTypeAsync(int id, Type partnerPartnerType)
     {
         var existingPartnerType = await context.PartnerTypes.FindAsync(id) ?? 
             throw new KeyNotFoundException("Не найден тип партнера");
-        context.Entry(existingPartnerType).CurrentValues.SetValues(partnerType);
+        context.Entry(existingPartnerType).CurrentValues.SetValues(partnerPartnerType.ConvertToDao());
         await context.SaveChangesAsync();
     }
 }

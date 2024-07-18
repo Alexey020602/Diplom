@@ -2,23 +2,26 @@
 using DataBase.Data;
 using DataBase.Extensions;
 using DataBase.Models;
-using Diploma.Extensions;
-using DataBase.SupportingClasses;
+using Diploma.Mappers;
 using Diploma.Services;
+using Model.Extensions;
+using Model.Partners;
+using DBPartner = DataBase.Models.Partner;
+using Partner = Model.Partners.Partner;
 
 namespace Diploma.Repositories;
 
 public class PartnersRepository(ApplicationContext context) : IPartnersRepository
 {
-    public async Task<List<Agreement>> GetAgreementsForPartnerWithId(int id) => 
+    public async Task<List<AgreementInPartner>> GetAgreementsForPartnerWithId(int id) => 
         (
             await GetPartnersWithAgreements()
             .FirstAsync(p => p.Id == id)
         )
         .PartnersInAgreement
-        .Select(p => p.Agreement)
+        .Select(p => p.Agreement.ConvertToPartnerModel())
         .ToList();
-    public async Task<List<Interaction>> GetInteractionsForPartnerWithId(int id) => 
+    public async Task<List<InteractionInPartner>> GetInteractionsForPartnerWithId(int id) => 
         (
             await GetPartnersWithInteractions()
                 .Include(p => p.Interactions)
@@ -26,14 +29,18 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .FirstAsync(p => p.Id == id)
         )
         .Interactions
+        .Select(i => i.ConvertToPartnerModel())
         .ToList();
     public async Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId) =>
         await GetPartners(partnerTypeId, directionId)
+            .Select(p => p.ConvertToModel())
             .ToListAsync();
-    public async Task<Partner> GetPartnerByIdAsync(int id) => await GetPartnersWithTypesAndDirections()
-        .FirstAsync(partner => partner.Id == id);
-    public async Task AddPartnerAsync(Partner partner)
+    public async Task<Partner> GetPartnerByIdAsync(int id) => (await GetPartnersWithTypesAndDirections()
+        // .Select(p => p.ConvertToModel())
+        .FirstAsync(partner => partner.Id == id)).ConvertToModel();
+    public async Task AddPartnerAsync(Partner newPartner)
     {
+        var partner = newPartner.ConvertToDao();
         AttachDirections(partner.Directions);
         context.PartnerTypes.Attach(partner.PartnerType);
         context.Partners.Add(partner);
@@ -47,10 +54,11 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         
         context.Partners.Remove(partner);
         await context.SaveChangesAsync();
-        return partner;
+        return partner.ConvertToModel();
     }
-    public async Task UpdatePartnerAsync(int id, Partner partner)
+    public async Task UpdatePartnerAsync(int id, Partner newPartner)
     {
+        var partner = newPartner.ConvertToDao();
         var existingPartner = await context.Partners
                                   .Include(p => p.Directions)
                                   .FirstAsync(p => p.Id == id) ??
@@ -62,7 +70,7 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         await context.SaveChangesAsync();
     }
 
-    private IQueryable<Partner> GetPartnersWithAgreements() => context.Partners
+    private IQueryable<DBPartner> GetPartnersWithAgreements() => context.Partners
         .Include(p => p.PartnersInAgreement)
         .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement)
         .ThenInclude(agreement => agreement.AgreementType)
@@ -70,19 +78,19 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
         .ThenInclude(partnerInAgreement => partnerInAgreement.Agreement)
         .ThenInclude(agreement => agreement.AgreementStatus)
         ;
-    private IQueryable<Partner> GetPartnersWithInteractions() => context.Partners
+    private IQueryable<DBPartner> GetPartnersWithInteractions() => context.Partners
         .Include(p => p.Interactions)
         .ThenInclude(i => i.InteractionType);
     private void AttachDirections(IEnumerable<Direction> directions)
     {
         context.Directions.AttachRange(directions);
     }
-    private IQueryable<Partner> GetPartners(int? partnerTypeId, int? directionId) =>
+    private IQueryable<DBPartner> GetPartners(int? partnerTypeId, int? directionId) =>
         GetPartnersWithTypesAndDirections()
             .FilterByType(partnerTypeId)
             .FilterByDirection(directionId);
-    private IQueryable<Partner> GetPartners() => context.Partners.AsNoTracking();
-    private IQueryable<Partner> GetPartnersWithTypesAndDirections() => GetPartners()
+    private IQueryable<DBPartner> GetPartners() => context.Partners.AsNoTracking();
+    private IQueryable<DBPartner> GetPartnersWithTypesAndDirections() => GetPartners()
         .Include(p => p.PartnerType)
         .Include(p => p.Directions);
 }

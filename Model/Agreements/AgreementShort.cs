@@ -3,11 +3,11 @@
 public record AgreementShort(
     int Id, 
     string Number,
-    Type Type,
+    AgreementType AgreementType,
     Status Status,
     DateTime Start,
     DateTime End
     )
 {
-    public override string ToString() => $"Номер: {Number}, Тип: {Type}, Статус: {Status}. {Start.ToShortDateString()} - {End.ToShortDateString()}";
+    public override string ToString() => $"Номер: {Number}, Тип: {AgreementType}, Статус: {Status}. {Start.ToShortDateString()} - {End.ToShortDateString()}";
 }

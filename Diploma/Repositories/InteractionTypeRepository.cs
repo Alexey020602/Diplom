@@ -2,13 +2,16 @@
 using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model.Extensions;
+using Type = Model.Interactions.InteractionType;
 
 namespace Diploma.Repositories;
 
 public class InteractionTypeRepository(ApplicationContext context) : IInteractionTypeRepository
 {
-    public async Task AddInteractionType(InteractionType interactionType)
+    public async Task AddInteractionType(Type type)
     {
+        var interactionType = type.ConvertToDao();
         await context.InteractionTypes.AddAsync(interactionType);
         await context.SaveChangesAsync();
     }
@@ -20,14 +23,19 @@ public class InteractionTypeRepository(ApplicationContext context) : IInteractio
         await context.SaveChangesAsync();
     }
 
-    public Task<InteractionType> GetInteractionTypeById(int id) => context.InteractionTypes.SingleAsync(type => type.Id == id);
+    public Task<Type> GetInteractionTypeById(int id) => context
+        .InteractionTypes
+        .Select(t => t.ConvertToModel())
+        .SingleAsync(type => type.Id == id);
 
-    public Task<List<InteractionType>> GetInteractionTypes() => context.InteractionTypes.ToListAsync();
+    public Task<List<Type>> GetInteractionTypes() => context.InteractionTypes
+        .Select(t => t.ConvertToModel())
+        .ToListAsync();
 
-    public async Task UpdateInteractionType(int id, InteractionType interactionType)
+    public async Task UpdateInteractionType(int id, Type interactionInteractionType)
     {
         var exitingInteractionType = await context.InteractionTypes.SingleAsync(type => type.Id == id);
-        context.Entry(exitingInteractionType).CurrentValues.SetValues(interactionType);
+        context.Entry(exitingInteractionType).CurrentValues.SetValues(interactionInteractionType);
         await context.SaveChangesAsync();
     }
 }

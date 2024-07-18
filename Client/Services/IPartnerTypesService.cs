@@ -2,6 +2,6 @@
 
 namespace Client.Services;
 
-public interface IPartnerTypesService: IReadApi<Model.Partners.Type>
+public interface IPartnerTypesService: IReadApi<Model.Partners.PartnerType>
 {
 }

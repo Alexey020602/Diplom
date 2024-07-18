@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Client.Shared.Select;
 
 namespace Model.Agreements;
 
-public class Partner: ISelectionWithTextElement
+public class PartnerInAgreement: ISelectionWithTextElement
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

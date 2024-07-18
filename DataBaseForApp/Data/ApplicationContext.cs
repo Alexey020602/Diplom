@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataBase.Models;
+using DataBase.Models.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 namespace DataBase.Data;
 /// <summary>
 /// Контекст приложения для подключения к БД
 /// </summary>
-public class ApplicationContext(DbContextOptions<ApplicationContext> options) : DbContext(options)
+public class ApplicationContext(DbContextOptions<ApplicationContext> options) : IdentityUserContext<User>(options)
 {
     /// <summary>
     /// DbSet партнеров в база данных
@@ -83,7 +86,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
             .WithMany(a => a.PartnerInAgreements)
             .OnDelete(deleteBehavior);
         
-        
+        base.OnModelCreating(modelBuilder);
     }
 
 

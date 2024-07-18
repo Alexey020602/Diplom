@@ -1,5 +1,4 @@
-﻿using DataBase.Models;
-using Model.Agreements;
+﻿using Model.Agreements;
 using ModelAgreement = Model.Agreements.Agreement;
 namespace Diploma.Services;
 

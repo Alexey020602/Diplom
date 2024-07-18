@@ -1,6 +1,6 @@
 ﻿using DataBase.Data;
+using DataBase.Extensions;
 using DataBase.Models;
-using Diploma.Extensions;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Divisions;
@@ -9,6 +9,7 @@ using Model.Interactions;
 using Model.Partners;
 using Division = DataBase.Models.Division;
 using Interaction = DataBase.Models.Interaction;
+using InteractionType = DataBase.Models.InteractionType;
 using ModelInteraction = Model.Interactions.Interaction;
 using Partner = DataBase.Models.Partner;
 
@@ -64,12 +65,12 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
     };
 
-    private InteractionType ConvertToDatabaseModel(Model.Interactions.Type type)
+    private InteractionType ConvertToDatabaseModel(Model.Interactions.InteractionType interactionType)
     {
         var newType = new InteractionType()
         {
-            Id = type.Id,
-            Name = type.Name,
+            Id = interactionType.Id,
+            Name = interactionType.Name,
         };
         context.Attach(newType);
         return newType;
@@ -93,7 +94,7 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
     private static PartnerShort ConvertToModel(Partner partner) => new(partner.Id, partner.ShortName);
     private static DivisionShort ConvertToModel(Division division) => new(division.Id, division.ShortName);
 
-    private static Model.Interactions.Type ConvertToModel(InteractionType type) => new()
+    private static Model.Interactions.InteractionType ConvertToModel(InteractionType type) => new()
     {
         Id = type.Id,
         Name = type.Name,

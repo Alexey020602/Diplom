@@ -12,7 +12,7 @@ public class Interaction
     [Required(ErrorMessage = "Необходимо выбрать подразделение, участвующее во взаимодействии")] 
     public DivisionShort? Division { get; set; }
     [Required(ErrorMessage = "Необходимо выбрать тип взаимодействия")] 
-    public Type? Type { get; set; }
+    public InteractionType? Type { get; set; }
     [StringLength(500, ErrorMessage = "Тема не может превышать 500 символов")]
     [Required(ErrorMessage = "Необходимо ввести тему взаимодействия")]
     public string Theme { get; set; } = string.Empty;

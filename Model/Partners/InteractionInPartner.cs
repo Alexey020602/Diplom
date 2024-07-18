@@ -1,6 +1,6 @@
 namespace Model.Partners;
 
-public class Interaction
+public class InteractionInPartner
 {
     public int Id { get; set; }
     public string Description { get; set; } = string.Empty;

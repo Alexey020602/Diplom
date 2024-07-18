@@ -1,5 +1,4 @@
-﻿using DataBase.Models;
-
+﻿
 using ModelInteraction = Model.Interactions.Interaction;
 using InteractionShort = Model.Interactions.InteractionShort;
 namespace Diploma.Services;

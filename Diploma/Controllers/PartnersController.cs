@@ -1,17 +1,16 @@
-using Diploma.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Model.Partners;
-using Diploma.Extensions.ModelToDao;
 using Diploma.Services;
+using Microsoft.AspNetCore.Authorization;
 using Model.Agreements;
 using Model.Extensions;
 using Model.Interactions;
 
 namespace Diploma.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class PartnersController(IPartnersRepository partnersRepository) : ControllerBase
+// [Route("api/[controller]")]
+// [ApiController]
+public class PartnersController(IPartnersRepository partnersRepository) : ApiControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> ShowPartners([FromQuery] int? partnerTypeId, [FromQuery] int? directionId)
@@ -28,7 +27,7 @@ public class PartnersController(IPartnersRepository partnersRepository) : Contro
     [HttpGet("{id}")]
     public async Task<IActionResult> ShowPartnerById(int id)
     {
-        var partner = (await partnersRepository.GetPartnerByIdAsync(id)).ConvertToModel();
+        var partner = await partnersRepository.GetPartnerByIdAsync(id);
         if (partner == null)
         {
             return NotFound("Нет соответсвующего партнера");
@@ -42,7 +41,7 @@ public class PartnersController(IPartnersRepository partnersRepository) : Contro
     [HttpGet("{id:int}/agreements")]
     public async Task<IActionResult> GetAgreementsForPartner(int id)
     {
-        return new JsonResult((await partnersRepository.GetAgreementsForPartnerWithId(id)).Select(a => a.ConvertToShortModel()));
+        return new JsonResult(await partnersRepository.GetAgreementsForPartnerWithId(id));
     }
 
     [HttpGet("{id:int}/interactions")]
@@ -51,16 +50,16 @@ public class PartnersController(IPartnersRepository partnersRepository) : Contro
         );
 
     [HttpPost]
-    public async Task<IActionResult> AddPartner([FromBody] Model.Partners.Partner partner)
+    public async Task<IActionResult> AddPartner([FromBody] Partner partner)
     {
-        await partnersRepository.AddPartnerAsync(partner.ConvertToDao());
+        await partnersRepository.AddPartnerAsync(partner);
         return Ok();
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePartner(int id, [FromBody] Model.Partners.Partner partner)
+    public async Task<IActionResult> UpdatePartner(int id, [FromBody] Partner partner)
     {
-        await partnersRepository.UpdatePartnerAsync(id, partner.ConvertToDao());
+        await partnersRepository.UpdatePartnerAsync(id, partner);
         return Ok();
     }
 

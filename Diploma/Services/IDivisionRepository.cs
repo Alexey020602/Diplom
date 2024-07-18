@@ -1,5 +1,5 @@
-﻿using DataBase.Models;
-
+﻿// using DataBase.Models;
+using Model.Divisions;
 namespace Diploma.Services;
 
 public interface IDivisionRepository

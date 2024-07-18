@@ -1,14 +1,17 @@
 ﻿using DataBase.Data;
 using DataBase.Models;
+using ModelFaculty = Model.Divisions.Faculty;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model.Extensions;
 
 namespace Diploma.Repositories;
 
 public class FacultyRepository(ApplicationContext context) : IFacultyRepository
 {
-    public async Task AddFaculty(Faculty faculty)
+    public async Task AddFaculty(ModelFaculty newFaculty)
     {
+        var faculty = newFaculty.ToDao();
         context.Faculties.Add(faculty);
         await context.SaveChangesAsync();
     }
@@ -22,15 +25,16 @@ public class FacultyRepository(ApplicationContext context) : IFacultyRepository
         return context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Faculty>> GetFaculties() => await context.Faculties.ToListAsync();
+    public async Task<IEnumerable<ModelFaculty>> GetFaculties() => await context.Faculties.Select(f => f.ToModel()).ToListAsync();
 
-    public async Task<Faculty> GetFaculty(int id) =>
-        await context.Faculties.FirstOrDefaultAsync(faculty => faculty.Id == id) ??
+    public async Task<ModelFaculty> GetFaculty(int id) =>
+        await context.Faculties.Select(f => f.ToModel()).FirstOrDefaultAsync(faculty => faculty.Id == id) ??
         throw new KeyNotFoundException("Не найден факультет");
 
 
-    public async Task UpdateFaculty(int id, Faculty faculty)
+    public async Task UpdateFaculty(int id, ModelFaculty newFaculty)
     {
+        var faculty = newFaculty.ToDao();
         var existedFaculty = await context.Faculties.FirstAsync(f => f.Id == id);
         context.Faculties.Entry(existedFaculty).CurrentValues.SetValues(faculty);
         await context.SaveChangesAsync();

@@ -1,6 +1,7 @@
 using DataBase.Models;
-using Diploma.Extensions.ModelToDao;
-using Agreement = Model.Partners.Agreement;
+using Model.Partners;
+using Interaction = DataBase.Models.Interaction;
+using Partner = DataBase.Models.Partner;
 
 namespace Model.Extensions;
 
@@ -19,13 +20,13 @@ public static class PartnerExtensions
         Interactions = partner.Interactions.Select(PartnerExtensions.ConvertToModel).ToList(),
         Directions = partner.Directions.Select(DirectionExtensions.ConvertToModel).ToList(),
     };
-    public static Agreement ConvertToModel(this PartnerInAgreement partnerInAgreement) => new()
+    public static AgreementInPartner ConvertToModel(this PartnerInAgreement partnerInAgreement) => new()
     {
         Id = partnerInAgreement.AgreementId,
         Description = partnerInAgreement.Agreement.ToString(),
         ContactPerson = partnerInAgreement.ContactPersons,
     };
-    public static Model.Partners.Interaction ConvertToModel(this Interaction interaction) => new()
+    public static InteractionInPartner ConvertToModel(this Interaction interaction) => new()
     {   
         Id = interaction.Id,
         Description = interaction.ToString(),

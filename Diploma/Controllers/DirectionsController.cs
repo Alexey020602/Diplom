@@ -1,5 +1,5 @@
 ﻿using Diploma.Services;
-using DataBase.Models;
+using Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Diploma.Controllers;

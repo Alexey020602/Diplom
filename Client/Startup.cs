@@ -1,12 +1,11 @@
 ﻿using Client.Network;
 using Client.Services;
 using Client.Services.BaseApi;
+using Model.Agreements;
 using Model.Divisions;
 using Model.Partners;
 using Refit;
-using AgreementType = Model.Agreements.Type;
 using AgreementStatus = Model.Agreements.Status;
-using Type = Model.Partners.Type;
 
 namespace Client;
 
@@ -40,16 +39,16 @@ public class Startup(string baseAddress)
         services.AddRefitClient<IReadApi<Model.Divisions.Faculty>>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"));
 
-        services.AddRefitClient<IReadApi<AgreementType>>(settings)
+        services.AddRefitClient<IReadApi<Model.Agreements.AgreementType>>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreementTypes"));
 
         services.AddRefitClient<IReadApi<AgreementStatus>>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreementStatuses"));
 
-        services.AddRefitClient<IReadApi<Model.Interactions.Type>>(settings)
+        services.AddRefitClient<IReadApi<Model.Interactions.InteractionType>>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("interactiontypes"));
 
-        services.AddRefitClient<IReadApi<Type>>(settings)
+        services.AddRefitClient<IReadApi<PartnerType>>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
         services.AddRefitClient<IAgreementService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"));

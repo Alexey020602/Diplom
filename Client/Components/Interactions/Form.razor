@@ -37,7 +37,7 @@
 
             <ValidationMessage For=@(() => Item.Division)/>
             <UniversalCustomSelect
-                TItem=@Model.Interactions.Type
+                TItem=@Model.Interactions.InteractionType
                 @bind-SelectedItem=@Item.Type
                 GetStringIdentifier=@(type => type.Id.ToString())/>
 

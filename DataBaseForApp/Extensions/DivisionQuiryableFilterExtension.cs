@@ -1,6 +1,6 @@
 ﻿using DataBase.Models;
 
-namespace Diploma.Extensions;
+namespace DataBase.Extensions;
 //public static class QuirableFilterExtension
 //{
 //    public static IQueryable<T> FilterBy<T, K>(this IQueryable<T> source, K? key,  Func<T, K> path) where K: struct, IEquatable<K>

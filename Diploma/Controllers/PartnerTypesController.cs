@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DataBase.Models;
 using Diploma.Services;
+using Model.Partners;
+
 namespace Diploma.Controllers;
 
 [Route("api/[controller]")]
@@ -22,9 +23,9 @@ public class PartnerTypesController(IPartnerTypesRepository partnerTypesReposito
     }
  
     [HttpPost]
-    public async Task<IActionResult> AddPartnerType(PartnerType partnerType)
+    public async Task<IActionResult> AddPartnerType(PartnerType partnerPartnerType)
     {
-        await partnerTypesRepository.AddPartnerTypeAsync(partnerType);
+        await partnerTypesRepository.AddPartnerTypeAsync(partnerPartnerType);
         return Ok();
     }
 
@@ -34,15 +35,9 @@ public class PartnerTypesController(IPartnerTypesRepository partnerTypesReposito
         await partnerTypesRepository.DeletePartnerTypeByIdAsync(id);
     }
 
-    [HttpDelete] 
-    public async Task DeletePartnerType(PartnerType partnerType)
-    {
-        await partnerTypesRepository.DeletePartnerTypeAsync(partnerType);
-    }
-
     [HttpPut("{id}")] 
-    public async Task UpdatePartnerType(int id,PartnerType partnerType)
+    public async Task UpdatePartnerType(int id,PartnerType partnerPartnerType)
     {
-        await partnerTypesRepository.UpdatePartnerTypeAsync(id,partnerType);
+        await partnerTypesRepository.UpdatePartnerTypeAsync(id,partnerPartnerType);
     }
 }

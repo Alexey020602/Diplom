@@ -1,9 +1,13 @@
-using Model.Agreements;
 using DataBase.Models;
+using Model.Agreements;
+using Model.Partners;
 using Agreement = DataBase.Models.Agreement;
+using AgreementType = Model.Agreements.AgreementType;
+using DivisionInAgreement = DataBase.Models.DivisionInAgreement;
 using ModelAgreement = Model.Agreements.Agreement;
-using Type = Model.Agreements.Type;
-namespace Diploma.Extensions;
+using PartnerInAgreement = DataBase.Models.PartnerInAgreement;
+
+namespace Diploma.Mappers;
 
 public static class AgreementsConvertExtension
 {
@@ -15,6 +19,12 @@ public static class AgreementsConvertExtension
         agreement.StarDateTime,
         agreement.EndDateTime
         );
+
+    public static AgreementInPartner ConvertToPartnerModel(this Agreement agreement) => new AgreementInPartner
+    {
+        Id = agreement.Id,
+        Description = agreement.ToString(),
+    };
     public static Agreement ConvertToDatabaseModel(this ModelAgreement agreement) => new()
     {
         Id  = agreement.Id,
@@ -26,10 +36,10 @@ public static class AgreementsConvertExtension
         DivisionInAgreements = ConvertToDatabaseModel(agreement.Divisions, agreement.Id),
         PartnerInAgreements = ConvertToDatabaseModel(agreement.Partners, agreement.Id),
     };
-    public static AgreementType ConvertToDatabaseModel(this Type type) => new AgreementType()
+    public static DataBase.Models.AgreementType ConvertToDatabaseModel(this AgreementType agreementType) => new DataBase.Models.AgreementType()
         {
-            Id = type.Id,
-            Name = type.Name,
+            Id = agreementType.Id,
+            Name = agreementType.Name,
         };
     public static AgreementStatus ConvertToDatabaseModel(this Status status) =>  new AgreementStatus()
         {
@@ -38,26 +48,26 @@ public static class AgreementsConvertExtension
         };
     
     public static List<DivisionInAgreement> ConvertToDatabaseModel(
-        this IEnumerable<Model.Agreements.Division> newDivisions,
+        this IEnumerable<Model.Agreements.DivisionInAgreement> newDivisions,
         int agreementId) =>
         newDivisions
             .Select(d => ConvertToDatabaseModel(d, agreementId))
             .ToList();
-    public static DivisionInAgreement ConvertToDatabaseModel(this Model.Agreements.Division newDivision, int agreementId) => new DivisionInAgreement()
+    public static DivisionInAgreement ConvertToDatabaseModel(this Model.Agreements.DivisionInAgreement newDivisionInAgreement, int agreementId) => new DivisionInAgreement()
         {
             AgreementId = agreementId,
-            DivisionId = newDivision.Id,
-            ContactPersons = newDivision.ContactPersons,
+            DivisionId = newDivisionInAgreement.Id,
+            ContactPersons = newDivisionInAgreement.ContactPersons,
         };
-    public static List<PartnerInAgreement> ConvertToDatabaseModel(this IEnumerable<Model.Agreements.Partner> partners, int agreementId) =>
+    public static List<PartnerInAgreement> ConvertToDatabaseModel(this IEnumerable<Model.Agreements.PartnerInAgreement> partners, int agreementId) =>
         partners
             .Select(p => ConvertToDatabaseModel(p, agreementId))
             .ToList();
-    public static PartnerInAgreement ConvertToDatabaseModel(this Model.Agreements.Partner newPartner, int agreementId) => new ()
+    public static PartnerInAgreement ConvertToDatabaseModel(this Model.Agreements.PartnerInAgreement newPartnerInAgreement, int agreementId) => new ()
         {
             AgreementId = agreementId,
-            PartnerId = newPartner.Id,
-            ContactPersons = newPartner.ContactPersons,
+            PartnerId = newPartnerInAgreement.Id,
+            ContactPersons = newPartnerInAgreement.ContactPersons,
         };
     
     public static ModelAgreement ConvertToModel(this Agreement agreement) => new()
@@ -72,26 +82,26 @@ public static class AgreementsConvertExtension
         Partners = agreement.PartnerInAgreements.Select(ConvertToModel).ToList(),
     };
 
-    private static Type ConvertToModel(this AgreementType type) => new()
+    public static AgreementType ConvertToModel(this DataBase.Models.AgreementType type) => new()
     {
         Id = type.Id,
         Name = type.Name,
     };
 
-    private static Status ConvertToModel(this AgreementStatus status) => new()
+    public static Status ConvertToModel(this AgreementStatus status) => new()
     {
         Id = status.Id,
         Name = status.Name,
     };
 
-    private static Model.Agreements.Partner ConvertToModel(this PartnerInAgreement partner) => new()
+    public static Model.Agreements.PartnerInAgreement ConvertToModel(this PartnerInAgreement partner) => new()
     {
         Id = partner.PartnerId,
         Name = partner.Partner.ShortName,
         ContactPersons = partner.ContactPersons,
     };
 
-    private static Model.Agreements.Division ConvertToModel(this DivisionInAgreement divisionInAgreement) => new()
+    public static Model.Agreements.DivisionInAgreement ConvertToModel(this DivisionInAgreement divisionInAgreement) => new()
     {
         Id = divisionInAgreement.DivisionId,
         Description = divisionInAgreement.Division.ShortName,

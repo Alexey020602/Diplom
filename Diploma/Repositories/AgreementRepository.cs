@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
-using Diploma.Extensions;
+using DataBase.Extensions;
+using Diploma.Mappers;
 using Model.Agreements;
-using Type = Model.Agreements.Type;
 
 namespace Diploma.Repositories;
 

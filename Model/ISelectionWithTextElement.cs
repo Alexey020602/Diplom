@@ -1,4 +1,4 @@
-namespace Client.Shared.Select;
+namespace Model;
 
 public interface ISelectionWithTextElement
 {

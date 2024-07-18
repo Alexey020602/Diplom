@@ -1,15 +1,19 @@
 ﻿using DataBase.Data;
+using DataBase.Extensions;
 using DataBase.Models;
+using DBDivision = DataBase.Models.Division;
+using ModelDivision = Model.Divisions.Division;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
-using Diploma.Extensions;
+using Model.Extensions;
 
 namespace Diploma.Repositories;
 
 public class DivisionsRepository(ApplicationContext context): IDivisionRepository
 {
-    public Task AddDivision(Division division)
+    public Task AddDivision(ModelDivision newDivision)
     {
+        var division = newDivision.ToDao();
         AttachDirections(division.Directions);
         if (division.Faculty != null) context.Faculties.Attach(division.Faculty);
         context.Divisions.Add(division);
@@ -30,19 +34,21 @@ public class DivisionsRepository(ApplicationContext context): IDivisionRepositor
         await context.SaveChangesAsync();
     }
 
-    public Task<Division> GetDivision(int id) => context.Divisions
+    public async Task<ModelDivision> GetDivision(int id) => (await context.Divisions
             .Include(d => d.Faculty)
             .Include(d => d.Directions)
-            .FirstAsync(d => d.Id == id);
+            .FirstAsync(d => d.Id == id)).ToModel();
 
-    public async Task<IEnumerable<Division>> GetDivisions(int? facultyId) => await GetDivisionWithFaculty()
+    public async Task<IEnumerable<ModelDivision>> GetDivisions(int? facultyId) => await GetDivisionWithFaculty()
         .FilterByFaculty(facultyId)
+        .Select(d => d.ToModel())
         .ToListAsync();
     private IQueryable<Division> GetDivisionWithFaculty() =>
         context.Divisions
         .Include(d => d.Faculty);
-    public async Task UpdateDivision(int id, Division division)
+    public async Task UpdateDivision(int id, ModelDivision newDivision)
     {
+        var division = newDivision.ToDao();
         var existingDivision = await context.Divisions.Include(d => d.Directions).FirstAsync(d => d.Id == id);
         /*?? throw new KeyNotFoundException("Не найдено подразделение")*/;
 
