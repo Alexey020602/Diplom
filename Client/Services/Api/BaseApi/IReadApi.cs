@@ -1,5 +1,6 @@
 ﻿using Refit;
-namespace Client.Services.BaseApi;
+
+namespace Client.Services.Api.BaseApi;
 
 public interface IReadApi<T> where T : class
 {

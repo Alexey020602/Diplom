@@ -1,8 +1,8 @@
-﻿using Client.Services.BaseApi;
+﻿using Client.Services.Api.BaseApi;
 using Model.Agreements;
 using Refit;
 
-namespace Client.Services;
+namespace Client.Services.Api;
 
 public interface IAgreementService: IReadOneApi<Agreement, int>, ICreateApi<Agreement>, IUpdateApi<Agreement, int>, IDeleteApi<int>
 {

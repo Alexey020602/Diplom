@@ -1,9 +1,13 @@
 ﻿@using Client.Services
+@using Client.Services.Api
 @using Client.Shared
 @using Model.Agreements
 @using Client.Shared.Text
 @using Client.Shared.List
+@using Microsoft.AspNetCore.Authorization
 @inherits DetailPage<Agreement>
+@attribute [Authorize(Roles="Cip")]
+
 @page "/agreements/{id:int}"
 @{
     base.BuildRenderTree(__builder);

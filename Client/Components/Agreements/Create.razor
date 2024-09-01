@@ -1,7 +1,10 @@
 @page "/agreements/create"
 @using Client.Services
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
 @using Model.Agreements
 @inject IAgreementService AgreementsService
+@attribute [Authorize(Roles = "Ctt")] 
 
 <PageTitle>Добавление соглашения</PageTitle>
 <Form Item=@_agreement OnSubmit=@OnSubmit></Form>

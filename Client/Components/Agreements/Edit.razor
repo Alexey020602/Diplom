@@ -1,6 +1,9 @@
 @page "/agreements/{id:int}/Edit"
 @using Client.Services
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
 @using Model.Agreements
+@attribute [Authorize(Roles = "Ctt")]
 
 @if (_agreement is not null)
 {

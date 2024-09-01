@@ -1,7 +1,9 @@
 ﻿@using Client.Services;
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
 @using Model.Partners
 @rendermode RenderMode.InteractiveWebAssembly
-
+@attribute [Authorize(Roles = "Ctt")]
 @page "/partners/create"
 @inject IPartnersService PartnersService
 

@@ -5,9 +5,7 @@ using Model.Extensions;
 
 namespace Diploma.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class DivisionsController(IDivisionRepository repository) : ControllerBase
+public class DivisionsController(IDivisionRepository repository) : ApiControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetDivisions(int? facultyId) => 

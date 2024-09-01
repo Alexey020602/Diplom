@@ -1,12 +1,14 @@
 ﻿@using Client.Services
+@using Client.Services.Api
 @using Microsoft.AspNetCore.Components.Forms;
 @using Client.Shared.Text;
 @using Client.Shared.Select;
 @using Client.Shared.Form
+@using Microsoft.AspNetCore.Authorization
 @using Model
 @using Model.Partners
 @using Type = Model.Partners.PartnerType
-
+@attribute [Authorize(Roles = "Ctt")]
 @inherits BaseForm<Partner>
 
 @{

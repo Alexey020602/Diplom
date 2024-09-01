@@ -2,5 +2,5 @@ namespace DataBase.Models.Identity;
 
 public enum Role
 {
-    Admin, Ctt, Cip
+    Admin=0, Ctt=1, Cip=2
 }

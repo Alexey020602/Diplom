@@ -1,8 +1,8 @@
-﻿using Refit;
-using Client.Services.BaseApi;
+﻿using Client.Services.Api.BaseApi;
 using Model.Divisions;
+using Refit;
 
-namespace Client.Services;
+namespace Client.Services.Api;
 
 public interface IDivisionsService: IReadApi<DivisionShort>, IReadOneApi<Division, int>, IDeleteApi<int>, ICreateApi<Division>, IUpdateApi<Division, int>
 {

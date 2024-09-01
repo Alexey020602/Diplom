@@ -1,8 +1,28 @@
 ﻿@using Shared.Layouts
+@using Client.Components
+@using Microsoft.AspNetCore.Components.Authorization
 @rendermode RenderMode.InteractiveAuto
+
+<CascadingAuthenticationState>
 <Router AppAssembly="@typeof(Program).Assembly" >
     <Found Context="routeData">
-        <RouteView RouteData = "@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <AuthorizeRouteView RouteData=@routeData DefaultLayout=@typeof(MainLayout)>
+            <Authorizing>
+                <p>Авторизация...</p>
+            </Authorizing>
+            <NotAuthorized>
+                <RedirectToLogin Path="/login"/>
+                @* @if (context.User.Identity?.IsAuthenticated != true) *@
+                @* { *@
+                @*     $1$TODO сделать перенаправление на логин #1# *@
+                @*     <RedirectToLogin Path="authentication/login"/> *@
+                @* } *@
+                @* else *@
+                @* { *@
+                @*     /*Todo сделать надпись об о не правильной роли*/ *@
+                @* } *@
+            </NotAuthorized>
+        </AuthorizeRouteView>
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
@@ -11,3 +31,4 @@
         </LayoutView>
     </NotFound>
 </Router>
+</CascadingAuthenticationState>

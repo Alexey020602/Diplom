@@ -1,13 +1,14 @@
 ﻿using Diploma.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Agreements;
 
 namespace Diploma.Controllers;
 
-// [Route("api/[controller]")]
-// [ApiController]
 public class AgreementsController(IAgreementRepository repository) : ApiControllerBase
 {
+    [Authorize(Roles = "Admin")]
+    
     [HttpGet]
     public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId) =>
         new JsonResult(

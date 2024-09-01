@@ -1,5 +1,6 @@
 using Client.Services;
-using Client.Services.BaseApi;
+using Client.Services.Api;
+using Client.Services.Api.BaseApi;
 using Model.Agreements;
 using Model.Divisions;
 

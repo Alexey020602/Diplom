@@ -8,8 +8,7 @@ using Model.Interactions;
 
 namespace Diploma.Controllers;
 
-// [Route("api/[controller]")]
-// [ApiController]
+
 public class PartnersController(IPartnersRepository partnersRepository) : ApiControllerBase
 {
     [HttpGet]

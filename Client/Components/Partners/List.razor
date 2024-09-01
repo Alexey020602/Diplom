@@ -2,9 +2,10 @@
 @using Client.Shared.Select;
 @using Client.Shared.List;
 @using Client.Shared.Text;
+@using Microsoft.AspNetCore.Authorization
 @using Model.Partners
 @using Type = Model.Partners.PartnerType
-
+@attribute [Authorize(Roles = "Cip")]
 @inherits SearchableStyledList<PartnerShort>
 
 @rendermode RenderMode.InteractiveWebAssembly

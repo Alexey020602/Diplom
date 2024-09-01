@@ -1,8 +1,10 @@
 ﻿@using Model.Divisions;
 @using Client.Services;
+@using Client.Services.Api
 @using Client.Shared.Text;
 @using Client.Shared.List;
-
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Cip")]
 @page "/divisions/{id:int}"
 <div>
     <div>

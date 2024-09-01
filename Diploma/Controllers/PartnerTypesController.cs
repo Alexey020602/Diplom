@@ -4,9 +4,7 @@ using Model.Partners;
 
 namespace Diploma.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class PartnerTypesController(IPartnerTypesRepository partnerTypesRepository) : ControllerBase
+public class PartnerTypesController(IPartnerTypesRepository partnerTypesRepository) : ApiControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetPartnerTypes()

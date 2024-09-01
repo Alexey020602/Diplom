@@ -5,9 +5,7 @@ using Model.Divisions;
 
 namespace Diploma.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class FacultiesController(IFacultyRepository repository): ControllerBase
+    public class FacultiesController(IFacultyRepository repository): ApiControllerBase
     {
         // GET: api/<FacultiesController>
         [HttpGet]

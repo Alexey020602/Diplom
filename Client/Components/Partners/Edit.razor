@@ -1,5 +1,8 @@
 ﻿@page "/partners/{id:int}/edit"
+@attribute [Authorize(Roles = "Ctt")]
 @using Client.Services;
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
 @using Model.Partners
 <div>
     @if (partner is not null)

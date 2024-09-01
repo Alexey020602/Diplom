@@ -1,4 +1,4 @@
-using Client.Services.BaseApi;
+using Client.Services.Api.BaseApi;
 using Microsoft.AspNetCore.Components;
 using Model;
 

@@ -1,7 +1,8 @@
 @page "/interactions/{id:int}/edit"
-@using Client.Services
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
 @using Model.Interactions
-
+@attribute [Authorize(Roles = "Ctt")]
 @if (_interaction is not null)
 {
     <Form OnSubmit=@UpdateInteraction Item=@_interaction></Form>

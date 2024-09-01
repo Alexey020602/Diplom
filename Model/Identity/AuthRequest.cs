@@ -1,4 +1,4 @@
-namespace Diploma.Identity;
+namespace Model.Identity;
 
 public class AuthRequest
 {

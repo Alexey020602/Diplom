@@ -1,11 +1,13 @@
 ﻿@using Client.Services
+@using Client.Services.Api
 @using Microsoft.AspNetCore.Components.Forms;
 @using Client.Shared.Text
 @using Client.Shared.Select
 @using Client.Shared.Form
+@using Microsoft.AspNetCore.Authorization
 @using Model.Divisions
 @using Model
-
+@attribute [Authorize(Roles = "Ctt")]
 @inherits BaseForm<Division>
 
 @{

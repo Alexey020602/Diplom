@@ -1,7 +1,8 @@
-﻿using Client.Services.BaseApi;
+﻿using Client.Services.Api.BaseApi;
 using Model.Interactions;
 using Refit;
-namespace Client.Services;
+
+namespace Client.Services.Api;
 
 public interface IInteractionsService: IReadOneApi<Interaction,int>, IUpdateApi<Interaction, int>, IDeleteApi<int>, ICreateApi<Interaction>
 {

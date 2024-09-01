@@ -1,6 +1,8 @@
-﻿@using Model.Divisions
+﻿@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
+@using Model.Divisions
 @using Services
-
+@attribute [Authorize(Roles = "Ctt")]
 @inject IDivisionsService api
 @page "/divisions/create"
 

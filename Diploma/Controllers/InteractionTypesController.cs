@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Diploma.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class InteractionTypesController(IInteractionTypeRepository repository) : ControllerBase
+public class InteractionTypesController(IInteractionTypeRepository repository) : ApiControllerBase
 {
     [HttpGet] public async Task<IActionResult> Get() => new JsonResult( await repository.GetInteractionTypes() );
 }

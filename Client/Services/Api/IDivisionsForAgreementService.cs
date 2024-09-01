@@ -1,6 +1,6 @@
 using Model.Agreements;
 
-namespace Client.Services;
+namespace Client.Services.Api;
 
 public interface IDivisionsForAgreementService
 {

@@ -1,8 +1,10 @@
 @page "/interactions/Create"
 @using Client.Services
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
 @using Model.Interactions
 @inject IInteractionsService InteractionService
-
+@attribute [Authorize(Roles = "Ctt")]
 <PageTitle>Создание взаимодействия</PageTitle>
 <Form Item=@interaction OnSubmit=@OnSubmit></Form>
 

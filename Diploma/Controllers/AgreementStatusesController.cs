@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Diploma.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AgreementStatusesController(IAgreementStatusRepository repository): ControllerBase
+public class AgreementStatusesController(IAgreementStatusRepository repository): ApiControllerBase
 {
     [HttpGet] public async Task<IActionResult> Get() => new JsonResult( await repository.GetAgreementStatuses() );
 }

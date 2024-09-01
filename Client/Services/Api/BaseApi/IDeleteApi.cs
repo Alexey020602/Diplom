@@ -1,6 +1,6 @@
 ﻿using Refit;
 
-namespace Client.Services.BaseApi;
+namespace Client.Services.Api.BaseApi;
 
 public interface IDeleteApi<in Id>
 {

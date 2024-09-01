@@ -1,6 +1,12 @@
-﻿using Client.Network;
+﻿using Blazored.LocalStorage;
+using Client.AuthProviders;
+using Client.Features;
+using Client.Network;
 using Client.Services;
-using Client.Services.BaseApi;
+using Client.Services.Api;
+using Client.Services.Api.BaseApi;
+using Client.Services.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
 using Model.Agreements;
 using Model.Divisions;
 using Model.Partners;
@@ -55,6 +61,16 @@ public class Startup(string baseAddress)
 
         services.AddRefitClient<IInteractionsService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("interactions"));
+
+        services.AddRefitClient<IAuthApi>()
+            .ConfigureHttpClient((client) => client.BaseAddress = new Uri(baseAddress));
+        services.AddTransient<IAuthenticationService, AuthenticationService>();
+
+        services.AddTransient<AuthenticationStateProvider, AuthStateProvider>();
+        services.AddTransient<NotifiedAuthStateProvider, AuthStateProvider>();
+        
+        services.AddBlazoredLocalStorage();
+        services.AddAuthorizationCore();
     }
     private string ApiAddress => baseAddress + "api/";
     //private Uri ApiBaseAddress => new(ApiAddress, UriKind.Absolute);

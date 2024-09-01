@@ -8,9 +8,7 @@ using Interaction = DataBase.Models.Interaction;
 
 namespace Diploma.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class InteractionsController(IInteractionRepository interactionRepository): ControllerBase
+    public class InteractionsController(IInteractionRepository interactionRepository): ApiControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> Get(int? interactionTypeId = null) => new JsonResult(

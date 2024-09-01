@@ -1,7 +1,8 @@
 ﻿@using Client.Shared.List;
 @using Client.Shared.Select;
+@using Microsoft.AspNetCore.Authorization
 @using Model.Divisions
-
+@attribute [Authorize(Roles = "Cip")]
 @inherits SearchableStyledList<Model.Divisions.DivisionShort>
 
 @page "/divisions"

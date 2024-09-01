@@ -1,6 +1,8 @@
 ﻿@using Model.Divisions
 @using Client.Services
-
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Cip")]
 @inject IDivisionsService DivisionsService
 
 @page "/divisions/{id:int}/edit"

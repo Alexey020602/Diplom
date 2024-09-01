@@ -1,11 +1,13 @@
 ﻿@using Client.Services
+@using Client.Services.Api
 @using Client.Shared.Text
 @using Client.Shared.List
 @using Client.Shared
+@using Microsoft.AspNetCore.Authorization
 @using Model.Agreements
 @using Model.Interactions
 @using Partner = Model.Partners.Partner
-
+@attribute [Authorize(Roles = "Cip")]
 @inherits DetailPage<Partner>
 
 @page "/partners/{id:int}"

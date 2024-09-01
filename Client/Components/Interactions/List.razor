@@ -1,7 +1,9 @@
 ﻿@using Client.Shared.List
 @using Client.Services
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
 @using Model.Interactions
-
+@attribute [Authorize(Roles = "Cip")]
 @inherits SearchableStyledList<InteractionShort>
 
 @page "/interactions"

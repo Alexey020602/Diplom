@@ -1,6 +1,7 @@
 using System.Text;
 using DataBase.Data;
 using DataBase.Models.Identity;
+using Diploma;
 using Diploma.Repositories;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +18,28 @@ var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSetti
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredUniqueChars = 2;
+    })
     .AddRoles<IdentityRole>()
-    //.AddRoleManager<RoleStore<IdentityRole>>()
     .AddEntityFrameworkStores<ApplicationContext>();
+// builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+//     .AddRoles<IdentityRole>()
+//     //.AddRoleManager<RoleStore<IdentityRole>>()
+//     .AddEntityFrameworkStores<ApplicationContext>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>//Íàñòðîéêè ïðîâåðêè òîêåíà
     {
         o.RequireHttpsMetadata = false;
@@ -40,7 +57,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricSecurityKey)),
         };
     });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("WatchOnly", policy => policy.RequireRole(Role.Cip.ToString()));
+    options.AddPolicy("Edit", policy => policy.RequireRole(Role.Cip.ToString(), Role.Ctt.ToString()));
+    options.AddPolicy("Admin", policy => policy.RequireRole(Role.Cip.ToString(), Role.Ctt.ToString(), Role.Admin.ToString()));
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -57,33 +79,56 @@ builder.Services.AddTransient<IInteractionRepository, InteractionRepository>();
 builder.Services.AddTransient<IInteractionTypeRepository, InteractionTypeRepository>();
 builder.Services.AddTransient<IAgreementStatusRepository, AgreementStatusRepository>();
 builder.Services.AddTransient<IAgreementTypeRepository, AgreementTypeRepository>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
 {
-    var securityScheme = new OpenApiSecurityScheme
+    // var loginSecurityScheme = new OpenApiSecurityScheme
+    // {
+    //     Description = "JWT Authorization header using the Bearer scheme.",
+    //     Name = "Authorization",
+    //     Scheme = "bearer",
+    //     Type = SecuritySchemeType.OAuth2,
+    //     BearerFormat = "JWT",
+    //     In = ParameterLocation.Header,
+    //     Flows = new()
+    //     {
+    //         Password = new()
+    //         {
+    //             TokenUrl = Uri.TryCreate("/login", UriKind.Relative, out var u) ? u : default,
+    //             Scopes = { { "Admin", "Administrator" }, { "ЦТТ", "Ctt" }, {"ЦИП","Cip"}, },
+    //         },
+    //     },
+    // };
+    var loginSecurityScheme = new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme.",
+        Description = "JWT Token",
         Name = "Authorization",
-        Scheme = "bearer",
-        Type = SecuritySchemeType.OAuth2,
-        BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Flows = new()
-        {
-            Password = new()
-            {
-                TokenUrl = Uri.TryCreate("/token", UriKind.Relative, out var u) ? u : default,
-                Scopes = { { "Admin", "Administrator" }, { "ЦТТ", "Ctt" }, {"ЦИП","Cip"}, },
-            },
-        },
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = JwtBearerDefaults.AuthenticationScheme
     };
-    o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-    securityScheme.Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = JwtBearerDefaults.AuthenticationScheme };
+    o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, loginSecurityScheme);
+    // o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, tokenSecurityScheme);
+    loginSecurityScheme.Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = JwtBearerDefaults.AuthenticationScheme };
     o.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        { securityScheme, new List<string>() }
+        { new OpenApiSecurityScheme
+        {
+            Reference = new()
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+            }
+        },
+            new List<string>() }
     });
+    // o.AddSecurityRequirement(new()
+    // {
+    //     {tokenSecurityScheme, new List<string>()}
+    // });
 });
 
 
@@ -114,16 +159,18 @@ if (app.Environment.IsDevelopment())
         o.OAuthClientId(validAudience);
         o.OAuthClientSecret(symmetricSecurityKey);
         o.OAuthScopes("Admin");
-        o.OAuthAppName("SwaggerIU");
+        o.OAuthAppName("SwaggerUI");
     });
 }
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapGroup("/api")
-    .MapControllers()
+// app.MapGroup("/api")
+//     .MapControllers()
     // .RequireAuthorization()
-    ;
-// app.MapControllers();
+    // ;
+app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+// app.MapGet("/", () => Results.Redirect("index.html"));
 app.Run();

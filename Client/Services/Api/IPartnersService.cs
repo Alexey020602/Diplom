@@ -1,11 +1,11 @@
-﻿using Client.Services.BaseApi;
+﻿using Client.Services.Api.BaseApi;
 using Model.Agreements;
 using Model.Interactions;
 using Model.Partners;
 using Refit;
 using Partner = Model.Partners.Partner;
 
-namespace Client.Services;
+namespace Client.Services.Api;
 
 public interface IPartnersService: IReadApi<PartnerShort>, IReadOneApi<Partner, int>, IDeleteApi<int>, IUpdateApi<Partner, int>, ICreateApi<Partner>
 {

@@ -1,6 +1,6 @@
-﻿using Client.Services.BaseApi;
+﻿using Client.Services.Api.BaseApi;
 
-namespace Client.Services;
+namespace Client.Services.Api;
 
 public interface IPartnerTypesService: IReadApi<Model.Partners.PartnerType>
 {
