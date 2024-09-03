@@ -12,15 +12,6 @@
             </Authorizing>
             <NotAuthorized>
                 <RedirectToLogin Path="/login"/>
-                @* @if (context.User.Identity?.IsAuthenticated != true) *@
-                @* { *@
-                @*     $1$TODO сделать перенаправление на логин #1# *@
-                @*     <RedirectToLogin Path="authentication/login"/> *@
-                @* } *@
-                @* else *@
-                @* { *@
-                @*     /*Todo сделать надпись об о не правильной роли*/ *@
-                @* } *@
             </NotAuthorized>
         </AuthorizeRouteView>
     </Found>

@@ -21,13 +21,14 @@ public class AuthenticationService(IAuthApi authApi, ILocalStorageService localS
     public async Task Login(AuthRequest request)
     {
         var result = await authApi.Login(request);
-        await localStorage.SetItemAsync("authorization", new Authorization
+        var authorization = new Authorization
         {
             Roles = result.Roles.Select(r => r.Name).ToList(),
             Token = result.Token,
-        });
-        stateProvider.NotifyUserAuthentication(result.Login);
-        
+            Login = result.Login,
+        };
+        await localStorage.SetItemAsync("authorization", authorization);
+        stateProvider.NotifyUserAuthentication(authorization);
     }
 
     public Task Logout()

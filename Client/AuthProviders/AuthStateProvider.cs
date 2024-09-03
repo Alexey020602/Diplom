@@ -21,7 +21,7 @@ public class AuthStateProvider(ILocalStorageService localStorage, HttpClient htt
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authorization.Token);
 
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(
-            authorization.Roles.Select(role => new Claim(ClaimTypes.Role, role)), 
+            authorization.Claims, 
             "jwtAuthType"
             )));
     }
@@ -31,9 +31,9 @@ public class AuthStateProvider(ILocalStorageService localStorage, HttpClient htt
 
     private ValueTask<Authorization?> GetUserAuthorization() =>
         localStorage.GetItemAsync<Authorization>("authorization");
-    public override void NotifyUserAuthentication(string login)
+    public override void NotifyUserAuthentication(Authorization authorization)
     {
-        var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login)}, "jwtAuthType"));
+        var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(authorization.Claims, "jwtAuthType"));
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(authenticatedUser)));
     }
 

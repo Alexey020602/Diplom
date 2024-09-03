@@ -66,8 +66,8 @@ public class Startup(string baseAddress)
             .ConfigureHttpClient((client) => client.BaseAddress = new Uri(baseAddress));
         services.AddTransient<IAuthenticationService, AuthenticationService>();
 
-        services.AddTransient<AuthenticationStateProvider, AuthStateProvider>();
-        services.AddTransient<NotifiedAuthStateProvider, AuthStateProvider>();
+        services.AddScoped<NotifiedAuthStateProvider, AuthStateProvider>();
+        services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<NotifiedAuthStateProvider>());
         
         services.AddBlazoredLocalStorage();
         services.AddAuthorizationCore();
@@ -75,6 +75,5 @@ public class Startup(string baseAddress)
     private string ApiAddress => baseAddress + "api/";
     //private Uri ApiBaseAddress => new(ApiAddress, UriKind.Absolute);
     private Uri CreateApiUrlWithPath(string path) => new(ApiAddress + path, UriKind.Absolute);
-
     private Action<HttpClient> ConfigureHttpClientForPath(string path) => (client) => client.BaseAddress = CreateApiUrlWithPath(path);
 }

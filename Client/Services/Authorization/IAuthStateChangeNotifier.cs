@@ -4,6 +4,6 @@ namespace Client.Services.Authorization;
 
 public interface IAuthStateChangeNotifier
 {
-    public void NotifyUserAuthentication(string login);
+    public void NotifyUserAuthentication(Dto.Authorization authorization);
     public void NotifyUserLogout();
 }

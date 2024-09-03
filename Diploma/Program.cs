@@ -29,10 +29,6 @@ builder.Services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>(options =>
     })
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<ApplicationContext>();
-// builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-//     .AddRoles<IdentityRole>()
-//     //.AddRoleManager<RoleStore<IdentityRole>>()
-//     .AddEntityFrameworkStores<ApplicationContext>();
 
 builder.Services.AddAuthentication(options =>
     {
