@@ -7,10 +7,9 @@ using Model.Identity;
 
 namespace Client.Features;
 
-public class AuthenticationService(IAuthApi authApi, ILocalStorageService localStorage, NotifiedAuthStateProvider stateProvider): IAuthenticationService
+public class AuthenticationService(IAuthApi authApi, NotifiedAuthStateProvider stateProvider): IAuthenticationService
 {
     private readonly IAuthApi authApi = authApi;
-    private readonly ILocalStorageService localStorage = localStorage;
     private readonly NotifiedAuthStateProvider stateProvider = stateProvider;
     
     public Task RegisterUser(RegistrationRequest request)
@@ -27,12 +26,12 @@ public class AuthenticationService(IAuthApi authApi, ILocalStorageService localS
             Token = result.Token,
             Login = result.Login,
         };
-        await localStorage.SetItemAsync("authorization", authorization);
-        stateProvider.NotifyUserAuthentication(authorization);
+
+        await stateProvider.Login(authorization);
     }
 
-    public Task Logout()
+    public async Task Logout()
     {
-        throw new NotImplementedException();
+        await stateProvider.Logout();
     }
 }

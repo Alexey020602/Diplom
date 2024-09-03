@@ -1,11 +1,10 @@
 using Client.Dto;
-using Client.Services.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Client.AuthProviders;
 
-public abstract class NotifiedAuthStateProvider: AuthenticationStateProvider, IAuthStateChangeNotifier
+public abstract class NotifiedAuthStateProvider: AuthenticationStateProvider
 {
-    public abstract void NotifyUserAuthentication(Authorization authorization);
-    public abstract void NotifyUserLogout();
+    public abstract Task Logout();
+    public abstract Task Login(Authorization authorization);
 }

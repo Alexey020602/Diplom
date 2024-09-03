@@ -10,6 +10,7 @@ namespace Client.AuthProviders;
 
 public class AuthStateProvider(ILocalStorageService localStorage, HttpClient httpClient): NotifiedAuthStateProvider
 {
+    private const string StorageKey = "authorization";
     private static AuthenticationState AnonymousState => new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
     private readonly ILocalStorageService localStorage = localStorage;
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -26,19 +27,29 @@ public class AuthStateProvider(ILocalStorageService localStorage, HttpClient htt
             )));
     }
 
-    // private ValueTask<List<string>?> GetStoredRoles() => localStorage.GetItemAsync<List<string>>("roles");
-    // private ValueTask<string?> GetStoredToken() => localStorage.GetItemAsync<string>("authToken");
+    public override async Task Logout()
+    {
+        await localStorage.RemoveItemAsync(StorageKey);
+        NotifyUserLogout();
+    }
 
+    public override async Task Login(Authorization authorization)
+    {
+        await localStorage.SetItemAsync(StorageKey, authorization);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authorization.Token);
+        NotifyUserAuthentication(authorization);
+    }
     private ValueTask<Authorization?> GetUserAuthorization() =>
-        localStorage.GetItemAsync<Authorization>("authorization");
-    public override void NotifyUserAuthentication(Authorization authorization)
+        localStorage.GetItemAsync<Authorization>(StorageKey);
+    private void NotifyUserAuthentication(Authorization authorization)
     {
         var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(authorization.Claims, "jwtAuthType"));
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(authenticatedUser)));
     }
 
-    public override void NotifyUserLogout()
+    private void NotifyUserLogout()
     {
+        httpClient.DefaultRequestHeaders.Authorization = null;
         NotifyAuthenticationStateChanged(Task.FromResult(AnonymousState));
     }
 }
