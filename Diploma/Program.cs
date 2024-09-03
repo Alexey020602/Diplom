@@ -18,7 +18,7 @@ var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSetti
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>(options =>
     {
         options.Password.RequireDigit = false;
         options.Password.RequiredLength = 6;
@@ -27,7 +27,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequiredUniqueChars = 2;
     })
-    .AddRoles<IdentityRole>()
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<ApplicationContext>();
 // builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
 //     .AddRoles<IdentityRole>()
@@ -80,6 +80,11 @@ builder.Services.AddTransient<IInteractionTypeRepository, InteractionTypeReposit
 builder.Services.AddTransient<IAgreementStatusRepository, AgreementStatusRepository>();
 builder.Services.AddTransient<IAgreementTypeRepository, AgreementTypeRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+
+builder.Services.AddLogging();
+
+builder.Services.AddTransient<ApplicationContextSeed>();
+builder.Services.AddTransient<IdentitySeed>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
@@ -138,8 +143,10 @@ builder.Services.AddCors();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-    new ApplicationContextSeed(context, app.Logger, app.Environment.IsDevelopment()).Seed();
+    var contextSeed = scope.ServiceProvider.GetRequiredService<ApplicationContextSeed>();
+    contextSeed.Seed();
+    var identitySeed = scope.ServiceProvider.GetRequiredService<IdentitySeed>();
+    await identitySeed.Seed();
 }
 
 app.UseStaticFiles();

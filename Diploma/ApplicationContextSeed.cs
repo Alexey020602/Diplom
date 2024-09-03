@@ -1,17 +1,10 @@
-﻿using DataBase.Models;
+﻿using DataBase.Data;
+using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataBase.Models.Identity;
-using Microsoft.AspNetCore.Identity;
 
-namespace DataBase.Data;
+namespace Diploma;
 
-public class ApplicationContextSeed(ApplicationContext context, ILogger logger, bool isDevelopment)
+public class ApplicationContextSeed(ApplicationContext context, ILogger<ApplicationContextSeed> logger, IWebHostEnvironment environment)
 {
     public void Seed(int retry = 0)
     {
@@ -39,7 +32,7 @@ public class ApplicationContextSeed(ApplicationContext context, ILogger logger, 
     private void SeedThrows()
     {
         Migrate();
-        if (!isDevelopment) return;
+        if (!environment.IsDevelopment()) return;
         SeedData();
     }
 
@@ -51,7 +44,7 @@ public class ApplicationContextSeed(ApplicationContext context, ILogger logger, 
         AddInteractionTypes();
         AddAgreementStatuses();
         AddAgreementTypes();
-        AddUsers();
+        // AddUsers();
     }
 
     private void AddInteractionTypes()
@@ -215,28 +208,28 @@ public class ApplicationContextSeed(ApplicationContext context, ILogger logger, 
          context.SaveChanges();
     }
 
-    private void AddUsers()
-    {
-        var hasher = new PasswordHasher<User>();
-        var users = new List<User>
-        {
-        new ()
-        {
-            Id = "login",
-            PasswordHash = hasher.HashPassword(null, "password"),
-            Role = Role.Admin,
-        }
-        };
-        foreach (var user in users)
-        {
-            var storedUser = context.Users.Find(user.Id);
-            if (storedUser is null)
-            {
-                context.Users.Add(user);
-            }
-        }
-
-        context.SaveChanges();
-    }
+    // private void AddUsers()
+    // {
+    //     var hasher = new PasswordHasher<User>();
+    //     var users = new List<User>
+    //     {
+    //     new ()
+    //     {
+    //         Id = "login",
+    //         PasswordHash = hasher.HashPassword(null, "password"),
+    //         Role = Role.Admin,
+    //     }
+    //     };
+    //     foreach (var user in users)
+    //     {
+    //         var storedUser = context.Users.Find(user.Id);
+    //         if (storedUser is null)
+    //         {
+    //             context.Users.Add(user);
+    //         }
+    //     }
+    //
+    //     context.SaveChanges();
+    // }
     
 }

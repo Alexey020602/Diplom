@@ -2,13 +2,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DataBase.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Diploma;
 
 public interface ITokenService
 {
-    public string CreateToken(User user);
+    public string CreateToken(IdentityUser<Guid> user, IEnumerable<string> roles);
 }
 public class TokenService(ILogger<TokenService> logger, IConfiguration configuration): ITokenService
 {
@@ -20,16 +21,16 @@ public class TokenService(ILogger<TokenService> logger, IConfiguration configura
     private readonly ILogger<TokenService> logger = logger;
     private readonly IConfiguration configuration = configuration;
 
-    public string CreateToken(User user)
+    public string CreateToken(IdentityUser<Guid> user, IEnumerable<string> roles)
     {
         var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
-        var token = CreateJwtSecurityToken(CreateClaims(user), CreateSigningCredentials(), expiration);
+        var token = CreateJwtSecurityToken(CreateClaims(user, roles), CreateSigningCredentials(), expiration);
         var tokenHandler = new JwtSecurityTokenHandler();
         logger.LogInformation("JWT Token created");
         return tokenHandler.WriteToken(token);
     }
     
-    private JwtSecurityToken CreateJwtSecurityToken(List<Claim> claims, SigningCredentials signingCredentials,
+    private JwtSecurityToken CreateJwtSecurityToken(IEnumerable<Claim> claims, SigningCredentials signingCredentials,
         DateTime expiration) => new(
         configuration.GetSection(SectionName)[ValidIssuer],
         configuration.GetSection(SectionName)[ValidAudience],
@@ -37,12 +38,20 @@ public class TokenService(ILogger<TokenService> logger, IConfiguration configura
         expires: expiration,
         signingCredentials: signingCredentials);
     
-    private List<Claim> CreateClaims(User user) => new()
-    {
-        new(ClaimTypes.NameIdentifier, user.Id),
-        new(ClaimTypes.Name, user.UserName!),
-        new(ClaimTypes.Role, user.Role.ToString())
+    private IEnumerable<Claim> CreateClaims(IdentityUser<Guid> user, IEnumerable<string> roles) => Enumerable.Concat(
+        CreateUserClaims(user),
+        CreateRoleClaims(roles)
+        );
+
+    private IEnumerable<Claim> CreateUserClaims(IdentityUser<Guid> user) => new[] 
+    { 
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.UserName!),
+        
     };
+
+    private IEnumerable<Claim> CreateRoleClaims(IEnumerable<string> roles) =>
+        roles.Select(role => new Claim(ClaimTypes.Role, role));
     private SigningCredentials CreateSigningCredentials() => 
         new( 
             new SymmetricSecurityKey(
