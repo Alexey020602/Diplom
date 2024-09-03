@@ -1,0 +1,13 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Authorization
+@using Model.Identity
+
+@page "/Registration"
+@attribute [Authorize(Roles = "Admin")]
+<EditFrom>
+    
+</EditFrom>
+
+@code {
+    private RegistrationRequest RegistrationRequest { get; set; } = new();
+}
