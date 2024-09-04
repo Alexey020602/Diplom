@@ -3,24 +3,26 @@ using System.Security.Claims;
 using Blazored.LocalStorage;
 using Client.Dto;
 using Client.Features;
+using Client.Services.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Model.Identity;
 
 namespace Client.AuthProviders;
 
-public class AuthStateProvider(ILocalStorageService localStorage, HttpClient httpClient): NotifiedAuthStateProvider
+public class AuthStateProvider(ITokenStorage authorizationStorage, HttpClient httpClient): NotifiedAuthStateProvider
 {
     private const string StorageKey = "authorization";
     private static AuthenticationState AnonymousState => new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-    private readonly ILocalStorageService localStorage = localStorage;
+    private readonly ITokenStorage authorizationStorage = authorizationStorage;
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var authorization = await GetUserAuthorization();
+        Console.WriteLine($"GetState {authorization}");
         if (authorization is null)
             return AnonymousState;
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authorization.Token);
-
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(
             authorization.Claims, 
             "jwtAuthType"
@@ -29,18 +31,20 @@ public class AuthStateProvider(ILocalStorageService localStorage, HttpClient htt
 
     public override async Task Logout()
     {
-        await localStorage.RemoveItemAsync(StorageKey);
+        await authorizationStorage.RemoveAuthorization();
         NotifyUserLogout();
     }
 
     public override async Task Login(Authorization authorization)
     {
-        await localStorage.SetItemAsync(StorageKey, authorization);
+        await authorizationStorage.SetAuthorization(authorization);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authorization.Token);
+        Console.WriteLine($"Login {authorization}");
         NotifyUserAuthentication(authorization);
     }
-    private ValueTask<Authorization?> GetUserAuthorization() =>
-        localStorage.GetItemAsync<Authorization>(StorageKey);
+
+    private async ValueTask<Authorization?> GetUserAuthorization() =>
+        await authorizationStorage.GetAuthorization();
     private void NotifyUserAuthentication(Authorization authorization)
     {
         var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(authorization.Claims, "jwtAuthType"));

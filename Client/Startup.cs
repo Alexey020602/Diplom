@@ -7,9 +7,12 @@ using Client.Services.Api;
 using Client.Services.Api.BaseApi;
 using Client.Services.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Model.Agreements;
 using Model.Divisions;
+using Model.Identity;
 using Model.Partners;
+using Radzen;
 using Refit;
 using AgreementStatus = Model.Agreements.Status;
 
@@ -24,14 +27,20 @@ public class Startup(string baseAddress)
         //    BaseAddress = ApiBaseAddress,
         //}); ;
         var settings = new RefitSettings(new NewtonsoftJsonContentSerializer());
+        
+        
+        services.AddTransient<ITokenStorage, AuthorizationStorage>();
+        services.AddTransient<DelegatingHandler, MyDelegatingHandler>();
         services.AddTransient<IPartnersForAgreementService, PartnersForAgreementService>();
         services.AddTransient<IDivisionsForAgreementService, DivisionsForAgreementService>();
         services.AddRefitClient<IPartnersService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("partners"));
         services.AddTransient<IReadApi<PartnerShort>>(p => p.GetRequiredService<IPartnersService>());
+        
 
         services.AddRefitClient<IPartnerTypesService>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"))
+            .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>());
 
         services.AddRefitClient<IDirectionsService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("directions"));
@@ -66,11 +75,15 @@ public class Startup(string baseAddress)
             .ConfigureHttpClient((client) => client.BaseAddress = new Uri(baseAddress));
         services.AddTransient<IAuthenticationService, AuthenticationService>();
 
+        services.AddRefitClient<IReadApi<Role>>()
+            .ConfigureHttpClient(ConfigureHttpClientForPath("roles"))
+            .AddHttpMessageHandler<DelegatingHandler>();
+
         services.AddScoped<NotifiedAuthStateProvider, AuthStateProvider>();
         services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<NotifiedAuthStateProvider>());
         
         services.AddBlazoredLocalStorage();
-        services.AddAuthorizationCore();
+        services.AddRadzenComponents();
     }
     private string ApiAddress => baseAddress + "api/";
     //private Uri ApiBaseAddress => new(ApiAddress, UriKind.Absolute);

@@ -26,4 +26,6 @@ public static class DivisionExtensions
             Site = division.Site,
             Directions = division.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
         };
+
+    public static DivisionShort ConvertToDivisionShort(this DataBase.Models.Division division) => new(division.Id, division.ShortName);
 }

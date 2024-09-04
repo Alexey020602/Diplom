@@ -2,7 +2,9 @@
 @using Client.Components
 @using Microsoft.AspNetCore.Components.Authorization
 @rendermode RenderMode.InteractiveAuto
-
+<head>
+    <RadzenTheme Theme="material"></RadzenTheme>
+</head>
 <CascadingAuthenticationState>
 <Router AppAssembly="@typeof(Program).Assembly" >
     <Found Context="routeData">

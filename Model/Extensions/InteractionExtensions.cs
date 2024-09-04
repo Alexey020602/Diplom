@@ -3,6 +3,7 @@ using DataBase.Models;
 using Model.Partners;
 using Interaction = Model.Interactions.Interaction;
 using DataBaseInteraction = DataBase.Models.Interaction;
+using Partner = DataBase.Models.Partner;
 
 namespace Model.Extensions;
 
@@ -10,13 +11,21 @@ public static class InteractionExtensions
 {
     public static InteractionInPartner ConvertToPartnerModel(this DataBaseInteraction interaction) => new()
     {
-        //TODO Доделать конвертацию
+        Id = interaction.Id,
+        Description = interaction.ToString()
     };
     public static Interaction ConvertToModel(this DataBaseInteraction interaction) => new()
     {
         Id = interaction.Id,
-        Directions = interaction.Directions.Select(DirectionExtensions.ConvertToModel).ToList()
-        //TODO Доделать конвертацию и проверить остальные методы
+        Directions = interaction.Directions.Select(DirectionExtensions.ConvertToModel).ToList(),
+        Partner = interaction.Partner.ConvertToPartnerShort(),
+        Division = interaction.Division.ConvertToDivisionShort(),
+        Type = interaction.InteractionType.ConvertToModel(),
+        Theme = interaction.Theme,
+        ContactCode = interaction.ContactCode,
+        SigningDate = interaction.SigningDateTime,
+        Begin = interaction.BeginigDateTime,
+        End = interaction.EndingDateTime,
     };
 
     public static DataBaseInteraction ConvertToDatabaseModel(this Interaction interaction) => new()
@@ -54,4 +63,6 @@ public static class InteractionExtensions
         Id = interactionType.Id,
         Name = interactionType.Name,
     };
+
+    public static PartnerShort ConvertToPartnerShort(this Partner partner) => new(partner.Id, partner.ShortName);
 }
