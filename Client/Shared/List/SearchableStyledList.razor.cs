@@ -16,22 +16,15 @@ public abstract partial class SearchableStyledList<TItem>: ComponentBase
     private const string EmptyListMessage = "Список подразделений пуст";
     private const string LoadMessage = "Загрузка...";
     private bool IsShowList => ShowedItems.Any();
-
+    protected bool isLoading;
     protected override Task OnInitializedAsync() => LoadItems();
 
     protected async Task LoadItems()
     {
         items = [];
         message = LoadMessage;
-        try
-        {
-            items = await Load();
-            message = EmptyListMessage;
-        }
-        catch (Exception ex)
-        {
-            message = ex.Message;
-        }
+        items = await Load();
+        message = EmptyListMessage;
     }
     protected abstract Task<List<TItem>> Load();
     protected abstract string RowHref(TItem item);

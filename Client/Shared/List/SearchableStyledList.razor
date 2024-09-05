@@ -4,35 +4,39 @@
 @Body
 
 @code {
-    protected RenderFragment Body =>@<div>
-        <div style="float:left; width:150px">
+    protected RenderFragment Body =>@<div class="list"><RadzenCard>
+        <RadzenStack Orientation=@Orientation.Horizontal AlignItems=@AlignItems.Center>
             @Filters
-        </div>
-        <div style="margin-left: 150px;">
             @Search
-            @LinkToCreate
-            @if (IsShowList)
-        {
-            @List
-        }
-        else
-        {
-            @EmptyListButton
-        }
-        </div>
-    </div>;
+        </RadzenStack>
+        @LinkToCreate
+        @List
+    </RadzenCard>
+    </div>
+;
 
     private RenderFragment LinkToCreate =>@<NavLink class="oval-button blue-fill" href=@CreateHref>
         Добавить
     </NavLink>;
 
-    private RenderFragment List => @<StyledList List=@ShowedItems>
-        <RowFragment Context="item">
-            @Row(item)
-        </RowFragment>
-    </StyledList>
+    private RenderFragment List => @<RadzenDataList WrapItems=false 
+                                                    AllowVirtualization=false 
+                                                    TItem=@TItem 
+                                                    Data=@items 
+                                                    IsLoading=@isLoading 
+                                                    Count=@items.Count 
+                                                    PageSize="5" 
+                                                    LoadData=@LoadItems 
+                                                    Style="padding:0">
+                                       <Template>
+                                           @Row(context)
+                                       </Template>
+                                       <EmptyTemplate>
+                                           Список пуст
+                                       </EmptyTemplate>
+    </RadzenDataList>
     ;
-    private RenderFragment Row(TItem item) => @<NavLink href=@RowHref(item)>@item</NavLink>;
+    private RenderFragment Row(TItem item) => @<NavLink style="text-decoration:none;color:unset; padding:0" href=@RowHref(item)>@item</NavLink>;
 
     private RenderFragment EmptyListButton =>@<div>
         @message
