@@ -1,13 +1,43 @@
+@using Client.Services.Api.BaseApi
+@using Client.Services.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Authorization
 @using Model.Identity
-
+@using Client.Shared.Select
 @page "/Registration"
 @attribute [Authorize(Roles = "Admin")]
-<EditFrom>
-    
-</EditFrom>
+
+<EditForm Model=@RegistrationRequest OnValidSubmit=@ExecuteRegistration>
+    <DataAnnotationsValidator/>
+    <InputText @bind-Value=@RegistrationRequest.Login/>
+    <ValidationMessage For=@(() => RegistrationRequest.Login)/>
+    <InputText type="password" @bind-Value=@RegistrationRequest.Password/>
+    <ValidationMessage For=@(() => RegistrationRequest.Password)/>
+    @* <UniversalMultipleSelect TItem=@Role TApi=@IReadApi<Role>> Selected=@RegistrationRequest.Roles></UniversalMultipleSelect> *@
+    @* <ValidationMessage For=@(() => RegistrationRequest.Roles)/> *@
+    <RadzenCheckBoxList Value=@RegistrationRequest.Roles TValue=@Role Change=@(roles => RegistrationRequest.Roles = roles.ToList())>
+        <Items>
+            @foreach (var role in Roles)
+            {
+                <RadzenCheckBoxListItem Text=@role.Name Value=@role/>
+            }
+        </Items>
+    </RadzenCheckBoxList>
+    <button type="submit">Войти</button>
+</EditForm>
 
 @code {
+    [Inject] private IAuthenticationService AuthenticationService { get; set; } = default!;
+    [Inject] private IReadApi<Role> RolesApi { get; set; } = default!;
     private RegistrationRequest RegistrationRequest { get; set; } = new();
+    private IEnumerable<Role> Roles { get; set; } = [];
+    protected override async Task OnInitializedAsync()
+    {
+        Roles = await RolesApi.ReadAll();
+    }
+
+    private async Task ExecuteRegistration()
+    {
+        await AuthenticationService.RegisterUser(RegistrationRequest);
+    }
 }
