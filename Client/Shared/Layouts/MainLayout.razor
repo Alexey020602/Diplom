@@ -1,7 +1,5 @@
 ﻿@inherits LayoutComponentBase
 
-@using Microsoft.AspNetCore.Components.Routing
-
 @rendermode RenderMode.InteractiveWebAssembly
 
 <header class="myHeader">
@@ -13,11 +11,11 @@
 </header>
 <div>
     <div class="center">
-        <ErrorBoundary>
+        <RefitErrorBoundary>
             <ChildContent>@Body</ChildContent>
-            <ErrorContent Context="exception">@exception.Message</ErrorContent>
-        </ErrorBoundary>
-        <RadzenComponents @rendermode=@(new InteractiveWebAssemblyRenderMode())></RadzenComponents>
+            <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
+        </RefitErrorBoundary>
+        <RadzenComponents @rendermode=@(new InteractiveWebAssemblyRenderMode())/>
     </div>
 </div>
 <footer style="background-color:#E7E7E7">

@@ -66,7 +66,8 @@ public class Startup(string baseAddress)
         services.AddRefitClient<IReadApi<PartnerType>>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
         services.AddRefitClient<IAgreementService>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"))
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IInteractionsService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("interactions"));
@@ -86,7 +87,6 @@ public class Startup(string baseAddress)
         services.AddRadzenComponents();
     }
     private string ApiAddress => baseAddress + "api/";
-    //private Uri ApiBaseAddress => new(ApiAddress, UriKind.Absolute);
     private Uri CreateApiUrlWithPath(string path) => new(ApiAddress + path, UriKind.Absolute);
     private Action<HttpClient> ConfigureHttpClientForPath(string path) => (client) => client.BaseAddress = CreateApiUrlWithPath(path);
 }

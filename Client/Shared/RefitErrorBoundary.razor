@@ -1,0 +1,29 @@
+@using System.Net
+@using Client.Services.Authorization
+@inherits ErrorBoundaryBase
+@inject ITokenStorage AuthorizationStorage
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+
+@ChildContent
+
+@code {
+    protected override async Task OnErrorAsync(Exception exception)
+    {
+        if (exception is not Refit.ApiException { StatusCode: HttpStatusCode.Unauthorized })
+            Notify(exception);
+        Console.WriteLine("Not authorized");
+        await AuthorizationStorage.RemoveAuthorization();
+        NavigationManager.NavigateTo("login");
+    }
+
+    private void Notify(Exception exception)
+    {
+        NotificationService.Notify(new NotificationMessage
+        {
+            Severity = NotificationSeverity.Error,
+            SummaryContent = (ns => @<RadzenText>Произошлаошибка</RadzenText>),
+            DetailContent = ns => @<RadzenText>@exception.Message</RadzenText>
+        });
+    }
+}
