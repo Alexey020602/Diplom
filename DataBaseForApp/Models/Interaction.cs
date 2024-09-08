@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace DataBase.Models;
+
 public class Interaction
 {
     public int Id { get; set; }
@@ -15,5 +14,9 @@ public class Interaction
     public DateTime BeginigDateTime { get; set; }
     public DateTime EndingDateTime { get; set; }
     public List<Direction> Directions { get; set; } = [];
-    public override string ToString() => $"{ContactCode} {InteractionType} от {SigningDateTime}, {BeginigDateTime} - {EndingDateTime}";
+
+    public override string ToString()
+    {
+        return $"{ContactCode} {InteractionType} от {SigningDateTime}, {BeginigDateTime} - {EndingDateTime}";
+    }
 }

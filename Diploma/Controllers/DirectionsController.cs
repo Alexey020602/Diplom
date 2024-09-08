@@ -1,12 +1,10 @@
-﻿using DataBase.Models.Identity;
-using Diploma.Services;
-using Microsoft.AspNetCore.Authorization;
-using Model;
+﻿using Diploma.Services;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 
 namespace Diploma.Controllers;
 
-public class DirectionsController(IDirectionsRepository directionsRepository): ApiControllerBase
+public class DirectionsController(IDirectionsRepository directionsRepository) : ApiControllerBase
 {
     // [Authorize(Roles = "Admin")]
     [HttpGet]

@@ -1,5 +1,7 @@
 ﻿// using DataBase.Models;
+
 using Model;
+
 namespace Diploma.Services;
 
 public interface IDirectionsRepository

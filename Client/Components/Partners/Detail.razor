@@ -1,14 +1,12 @@
-﻿@using Client.Services
-@using Client.Services.Api
-@using Client.Shared.Text
+﻿@using Client.Services.Api
 @using Client.Shared.List
-@using Client.Shared
+@using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
 @using Model.Agreements
 @using Model.Interactions
 @using Partner = Model.Partners.Partner
 @attribute [Authorize(Roles = "Cip")]
-@inherits DetailPage<Partner>
+@inherits Client.Shared.DetailPage<Partner>
 
 @page "/partners/{id:int}"
 
@@ -36,8 +34,7 @@
 }
 
 @code {
-    [Inject]
-    private IPartnersService PartnersService { get; set; } = default!;
+    [Inject] private IPartnersService PartnersService { get; set; } = default!;
     private List<AgreementShort> agreements = [];
     private List<InteractionShort> interactions = [];
 
@@ -55,26 +52,29 @@
             //TODO Обработка исключений
             Console.WriteLine(ex);
         }
-
     }
-    
+
     protected override RenderFragment Content => @<div>
         <h3>@item?.ShortName</h3>
         <h4>@item?.FullName</h4>
 
-        <TextWithTitle Title="Тип партнера" Text=@item?.Type?.ToString() />
-        <TextWithTitle Title="Контактные данные" Text=@item?.ContactData />
-        <TextWithTitle Title="Адрес" Text=@item?.Address />
-        <TextWithTitle Title="Город" Text=@item?.City />
-        <TextWithTitle Title="Сайт" Text=@item?.Site />
-        <ListWithTitle Title="Направления" Items=@item?.Directions/>
-        <ListWithTitle Title="Соглашения" Items=@item?.Agreements/>
-        <ListWithTitle Title="Взаимодействия" Items=@item?.Interactions/>
+        <TextWithTitle Title="Тип партнера" Text="@item?.Type?.ToString()"/>
+        <TextWithTitle Title="Контактные данные" Text="@item?.ContactData"/>
+        <TextWithTitle Title="Адрес" Text="@item?.Address"/>
+        <TextWithTitle Title="Город" Text="@item?.City"/>
+        <TextWithTitle Title="Сайт" Text="@item?.Site"/>
+        <ListWithTitle Title="Направления" Items="@item?.Directions"/>
+        <ListWithTitle Title="Соглашения" Items="@item?.Agreements"/>
+        <ListWithTitle Title="Взаимодействия" Items="@item?.Interactions"/>
     </div>;
 
     protected override bool CanDelete => !agreements.Any() && !interactions.Any();
     protected override string EntitiesPath => "partners";
     protected override string? Title => item?.ShortName;
-    protected override Task<Partner> LoadItem()  => PartnersService.ReadOne(Id);
+
+    protected override Task<Partner> LoadItem()
+    {
+        return PartnersService.ReadOne(Id);
+    }
 
 }

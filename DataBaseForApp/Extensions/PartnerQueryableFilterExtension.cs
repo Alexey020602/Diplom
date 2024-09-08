@@ -10,6 +10,7 @@ public static class PartnerQueryableFilterExtension
 
         return query.Where(partner => partner.PartnerType.Id == partnerTypeId.Value);
     }
+
     public static IQueryable<Partner> FilterByDirection(this IQueryable<Partner> query, int? directionId)
     {
         if (!directionId.HasValue) return query;

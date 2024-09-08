@@ -1,5 +1,4 @@
 ﻿using DataBase.Data;
-using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Extensions;
@@ -30,7 +29,10 @@ public class PartnerTypeRepository(ApplicationContext context) : IPartnerTypesRe
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Type>> GetAllPartnerTypesAsync() => await context.PartnerTypes.Select(t => t.ConvertToModel()).ToListAsync();
+    public async Task<IEnumerable<Type>> GetAllPartnerTypesAsync()
+    {
+        return await context.PartnerTypes.Select(t => t.ConvertToModel()).ToListAsync();
+    }
 
 
     public async Task<Type> GetPartnerTypeByIdAsync(int id)
@@ -43,8 +45,8 @@ public class PartnerTypeRepository(ApplicationContext context) : IPartnerTypesRe
 
     public async Task UpdatePartnerTypeAsync(int id, Type partnerPartnerType)
     {
-        var existingPartnerType = await context.PartnerTypes.FindAsync(id) ?? 
-            throw new KeyNotFoundException("Не найден тип партнера");
+        var existingPartnerType = await context.PartnerTypes.FindAsync(id) ??
+                                  throw new KeyNotFoundException("Не найден тип партнера");
         context.Entry(existingPartnerType).CurrentValues.SetValues(partnerPartnerType.ConvertToDao());
         await context.SaveChangesAsync();
     }

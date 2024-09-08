@@ -1,7 +1,7 @@
-﻿@using Microsoft.AspNetCore.Components.Forms;
+﻿@using Microsoft.AspNetCore.Components.Forms
 @typeparam TItem
-<InputSelect @bind-Value:get=@ItemString @bind-Value:set=@Select>
-    <option value=@defaultItemName>
+<InputSelect @bind-Value:get="@ItemString" @bind-Value:set="@Select">
+    <option value="@defaultItemName">
         @defaultItemName
     </option>
     @foreach (var item in Items)
@@ -13,11 +13,12 @@
 </InputSelect>
 
 @code {
-    private static string defaultItemName = "Не выбрано";
+    private static readonly string defaultItemName = "Не выбрано";
     [Parameter] public IEnumerable<TItem> Items { get; set; } = [];
     [Parameter] public TItem? SelectedItem { get; set; }
     [Parameter] public Func<TItem, string> GetStringFromItem { get; set; } = null!;
-    [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set;}
+    [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set; }
+
     private string ItemString
     {
         get
@@ -28,20 +29,25 @@
         }
     }
 
-    private Task Select(string? stringOfItem) => SelectedItemChanged.InvokeAsync(FindItemByNullableString(stringOfItem)); 
+    private Task Select(string? stringOfItem)
+    {
+        return SelectedItemChanged.InvokeAsync(FindItemByNullableString(stringOfItem));
+    }
 
     private TItem? FindItemByNullableString(string? stringOfItem)
     {
         Console.WriteLine($"Выбран элемент {stringOfItem}");
         if (stringOfItem is null)
         {
-            return default(TItem);
+            return default;
         }
-        else
-        {
-            return FindItemByString(stringOfItem);
-        }
+
+        return FindItemByString(stringOfItem);
     }
 
-    private TItem? FindItemByString(string stringOfItem) => Items.FirstOrDefault(item => GetStringFromItem(item) == stringOfItem);
+    private TItem? FindItemByString(string stringOfItem)
+    {
+        return Items.FirstOrDefault(item => GetStringFromItem(item) == stringOfItem);
+    }
+
 }

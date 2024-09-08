@@ -4,11 +4,11 @@ using DataBase.Models.Identity;
 using Diploma;
 using Diploma.Repositories;
 using Diploma.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +36,7 @@ builder.Services.AddAuthentication(options =>
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     })
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>//Íàñòðîéêè ïðîâåðêè òîêåíà
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o => //Íàñòðîéêè ïðîâåðêè òîêåíà
     {
         o.RequireHttpsMetadata = false;
         o.IncludeErrorDetails = true;
@@ -50,14 +50,15 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
             RequireExpirationTime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricSecurityKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricSecurityKey!))
         };
     });
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("WatchOnly", policy => policy.RequireRole(Role.Cip.ToString()));
     options.AddPolicy("Edit", policy => policy.RequireRole(Role.Cip.ToString(), Role.Ctt.ToString()));
-    options.AddPolicy("Admin", policy => policy.RequireRole(Role.Cip.ToString(), Role.Ctt.ToString(), Role.Admin.ToString()));
+    options.AddPolicy("Admin",
+        policy => policy.RequireRole(Role.Cip.ToString(), Role.Ctt.ToString(), Role.Admin.ToString()));
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
@@ -113,18 +114,21 @@ builder.Services.AddSwaggerGen(o =>
     };
     o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, loginSecurityScheme);
     // o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, tokenSecurityScheme);
-    loginSecurityScheme.Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = JwtBearerDefaults.AuthenticationScheme };
+    loginSecurityScheme.Reference = new OpenApiReference
+        { Type = ReferenceType.SecurityScheme, Id = JwtBearerDefaults.AuthenticationScheme };
     o.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        { new OpenApiSecurityScheme
         {
-            Reference = new()
+            new OpenApiSecurityScheme
             {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
-            }
-        },
-            new List<string>() }
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new List<string>()
+        }
     });
     // o.AddSecurityRequirement(new()
     // {
@@ -156,7 +160,8 @@ if (app.Environment.IsDevelopment())
 {
     //app.UseWebAssemblyDebugging();
     app.UseSwagger();
-    app.UseSwaggerUI(o=>{
+    app.UseSwaggerUI(o =>
+    {
         o.EnablePersistAuthorization();
         o.OAuthScopeSeparator(" ");
         o.OAuthClientId(validAudience);
@@ -170,8 +175,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 // app.MapGroup("/api")
 //     .MapControllers()
-    // .RequireAuthorization()
-    // ;
+// .RequireAuthorization()
+// ;
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 

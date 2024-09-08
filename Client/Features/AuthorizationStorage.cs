@@ -4,16 +4,23 @@ using Client.Services.Authorization;
 
 namespace Client.Features;
 
-public class AuthorizationStorage(ILocalStorageService localStorageService): ITokenStorage
+public class AuthorizationStorage(ILocalStorageService localStorageService) : ITokenStorage
 {
     private const string StorageKey = "authorization";
     private readonly ILocalStorageService localStorageService = localStorageService;
 
-    public async Task<Authorization?> GetAuthorization() =>
-        await localStorageService.GetItemAsync<Authorization>(StorageKey);
+    public async Task<Authorization?> GetAuthorization()
+    {
+        return await localStorageService.GetItemAsync<Authorization>(StorageKey);
+    }
 
-    public async Task SetAuthorization(Authorization authorization) =>
+    public async Task SetAuthorization(Authorization authorization)
+    {
         await localStorageService.SetItemAsync(StorageKey, authorization);
+    }
 
-    public async Task RemoveAuthorization() => await localStorageService.RemoveItemAsync(StorageKey);
+    public async Task RemoveAuthorization()
+    {
+        await localStorageService.RemoveItemAsync(StorageKey);
+    }
 }

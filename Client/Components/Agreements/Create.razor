@@ -1,5 +1,4 @@
 @page "/agreements/create"
-@using Client.Services
 @using Client.Services.Api
 @using Microsoft.AspNetCore.Authorization
 @using Model.Agreements
@@ -7,9 +6,14 @@
 @attribute [Authorize(Roles = "Ctt")] 
 
 <PageTitle>Добавление соглашения</PageTitle>
-<Form Item=@_agreement OnSubmit=@OnSubmit></Form>
+<Form Item="@_agreement" OnSubmit="@OnSubmit"></Form>
 
 @code {
     private readonly Agreement _agreement = new();
-    private Task OnSubmit() => AgreementsService.Create(_agreement);
+
+    private Task OnSubmit()
+    {
+        return AgreementsService.Create(_agreement);
+    }
+
 }

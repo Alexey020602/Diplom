@@ -1,8 +1,8 @@
 ﻿using DataBase.Data;
 using DataBase.Extensions;
-using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model;
 using Model.Divisions;
 using Model.Extensions;
 using Model.Interactions;
@@ -30,14 +30,22 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         context.Interactions.Remove(await context.Interactions.FirstAsync(i => i.Id == id));
         await context.SaveChangesAsync();
     }
-    public async Task<ModelInteraction> GetInteractionById(int id) => ConvertToModel(await context.Interactions.AsNoTracking().FirstAsync(i => i.Id == id));
-    public Task<List<InteractionShort>> GetInteractions(int? interactionTypeId) => context
-        .Interactions
-        .AsNoTracking()
-        .Include(i => i.InteractionType)
-        .FilterByType(interactionTypeId)
-        .Select(i => new InteractionShort(i.Id, i.ToString()))
-        .ToListAsync();
+
+    public async Task<ModelInteraction> GetInteractionById(int id)
+    {
+        return ConvertToModel(await context.Interactions.AsNoTracking().FirstAsync(i => i.Id == id));
+    }
+
+    public Task<List<InteractionShort>> GetInteractions(int? interactionTypeId)
+    {
+        return context
+            .Interactions
+            .AsNoTracking()
+            .Include(i => i.InteractionType)
+            .FilterByType(interactionTypeId)
+            .Select(i => new InteractionShort(i.Id, i.ToString()))
+            .ToListAsync();
+    }
 
     public async Task UpdateInteraction(int id, ModelInteraction interaction)
     {
@@ -51,64 +59,85 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         await context.SaveChangesAsync();
     }
 
-    private Interaction ConvertToDatabaseModel(ModelInteraction interaction) => new()
+    private Interaction ConvertToDatabaseModel(ModelInteraction interaction)
     {
-        Id = interaction.Id,
-        InteractionType = ConvertToDatabaseModel(interaction.Type!),
-        Theme = interaction.Theme,
-        ContactCode = interaction.ContactCode,
-        SigningDateTime = interaction.SigningDate,
-        BeginigDateTime = interaction.Begin,
-        EndingDateTime = interaction.End,
-        Division = GetDivisionFormDivisionShort(interaction.Division!),
-        Partner = GetPartnerFromPartnerShort(interaction.Partner!),
-        Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
-    };
+        return new Interaction
+        {
+            Id = interaction.Id,
+            InteractionType = ConvertToDatabaseModel(interaction.Type!),
+            Theme = interaction.Theme,
+            ContactCode = interaction.ContactCode,
+            SigningDateTime = interaction.SigningDate,
+            BeginigDateTime = interaction.Begin,
+            EndingDateTime = interaction.End,
+            Division = GetDivisionFormDivisionShort(interaction.Division!),
+            Partner = GetPartnerFromPartnerShort(interaction.Partner!),
+            Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
+        };
+    }
 
     private InteractionType ConvertToDatabaseModel(Model.Interactions.InteractionType interactionType)
     {
-        var newType = new InteractionType()
+        var newType = new InteractionType
         {
             Id = interactionType.Id,
-            Name = interactionType.Name,
+            Name = interactionType.Name
         };
         context.Attach(newType);
         return newType;
     }
-    private static ModelInteraction ConvertToModel(Interaction interaction) => new()
-    {
-        Id = interaction.Id,
-        Partner = ConvertToModel(interaction.Partner),
-        Division = ConvertToModel(interaction.Division),
-        Type = ConvertToModel(interaction.InteractionType),
-        Theme = interaction.Theme,
-        ContactCode = interaction.ContactCode,
-        SigningDate = interaction.SigningDateTime,
-        Begin = interaction.BeginigDateTime,
-        End = interaction.EndingDateTime,
-        Directions = ConvertToModel(interaction.Directions),
-    };
 
-    private static List<Model.Direction> ConvertToModel(IEnumerable<Direction> directions) =>
-        directions.Select(DirectionExtensions.ConvertToModel).ToList();
-    private static PartnerShort ConvertToModel(Partner partner) => new(partner.Id, partner.ShortName);
-    private static DivisionShort ConvertToModel(Division division) => new(division.Id, division.ShortName);
-
-    private static Model.Interactions.InteractionType ConvertToModel(InteractionType type) => new()
+    private static ModelInteraction ConvertToModel(Interaction interaction)
     {
-        Id = type.Id,
-        Name = type.Name,
-    };
-    private void AttachDirections(IEnumerable<Direction> directions)
+        return new ModelInteraction
+        {
+            Id = interaction.Id,
+            Partner = ConvertToModel(interaction.Partner),
+            Division = ConvertToModel(interaction.Division),
+            Type = ConvertToModel(interaction.InteractionType),
+            Theme = interaction.Theme,
+            ContactCode = interaction.ContactCode,
+            SigningDate = interaction.SigningDateTime,
+            Begin = interaction.BeginigDateTime,
+            End = interaction.EndingDateTime,
+            Directions = ConvertToModel(interaction.Directions)
+        };
+    }
+
+    private static List<Direction> ConvertToModel(IEnumerable<DataBase.Models.Direction> directions)
+    {
+        return directions.Select(DirectionExtensions.ConvertToModel).ToList();
+    }
+
+    private static PartnerShort ConvertToModel(Partner partner)
+    {
+        return new PartnerShort(partner.Id, partner.ShortName);
+    }
+
+    private static DivisionShort ConvertToModel(Division division)
+    {
+        return new DivisionShort(division.Id, division.ShortName);
+    }
+
+    private static Model.Interactions.InteractionType ConvertToModel(InteractionType type)
+    {
+        return new Model.Interactions.InteractionType
+        {
+            Id = type.Id,
+            Name = type.Name
+        };
+    }
+
+    private void AttachDirections(IEnumerable<DataBase.Models.Direction> directions)
     {
         context.AttachRange(directions);
     }
 
     private Partner GetPartnerFromPartnerShort(PartnerShort partner)
     {
-        var exitingPartner = new Partner()
+        var exitingPartner = new Partner
         {
-            Id = partner.Id,
+            Id = partner.Id
         }; //await context.Partners.FirstAsync(p => p.Id == partner.Id);
         context.Attach(exitingPartner);
         return exitingPartner;
@@ -116,12 +145,11 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
 
     private Division GetDivisionFormDivisionShort(DivisionShort division)
     {
-        var existingDivision = new Division()
+        var existingDivision = new Division
         {
-            Id = division.Id,
+            Id = division.Id
         };
         context.Attach(existingDivision);
         return existingDivision;
     }
-
 }

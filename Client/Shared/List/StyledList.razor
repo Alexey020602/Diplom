@@ -13,9 +13,7 @@
 </div>
 
 @code {
-    [Parameter]
-    public IEnumerable<TItem> List { get; set; } = new List<TItem>();
+    [Parameter] public IEnumerable<TItem> List { get; set; } = new List<TItem>();
 
-    [Parameter]
-    public RenderFragment<TItem>? RowFragment { get; set; }
+    [Parameter] public RenderFragment<TItem>? RowFragment { get; set; }
 }

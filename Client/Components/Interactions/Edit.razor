@@ -13,13 +13,16 @@ else
 }
 
 @code {
-    private static string LoadingMessage = "Загрузка...";
+    private static readonly string LoadingMessage = "Загрузка...";
     [Parameter] public int Id { get; set; }
     [Inject] private IInteractionsService InteractionsService { get; set; } = null!;
     private Interaction? _interaction;
     private string message = LoadingMessage;
-    
-    protected override Task OnParametersSetAsync() => LoadInteraction();
+
+    protected override Task OnParametersSetAsync()
+    {
+        return LoadInteraction();
+    }
 
     private async Task LoadInteraction()
     {
@@ -27,7 +30,7 @@ else
         {
             _interaction = await InteractionsService.ReadOne(Id);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             message = ex.Message;
         }
@@ -42,7 +45,7 @@ else
         }
         catch
         {
-            
         }
     }
+
 }

@@ -1,26 +1,21 @@
-﻿@using Microsoft.AspNetCore.Components.Forms;
-
-<div>
-        <InputText @bind-Value=@Value />
-        <button style="display:inline-block" onclick=@SendUpdatedValue class="oval-button blue-outline">Поиск</button>
-        <button style="display:inline-block" onclick=@ClearFilterField class="oval-button orange-outline">Очистить</button>
-    </div>
+﻿<RadzenStack Orientation="@Orientation.Horizontal" AlignItems="@AlignItems.Center">
+    <RadzenTextBox @bind-Value:get="@Value" @bind-Value:set="@ValueChanged"/>
+    @* <button style="display:inline-block" onclick=@SendUpdatedValue class="oval-button blue-outline">Поиск</button> *@
+    <RadzenButton
+        Icon="highlight_off"
+        Click="@ClearFilterField"
+        Variant="@Variant.Text"
+        ButtonStyle="@ButtonStyle.Primary"
+        class="rz-border-radius-10"/>
+</RadzenStack>
 
 @code {
-    [Parameter] public string Input { get; set; } = string.Empty;
-    [Parameter] public EventCallback<string> InputChanged { get; set; }
-    private string Value = string.Empty;
-
-    protected override void OnParametersSet()
-    {
-        Value = Input;
-    }
-
-    private Task SendUpdatedValue() => InputChanged.InvokeAsync(Value);
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
 
     private Task ClearFilterField()
     {
-        Value = string.Empty;
-        return SendUpdatedValue();
+        return ValueChanged.InvokeAsync(string.Empty);
     }
+
 }

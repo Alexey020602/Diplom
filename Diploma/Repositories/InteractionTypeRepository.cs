@@ -1,5 +1,4 @@
 ﻿using DataBase.Data;
-using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Extensions;
@@ -23,14 +22,20 @@ public class InteractionTypeRepository(ApplicationContext context) : IInteractio
         await context.SaveChangesAsync();
     }
 
-    public Task<Type> GetInteractionTypeById(int id) => context
-        .InteractionTypes
-        .Select(t => t.ConvertToModel())
-        .SingleAsync(type => type.Id == id);
+    public Task<Type> GetInteractionTypeById(int id)
+    {
+        return context
+            .InteractionTypes
+            .Select(t => t.ConvertToModel())
+            .SingleAsync(type => type.Id == id);
+    }
 
-    public Task<List<Type>> GetInteractionTypes() => context.InteractionTypes
-        .Select(t => t.ConvertToModel())
-        .ToListAsync();
+    public Task<List<Type>> GetInteractionTypes()
+    {
+        return context.InteractionTypes
+            .Select(t => t.ConvertToModel())
+            .ToListAsync();
+    }
 
     public async Task UpdateInteractionType(int id, Type interactionInteractionType)
     {

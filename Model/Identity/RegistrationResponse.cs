@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using DataBase.Models.Identity;
 
 namespace Model.Identity;
 

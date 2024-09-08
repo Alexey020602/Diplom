@@ -4,19 +4,23 @@ namespace Model.Extensions;
 
 public static class DivisionExtensions
 {
-    public static Model.Divisions.Division ToModel(this DataBase.Models.Division division) => new Division()
+    public static Division ToModel(this DataBase.Models.Division division)
     {
-        Id = division.Id,
-        ShortName = division.ShortName,
-        FullName = division.FullName,
-        Faculty = division.Faculty.ToModel(),
-        Contacts = division.Contacts,
-        Site = division.Site,
-        Directions = division.Directions.Select(DirectionExtensions.ConvertToModel).ToList()
-    };
+        return new Division()
+        {
+            Id = division.Id,
+            ShortName = division.ShortName,
+            FullName = division.FullName,
+            Faculty = division.Faculty.ToModel(),
+            Contacts = division.Contacts,
+            Site = division.Site,
+            Directions = division.Directions.Select(DirectionExtensions.ConvertToModel).ToList()
+        };
+    }
 
-    public static DataBase.Models.Division ToDao(this Model.Divisions.Division division) =>
-        new DataBase.Models.Division()
+    public static DataBase.Models.Division ToDao(this Division division)
+    {
+        return new DataBase.Models.Division()
         {
             Id = division.Id,
             ShortName = division.ShortName,
@@ -26,6 +30,10 @@ public static class DivisionExtensions
             Site = division.Site,
             Directions = division.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
         };
+    }
 
-    public static DivisionShort ConvertToDivisionShort(this DataBase.Models.Division division) => new(division.Id, division.ShortName);
+    public static DivisionShort ConvertToDivisionShort(this DataBase.Models.Division division)
+    {
+        return new DivisionShort(division.Id, division.ShortName);
+    }
 }

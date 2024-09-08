@@ -1,10 +1,7 @@
-@using Client.Services
 @using Client.Services.Api
-@using Model.Interactions
-@using Client.Shared
 @using Microsoft.AspNetCore.Authorization
-@using Model.Agreements
-@inherits DetailPage<Interaction>
+@using Model.Interactions
+@inherits Client.Shared.DetailPage<Interaction>
 @page "/interactions/{id:int}"
 @attribute [Authorize(Roles = "Cip")]
 @{
@@ -13,7 +10,11 @@
 
 @code {
     [Inject] private IInteractionsService InteractionsService { get; set; } = null!;
-    protected override Task<Interaction> LoadItem() => InteractionsService.ReadOne(Id);
+
+    protected override Task<Interaction> LoadItem()
+    {
+        return InteractionsService.ReadOne(Id);
+    }
 
     protected override RenderFragment Content => @<div></div>;
     protected override string? Title => item?.ToString();

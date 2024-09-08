@@ -1,47 +1,58 @@
-﻿@using Client.Shared.Text;
-@typeparam TItem
+﻿@using Client.Shared.Buttons
+@using Client.Shared.Text
+@typeparam TItem where TItem : notnull
 
 @Body
 
 @code {
-    protected RenderFragment Body =>@<div class="list"><RadzenCard>
-        <RadzenStack Orientation=@Orientation.Horizontal AlignItems=@AlignItems.Center>
-            @Filters
-            @Search
-        </RadzenStack>
-        @LinkToCreate
-        @List
-    </RadzenCard>
-    </div>
-;
 
-    private RenderFragment LinkToCreate =>@<NavLink class="oval-button blue-fill" href=@CreateHref>
-        Добавить
-    </NavLink>;
+    private RenderFragment Body => @<div class="list">
+                                       <RadzenCard>
+                                           <RadzenStack
+                                               Orientation=@Orientation.Vertical
+                                               AlignItems=@AlignItems.Center>
+                                               @Filters
+                                               @Search
+                                           </RadzenStack>
+                                           <RadzenStack
+                                               Style="padding-top:10px"
+                                               Orientation=@Orientation.Horizontal
+                                               AlignItems=@AlignItems.Center
+                                               JustifyContent=@JustifyContent.SpaceBetween>
+                                               @LinkToCreate
+                                               @EmptyListButton
+                                           </RadzenStack>
+                                           @List
+                                       </RadzenCard>
+                                   </div>;
 
-    private RenderFragment List => @<RadzenDataList WrapItems=false 
-                                                    AllowVirtualization=false 
-                                                    TItem=@TItem 
-                                                    Data=@items 
-                                                    IsLoading=@isLoading 
-                                                    Count=@items.Count 
-                                                    PageSize="5" 
-                                                    LoadData=@LoadItems 
-                                                    Style="padding:0">
+    private RenderFragment LinkToCreate => @<NavigationButton Path=@CreateHref Text="Добавить"/>;
+
+    private RenderFragment List => @<RadzenDataList
+                                        WrapItems=false
+                                        AllowVirtualization=false
+                                        TItem=@TItem
+                                        Data=@ShowedItems
+                                        IsLoading=@isLoading
+                                        Count=@ShowedItems.Count()
+                                        PageSize="5"
+                                        LoadData=@LoadItems
+                                        ShowEmptyMessage=true>
                                        <Template>
                                            @Row(context)
                                        </Template>
                                        <EmptyTemplate>
                                            Список пуст
                                        </EmptyTemplate>
-    </RadzenDataList>
-    ;
-    private RenderFragment Row(TItem item) => @<NavLink style="text-decoration:none;color:unset; padding:0" href=@RowHref(item)>@item</NavLink>;
+                                   </RadzenDataList>;
 
-    private RenderFragment EmptyListButton =>@<div>
-        @message
-        <button class="oval-button blue-fill" onclick=@LoadItems>Загрузить</button>
-    </div>;
+    private RenderFragment Row(TItem item) => @<RadzenLink
+                                                   style="text-decoration:none;color:unset;padding:0"
+                                                   Path=@RowHref(item)
+                                                   Text=@item.ToString()/>;
 
-    private RenderFragment Search =>@<SearchText @bind-Input=@namesFilter />;
+    private RenderFragment EmptyListButton => @<RadzenButton Icon="cached" Click=@LoadItems ButtonStyle=@ButtonStyle.Primary/>;
+
+    private RenderFragment Search => @<SearchText @bind-Value=@namesFilter/>;
+
 }

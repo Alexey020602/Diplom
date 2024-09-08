@@ -1,20 +1,17 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using Blazored.LocalStorage;
 using Client.Dto;
-using Client.Features;
 using Client.Services.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Model.Identity;
 
 namespace Client.AuthProviders;
 
-public class AuthStateProvider(ITokenStorage authorizationStorage, HttpClient httpClient): NotifiedAuthStateProvider
+public class AuthStateProvider(ITokenStorage authorizationStorage, HttpClient httpClient) : NotifiedAuthStateProvider
 {
     private const string StorageKey = "authorization";
-    private static AuthenticationState AnonymousState => new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
     private readonly ITokenStorage authorizationStorage = authorizationStorage;
+    private static AuthenticationState AnonymousState => new(new ClaimsPrincipal(new ClaimsIdentity()));
+
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var authorization = await GetUserAuthorization();
@@ -24,9 +21,9 @@ public class AuthStateProvider(ITokenStorage authorizationStorage, HttpClient ht
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authorization.Token);
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(
-            authorization.Claims, 
+            authorization.Claims,
             "jwtAuthType"
-            )));
+        )));
     }
 
     public override async Task Logout()
@@ -43,8 +40,11 @@ public class AuthStateProvider(ITokenStorage authorizationStorage, HttpClient ht
         NotifyUserAuthentication(authorization);
     }
 
-    private async ValueTask<Authorization?> GetUserAuthorization() =>
-        await authorizationStorage.GetAuthorization();
+    private async ValueTask<Authorization?> GetUserAuthorization()
+    {
+        return await authorizationStorage.GetAuthorization();
+    }
+
     private void NotifyUserAuthentication(Authorization authorization)
     {
         var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(authorization.Claims, "jwtAuthType"));

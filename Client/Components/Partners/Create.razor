@@ -1,18 +1,21 @@
-﻿@using Client.Services;
+﻿@rendermode RenderMode.InteractiveWebAssembly
+@attribute [Authorize(Roles = "Ctt")]
+@page "/partners/create"
 @using Client.Services.Api
 @using Microsoft.AspNetCore.Authorization
 @using Model.Partners
-@rendermode RenderMode.InteractiveWebAssembly
-@attribute [Authorize(Roles = "Ctt")]
-@page "/partners/create"
 @inject IPartnersService PartnersService
 
 <p>Создание</p>
 <PageTitle>Добавление партнера</PageTitle>
-<Form Item=@partner OnSubmit=@CreatePartner></Form>
+<Form Item="@partner" OnSubmit="@CreatePartner"></Form>
 
 @code {
-    private Partner partner = new();
+    private readonly Partner partner = new();
 
-    private Task CreatePartner() => PartnersService.Create(partner);
+    private Task CreatePartner()
+    {
+        return PartnersService.Create(partner);
+    }
+
 }

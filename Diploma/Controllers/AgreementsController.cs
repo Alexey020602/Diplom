@@ -8,14 +8,19 @@ namespace Diploma.Controllers;
 public class AgreementsController(IAgreementRepository repository) : ApiControllerBase
 {
     [Authorize(Roles = "Admin")]
-    
     [HttpGet]
-    public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId) =>
-        new JsonResult(
+    public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId)
+    {
+        return new JsonResult(
             await repository.GetAgreements(agreementTypeId, agreementStatusId)
         );
+    }
 
-    [HttpGet("{id:int}")] public async Task<IActionResult> GetOne(int id) => new JsonResult(await repository.GetAgreementById(id));
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetOne(int id)
+    {
+        return new JsonResult(await repository.GetAgreementById(id));
+    }
 
     [HttpPost]
     public async Task<IActionResult> Add(Agreement agreement)

@@ -5,10 +5,10 @@ namespace Diploma;
 
 public class IdentitySeed(UserManager<IdentityUser<Guid>> userManager, RoleManager<IdentityRole<Guid>> roleManager)
 {
-    private readonly UserManager<IdentityUser<Guid>> userManager = userManager;
-    private readonly RoleManager<IdentityRole<Guid>> roleManager = roleManager;
     private const string AdminName = "Admin";
     private const string AdminPassword = "123456";
+    private readonly RoleManager<IdentityRole<Guid>> roleManager = roleManager;
+    private readonly UserManager<IdentityUser<Guid>> userManager = userManager;
 
     public async Task Seed()
     {
@@ -16,6 +16,7 @@ public class IdentitySeed(UserManager<IdentityUser<Guid>> userManager, RoleManag
         await SeedRoles();
         await AddAdminToRolesAsync();
     }
+
     private async Task AddAdmin()
     {
         var user = await userManager.FindByNameAsync(AdminName);
@@ -23,7 +24,7 @@ public class IdentitySeed(UserManager<IdentityUser<Guid>> userManager, RoleManag
             return;
 
         var result = await userManager.CreateAsync(
-            new()
+            new IdentityUser<Guid>
             {
                 UserName = AdminName
             },
@@ -42,7 +43,7 @@ public class IdentitySeed(UserManager<IdentityUser<Guid>> userManager, RoleManag
 
         if (user is null)
             throw new InvalidOperationException();
-        
+
         var result = await userManager.AddToRolesAsync(
             user,
             new[]
@@ -51,26 +52,27 @@ public class IdentitySeed(UserManager<IdentityUser<Guid>> userManager, RoleManag
                 RoleDefaults.Ctt,
                 RoleDefaults.Cip
             }
-            );
+        );
     }
-    
+
     private async Task SeedRoles()
     {
         await AddRole(RoleDefaults.Admin);
         await AddRole(RoleDefaults.Ctt);
         await AddRole(RoleDefaults.Cip);
     }
+
     private async Task AddRole(string name)
     {
-        if (await roleManager.RoleExistsAsync(name)) 
+        if (await roleManager.RoleExistsAsync(name))
             return;
 
-        var result = await roleManager.CreateAsync(new()
+        var result = await roleManager.CreateAsync(new IdentityRole<Guid>
         {
-            Name = name,
+            Name = name
         });
-        
-        if (result.Succeeded) 
+
+        if (result.Succeeded)
             return;
 
         throw new InvalidOperationException(result.Errors.ToString());

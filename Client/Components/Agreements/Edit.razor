@@ -1,5 +1,4 @@
 @page "/agreements/{id:int}/Edit"
-@using Client.Services
 @using Client.Services.Api
 @using Microsoft.AspNetCore.Authorization
 @using Model.Agreements
@@ -13,13 +12,18 @@ else
 {
     @_message
 }
+
 @code {
-    private static string LoadingMessage = "Загрузка...";
+    private static readonly string LoadingMessage = "Загрузка...";
     [Parameter] public int Id { get; set; }
     [Inject] private IAgreementService AgreementService { get; set; } = null!;
     private Agreement? _agreement;
     private string _message = LoadingMessage;
-    protected override Task OnParametersSetAsync() => LoadAgreement();
+
+    protected override Task OnParametersSetAsync()
+    {
+        return LoadAgreement();
+    }
 
     private async Task LoadAgreement()
     {
@@ -45,4 +49,5 @@ else
             //TODO Обработка исключения
         }
     }
+
 }

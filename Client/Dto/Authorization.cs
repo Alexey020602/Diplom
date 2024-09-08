@@ -10,13 +10,18 @@ public record class Authorization([Required] string Token, string Login, [MinLen
     // public string Login { get; set; } = login;
 
     public IEnumerable<Claim> Claims => RolesClaims.Concat(UserClaims);
-    private IEnumerable<Claim> UserClaims => string.IsNullOrEmpty(Login) ? [] : new Claim[] { new(ClaimTypes.Name, Login)};
+
+    private IEnumerable<Claim> UserClaims =>
+        string.IsNullOrEmpty(Login) ? [] : new Claim[] { new(ClaimTypes.Name, Login) };
+
     private IEnumerable<Claim> RolesClaims => Roles.Select(r => new Claim(ClaimTypes.Role, r));
 
-    public override string ToString() =>
-        $"""
-        Login: {Login}
-        Roles: {Roles}
-        Token: {Token}
-        """;
+    public override string ToString()
+    {
+        return $"""
+                Login: {Login}
+                Roles: {Roles}
+                Token: {Token}
+                """;
+    }
 }

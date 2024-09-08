@@ -1,5 +1,6 @@
 ﻿using Model.Agreements;
 using ModelAgreement = Model.Agreements.Agreement;
+
 namespace Diploma.Services;
 
 public interface IAgreementRepository

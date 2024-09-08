@@ -1,5 +1,4 @@
 ﻿using DataBase.Data;
-using DataBase.Models;
 using Diploma.Mappers;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +21,15 @@ public class AgreementTypeRepository(ApplicationContext context) : IAgreementTyp
         await context.SaveChangesAsync();
     }
 
-    public async Task<AgreementType> GetAgreementType(int id) => 
-        (await context.AgreementType.SingleAsync(a => a.Id == id)).ConvertToModel();
+    public async Task<AgreementType> GetAgreementType(int id)
+    {
+        return (await context.AgreementType.SingleAsync(a => a.Id == id)).ConvertToModel();
+    }
 
-    public Task<List<AgreementType>> GetAgreementTypes() => 
-        context.AgreementType.Select(type => type.ConvertToModel()).ToListAsync();
+    public Task<List<AgreementType>> GetAgreementTypes()
+    {
+        return context.AgreementType.Select(type => type.ConvertToModel()).ToListAsync();
+    }
 
     public async Task UpdateAgreementType(int id, AgreementType agreementAgreementType)
     {

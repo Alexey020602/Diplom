@@ -1,34 +1,24 @@
 ﻿@using Client.Services.Api.BaseApi
-
 @typeparam TItem where TItem : class
 
-@inject IReadApi<TItem> service
+@inject IReadApi<TItem> Service
 
-<SelectInList TItem=TItem
-              Items=@items
-              GetStringFromItem=@GetStringIdentifier
-              @bind-SelectedItem:get=@SelectedItem
-              @bind-SelectedItem:set=@SelectedItemChanged />
+<RadzenDropDown TValue=@(TItem?) @bind-Value:get=@SelectedItem @bind-Value:set=@SelectedItemChanged Data=@items Placeholder=@Placeholder/>
 
 @code {
     private List<TItem> items = [];
+    [Parameter] public string? Placeholder { get; set; }
     [Parameter] public TItem? SelectedItem { get; set; }
     [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set; }
-    [Parameter] public Func<TItem, string> GetStringIdentifier { get; set; } = (item => item.ToString() ?? string.Empty);
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-        await LoadPartnerTypes();
+        return LoadPartnerTypes();
     }
+
     private async Task LoadPartnerTypes()
     {
-        try
-        {
-            items = await service.ReadAll();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ошибка при загрузке списка типов партнера {ex}");
-        }
+        items = await Service.ReadAll();
     }
+
 }

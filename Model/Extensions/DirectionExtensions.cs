@@ -2,15 +2,21 @@ namespace Model.Extensions;
 
 public static class DirectionExtensions
 {
-    public static DataBase.Models.Direction ConvertToDao(this Model.Direction direction) => new()
+    public static DataBase.Models.Direction ConvertToDao(this Direction direction)
     {
-        Id = direction.Id,
-        Name = direction.Name,
-    };
+        return new DataBase.Models.Direction
+        {
+            Id = direction.Id,
+            Name = direction.Name
+        };
+    }
 
-    public static Model.Direction ConvertToModel(this DataBase.Models.Direction direction) => new()
+    public static Direction ConvertToModel(this DataBase.Models.Direction direction)
     {
-        Id = direction.Id,
-        Name = direction.Name,
-    };
+        return new Direction
+        {
+            Id = direction.Id,
+            Name = direction.Name
+        };
+    }
 }

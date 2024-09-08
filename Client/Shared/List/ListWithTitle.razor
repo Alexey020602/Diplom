@@ -1,17 +1,19 @@
 ﻿@typeparam TItem
 <div>
-    @if (Items.Any()) {
-    <p class="title">@Title</p>
-    <ul>
-        @foreach (var item in Items)
-        {
-            <li>
-                @item
-            </li>
-        }
-    </ul>
+    @if (Items.Any())
+    {
+        <p class="title">@Title</p>
+        <ul>
+            @foreach (var item in Items)
+            {
+                <li>
+                    @item
+                </li>
+            }
+        </ul>
     }
 </div>
+
 @code {
     [Parameter] public string? Title { get; set; } = string.Empty;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = [];

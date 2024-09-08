@@ -15,7 +15,7 @@
             <ChildContent>@Body</ChildContent>
             <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
         </RefitErrorBoundary>
-        <RadzenComponents @rendermode=@(new InteractiveWebAssemblyRenderMode())/>
+        <RadzenComponents @rendermode="@(new InteractiveWebAssemblyRenderMode())"/>
     </div>
 </div>
 <footer style="background-color:#E7E7E7">

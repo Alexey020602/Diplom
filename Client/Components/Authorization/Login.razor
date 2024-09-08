@@ -1,13 +1,12 @@
 @page "/login"
-
 @using Microsoft.AspNetCore.Components.Forms
 
-<EditForm Model=@AuthRequest OnValidSubmit=@ExecuteLogin>
+<EditForm Model="@AuthRequest" OnValidSubmit="@ExecuteLogin">
     <DataAnnotationsValidator/>
-    <InputText @bind-Value=@AuthRequest.Login/>
-    <ValidationMessage For=@(() => AuthRequest.Login)/>
-    <InputText type="password" @bind-Value=@AuthRequest.Password/>
-    <ValidationMessage For=@(() => AuthRequest.Password)/>
+    <InputText @bind-Value="@AuthRequest.Login"/>
+    <ValidationMessage For="@(() => AuthRequest.Login)"/>
+    <InputText type="password" @bind-Value="@AuthRequest.Password"/>
+    <ValidationMessage For="@(() => AuthRequest.Password)"/>
     <button type="submit">Войти</button>
 </EditForm>
 

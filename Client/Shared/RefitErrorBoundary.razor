@@ -1,5 +1,6 @@
 @using System.Net
 @using Client.Services.Authorization
+@using Refit
 @inherits ErrorBoundaryBase
 @inject ITokenStorage AuthorizationStorage
 @inject NavigationManager NavigationManager
@@ -8,9 +9,10 @@
 @ChildContent
 
 @code {
+
     protected override async Task OnErrorAsync(Exception exception)
     {
-        if (exception is not Refit.ApiException { StatusCode: HttpStatusCode.Unauthorized })
+        if (exception is not ApiException { StatusCode: HttpStatusCode.Unauthorized })
             Notify(exception);
         Console.WriteLine("Not authorized");
         await AuthorizationStorage.RemoveAuthorization();
@@ -26,4 +28,5 @@
             DetailContent = ns => @<RadzenText>@exception.Message</RadzenText>
         });
     }
+
 }

@@ -7,10 +7,13 @@ public interface IPartnersFilter
     public IQueryable<Partner> Filter(IQueryable<Partner> partners);
 }
 
-public abstract class PartnersFilterDecorator(IPartnersFilter partnersFilter): IPartnersFilter
+public abstract class PartnersFilterDecorator(IPartnersFilter partnersFilter) : IPartnersFilter
 {
-    public IQueryable<Partner> Filter(IQueryable<Partner> partners) => FilterPartners(partnersFilter.Filter(partners));
-    
+    public IQueryable<Partner> Filter(IQueryable<Partner> partners)
+    {
+        return FilterPartners(partnersFilter.Filter(partners));
+    }
+
     protected abstract IQueryable<Partner> FilterPartners(IQueryable<Partner> partners);
 }
 

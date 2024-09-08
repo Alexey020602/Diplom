@@ -1,31 +1,31 @@
-﻿@using Model.Divisions;
-@using Client.Services;
-@using Client.Services.Api
-@using Client.Shared.Text;
-@using Client.Shared.List;
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Cip")]
+﻿@attribute [Authorize(Roles = "Cip")]
 @page "/divisions/{id:int}"
+@using Client.Services.Api
+@using Client.Shared.List
+@using Client.Shared.Text
+@using Microsoft.AspNetCore.Authorization
+@using Model.Divisions
 <div>
     <div>
         <button onclick="history.back()" class="oval-button blue-fill">Назад</button>
         <NavLink class="oval-button blue-outline" style="display:inline-block" href=@($"divisions/{Id}/edit")>
-            Редактировать    
+            Редактировать
         </NavLink>
     </div>
 
     <div>
-        @if(division is not null)
+        @if (division is not null)
         {
             <h3>@division.ShortName</h3>
             <h4>@division.FullName</h4>
-            <TextWithTitle Title="Факультет" Text=@division.Faculty?.ToString() />
-            <TextWithTitle Title="Контактные данные" Text=@division.Contacts />
-            <TextWithTitle Title="Сайт" Text=@division.Site />
-            <ListWithTitle Title="Направления" Items=@division.Directions />
+            <TextWithTitle Title="Факультет" Text=@division.Faculty?.ToString()/>
+            <TextWithTitle Title="Контактные данные" Text=@division.Contacts/>
+            <TextWithTitle Title="Сайт" Text=@division.Site/>
+            <ListWithTitle Title="Направления" Items=@division.Directions/>
         }
     </div>
 </div>
+
 @code {
     [Inject] private IDivisionsService DivisionsService { get; set; } = null!;
     [Parameter] public int Id { get; set; }
@@ -36,11 +36,12 @@
         try
         {
             division = await DivisionsService.ReadOne(Id);
-        } 
-        catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             //TODO Добавить обработку исключений
             Console.WriteLine(ex);
         }
     }
+
 }

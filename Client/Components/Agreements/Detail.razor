@@ -1,14 +1,13 @@
-﻿@using Client.Services
-@using Client.Services.Api
-@using Client.Shared
-@using Model.Agreements
-@using Client.Shared.Text
+﻿@using Client.Services.Api
 @using Client.Shared.List
+@using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
-@inherits DetailPage<Agreement>
-@attribute [Authorize(Roles="Cip")]
+@using Model.Agreements
+@inherits Client.Shared.DetailPage<Agreement>
+@attribute [Authorize(Roles = "Cip")]
 
 @page "/agreements/{id:int}"
+
 @{
     base.BuildRenderTree(__builder);
 }
@@ -16,7 +15,11 @@
 @code {
     [Inject] private IAgreementService AgreementService { get; set; } = null!;
 
-    protected override Task<Agreement> LoadItem() => AgreementService.ReadOne(Id);
+    protected override Task<Agreement> LoadItem()
+    {
+        return AgreementService.ReadOne(Id);
+    }
+
     //TODO Доделать экраны деталей
     protected override RenderFragment Content =>
         @<div>

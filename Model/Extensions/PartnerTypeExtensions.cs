@@ -1,17 +1,23 @@
-using DataBase.Models;
+using Model.Partners;
 
 namespace Model.Extensions;
 
 public static class PartnerTypeExtensions
 {
-    public static Model.Partners.PartnerType ConvertToModel(this PartnerType partnerType) => new()
+    public static PartnerType ConvertToModel(this DataBase.Models.PartnerType partnerType)
     {
-        Id = partnerType.Id,
-        Name = partnerType.Name,
-    };
+        return new PartnerType
+        {
+            Id = partnerType.Id,
+            Name = partnerType.Name
+        };
+    }
 
-    public static PartnerType ConvertToDao(this Model.Partners.PartnerType partnerType) => new()
+    public static DataBase.Models.PartnerType ConvertToDao(this PartnerType partnerType)
     {
-        Id = partnerType.Id, Name = partnerType.Name,
-    };
+        return new DataBase.Models.PartnerType
+        {
+            Id = partnerType.Id, Name = partnerType.Name
+        };
+    }
 }

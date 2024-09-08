@@ -1,13 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using Model.Partners;
 using Diploma.Services;
-using Microsoft.AspNetCore.Authorization;
-using Model.Agreements;
-using Model.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Model.Interactions;
+using Model.Partners;
 
 namespace Diploma.Controllers;
-
 
 public class PartnersController(IPartnersRepository partnersRepository) : ApiControllerBase
 {
@@ -17,8 +13,8 @@ public class PartnersController(IPartnersRepository partnersRepository) : ApiCon
         var partners = (await partnersRepository.GetPartnersAsync(partnerTypeId, directionId)).Select(p => new
         {
             Name = p.ShortName,
-            p.Id,
-        } ) ;
+            p.Id
+        });
 
         return new JsonResult(partners);
     }
@@ -28,13 +24,8 @@ public class PartnersController(IPartnersRepository partnersRepository) : ApiCon
     {
         var partner = await partnersRepository.GetPartnerByIdAsync(id);
         if (partner == null)
-        {
             return NotFound("Нет соответсвующего партнера");
-        }
-        else
-        {
-            return new JsonResult(partner);
-        }
+        return new JsonResult(partner);
     }
 
     [HttpGet("{id:int}/agreements")]
@@ -44,9 +35,13 @@ public class PartnersController(IPartnersRepository partnersRepository) : ApiCon
     }
 
     [HttpGet("{id:int}/interactions")]
-    public async Task<IActionResult> GetInteractionsForPartner(int id) => new JsonResult(
-        (await partnersRepository.GetInteractionsForPartnerWithId(id)).Select(i => new InteractionShort(i.Id, i.ToString()))
+    public async Task<IActionResult> GetInteractionsForPartner(int id)
+    {
+        return new JsonResult(
+            (await partnersRepository.GetInteractionsForPartnerWithId(id)).Select(i =>
+                new InteractionShort(i.Id, i.ToString()))
         );
+    }
 
     [HttpPost]
     public async Task<IActionResult> AddPartner([FromBody] Partner partner)
@@ -68,4 +63,3 @@ public class PartnersController(IPartnersRepository partnersRepository) : ApiCon
         await partnersRepository.DeletePartnerByIdAsync(id);
     }
 }
-

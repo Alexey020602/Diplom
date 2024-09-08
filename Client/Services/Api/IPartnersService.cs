@@ -7,9 +7,15 @@ using Partner = Model.Partners.Partner;
 
 namespace Client.Services.Api;
 
-public interface IPartnersService: IReadApi<PartnerShort>, IReadOneApi<Partner, int>, IDeleteApi<int>, IUpdateApi<Partner, int>, ICreateApi<Partner>
+public interface IPartnersService : IReadApi<PartnerShort>, IReadOneApi<Partner, int>, IDeleteApi<int>,
+    IUpdateApi<Partner, int>, ICreateApi<Partner>
 {
-    [Get("")] Task<List<PartnerShort>> ReadAll(int? partnerTypeId = null);
-    [Get("/{id}/agreements")] Task<List<AgreementShort>> ReadAllAgreements(int id);
-    [Get("/{id}/interactions")] Task<List<InteractionShort>> ReadAllInteractions(int id);
+    [Get("")]
+    Task<List<PartnerShort>> ReadAll(int? partnerTypeId = null);
+
+    [Get("/{id}/agreements")]
+    Task<List<AgreementShort>> ReadAllAgreements(int id);
+
+    [Get("/{id}/interactions")]
+    Task<List<InteractionShort>> ReadAllInteractions(int id);
 }

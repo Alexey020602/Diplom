@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Division = Model.Divisions.DivisionShort;
+
 namespace Model.Agreements;
 
 public class Agreement
@@ -12,5 +12,9 @@ public class Agreement
     public DateTime End { get; set; } = DateTime.Now;
     [MinLength(1)] public List<DivisionInAgreement> Divisions { get; set; } = [];
     [MinLength(1)] public List<PartnerInAgreement> Partners { get; set; } = [];
-    public override string ToString() => $"{Number} {Type} {Start.ToShortDateString()} - {End.ToLongDateString()}";
+
+    public override string ToString()
+    {
+        return $"{Number} {Type} {Start.ToShortDateString()} - {End.ToLongDateString()}";
+    }
 }

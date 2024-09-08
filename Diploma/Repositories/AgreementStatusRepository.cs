@@ -1,9 +1,8 @@
 ﻿using DataBase.Data;
-using DataBase.Models;
 using Diploma.Mappers;
 using Diploma.Services;
-using Model.Agreements;
 using Microsoft.EntityFrameworkCore;
+using Model.Agreements;
 
 namespace Diploma.Repositories;
 
@@ -17,18 +16,23 @@ public class AgreementStatusRepository(ApplicationContext context) : IAgreementS
 
     public async Task DeleteAgreementStatus(int id)
     {
-       var existingAgreementStatus = context.AgreementStatus.Single(a => a.Id == id);
+        var existingAgreementStatus = context.AgreementStatus.Single(a => a.Id == id);
         context.AgreementStatus.Remove(existingAgreementStatus);
         await context.SaveChangesAsync();
     }
 
-    public async Task<Status> GetAgreementStatus(int id) =>
-        (await context.AgreementStatus.FirstAsync(status => status.Id == id)).ConvertToModel();
+    public async Task<Status> GetAgreementStatus(int id)
+    {
+        return (await context.AgreementStatus.FirstAsync(status => status.Id == id)).ConvertToModel();
+    }
 
-    public Task<List<Status>> GetAgreementStatuses() => context
-        .AgreementStatus
-        .Select(status => status.ConvertToModel())
-        .ToListAsync();
+    public Task<List<Status>> GetAgreementStatuses()
+    {
+        return context
+            .AgreementStatus
+            .Select(status => status.ConvertToModel())
+            .ToListAsync();
+    }
 
     public async Task UpdateAgreementStatus(int id, Status agreementStatus)
     {

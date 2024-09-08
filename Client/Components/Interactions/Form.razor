@@ -1,16 +1,14 @@
-@using Client.Services
 @using Client.Services.Api
-@using Client.Shared.Form
-@using Client.Shared.Text
 @using Client.Shared.Select
+@using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Forms;
+@using Microsoft.AspNetCore.Components.Forms
 @using Model
 @using Model.Divisions
 @using Model.Interactions
 @using PartnerShort = Model.Partners.PartnerShort
 @attribute [Authorize(Roles = "Ctt")]
-@inherits BaseForm<Interaction>
+@inherits Client.Shared.Form.BaseForm<Model.Interactions.Interaction>
 
 @{
     base.BuildRenderTree(__builder);
@@ -26,33 +24,27 @@
             <ValidationMessage For=@(() => Item.ContactCode)/>
             <InputWithFloatTitle Title="Тема" @bind-Value=@Item.Theme/>
 
-            <ValidationMessage For=@(() => Item.Theme)/>
+            <ValidationMessage For="@(() => Item.Theme)"/>
             <UniversalCustomSelect
-                TItem=@PartnerShort
-                @bind-SelectedItem=@Item.Partner
-                GetStringIdentifier=@(partner => partner.Id.ToString())/>
-            <ValidationMessage For=@(() => Item.Partner)/>
+                TItem=@PartnerShort @bind-SelectedItem=@Item.Partner/>
+            <ValidationMessage For="@(() => Item.Partner)"/>
             <UniversalCustomSelect
-                TItem=@DivisionShort
-                @bind-SelectedItem=@Item.Division
-                GetStringIdentifier=@(division => division.Id.ToString())/>
+                TItem=@DivisionShort @bind-SelectedItem=@Item.Division/>
 
-            <ValidationMessage For=@(() => Item.Division)/>
+            <ValidationMessage For="@(() => Item.Division)"/>
             <UniversalCustomSelect
-                TItem=@Model.Interactions.InteractionType
-                @bind-SelectedItem=@Item.Type
-                GetStringIdentifier=@(type => type.Id.ToString())/>
+                TItem=@InteractionType @bind-SelectedItem=@Item.Type/>
 
-            <ValidationMessage For=@(() => Item.Type)/>
-            <InputDate @bind-Value=@Item.Begin>Начало</InputDate>
+            <ValidationMessage For="@(() => Item.Type)"/>
+            <InputDate @bind-Value="@Item.Begin">Начало</InputDate>
 
-            <ValidationMessage For=@(() => Item.Begin)/>
-            <InputDate @bind-Value=@Item.End>Конец</InputDate>
+            <ValidationMessage For="@(() => Item.Begin)"/>
+            <InputDate @bind-Value="@Item.End">Конец</InputDate>
 
-            <ValidationMessage For=@(() => Item.End)/>
-            <InputDate @bind-Value=@Item.SigningDate>Дата подписания</InputDate>
-            <ValidationMessage For=@(() => Item.SigningDate)/>
-            <ValidationMessage For=@(() => Item.SigningDate)/>
+            <ValidationMessage For="@(() => Item.End)"/>
+            <InputDate @bind-Value="@Item.SigningDate">Дата подписания</InputDate>
+            <ValidationMessage For="@(() => Item.SigningDate)"/>
+            <ValidationMessage For="@(() => Item.SigningDate)"/>
     </div>;
 
 }

@@ -1,12 +1,8 @@
-﻿@using Microsoft.AspNetCore.Components.Forms;
-@using Client.Shared.Select;
-@using Client.Shared.List;
-@using Client.Shared.Text;
+﻿@attribute [Authorize(Roles = "Cip")]
+@using Client.Shared.Select
 @using Microsoft.AspNetCore.Authorization
 @using Model.Partners
-@using Type = Model.Partners.PartnerType
-@attribute [Authorize(Roles = "Cip")]
-@inherits SearchableStyledList<PartnerShort>
+@inherits Client.Shared.List.SearchableStyledList<Model.Partners.PartnerShort>
 
 @rendermode RenderMode.InteractiveWebAssembly
 @page "/"
@@ -18,10 +14,9 @@
 }
 
 @code {
-    protected override RenderFragment Filters => 
-        @<UniversalCustomSelect 
-             TItem=@Type 
-                          @bind-SelectedItem:get=@PartnerType 
-                                                    @bind-SelectedItem:set=@SelectPartnerType 
-             GetStringIdentifier=@(type => type.Id.ToString()) />;
+
+    protected override RenderFragment Filters =>
+        @<UniversalCustomSelect
+             TItem=@PartnerType @bind-SelectedItem:get=@PartnerType @bind-SelectedItem:set=@SelectPartnerType/>;
+
 }

@@ -1,31 +1,31 @@
-﻿@using Shared.List;
-@using Client.Shared.Select
-@using Model.Agreements
+﻿@using Client.Shared.Select
 @using AgreementType = Model.Agreements.AgreementType
 @using AgreementStatus = Model.Agreements.Status
 
 @page "/agreements"
-@inherits SearchableStyledList<Model.Agreements.AgreementShort>
+@inherits Client.Shared.List.SearchableStyledList<Model.Agreements.AgreementShort>
 
 @{
     base.BuildRenderTree(__builder);
 }
 
 @code {
-    protected override RenderFragment Filters =>@<div>
-        @TypeFilter
-        @StatusFilter
-    </div>;
-    
-    private RenderFragment TypeFilter => @<UniversalCustomSelect 
-    TItem=@AgreementType 
-    GetStringIdentifier=@(type => type.Id.ToString())
-    SelectedItem=@agreementType 
-    SelectedItemChanged=@Select />;
+
+    protected override RenderFragment Filters => @<RadzenStack Orientation="@Orientation.Vertical">
+                                                     @TypeFilter
+                                                     @StatusFilter
+                                                 </RadzenStack>;
+
+    private RenderFragment TypeFilter => @<UniversalCustomSelect
+                                              Placeholder="Тип соглашения"
+                                              TItem="@AgreementType"
+                                              SelectedItem="@agreementType"
+                                              SelectedItemChanged="@Select"/>;
 
     private RenderFragment StatusFilter => @<UniversalCustomSelect
-    TItem=@AgreementStatus 
-    GetStringIdentifier=@(status => status.Id.ToString())
-    SelectedItem=@agreementStatus
-    SelectedItemChanged=@Select />;
+                                                TItem="@AgreementStatus"
+                                                Placeholder="Статус соглашения"
+                                                SelectedItem="@agreementStatus"
+                                                SelectedItemChanged="@Select"/>;
+
 }

@@ -1,5 +1,4 @@
-﻿using Client.Services;
-using Client.Services.Api;
+﻿using Client.Services.Api;
 using Microsoft.AspNetCore.Components;
 using Model.Agreements;
 using AgreementStatus = Model.Agreements.Status;
@@ -8,13 +7,20 @@ namespace Client.Components.Agreements;
 
 public partial class List
 {
-    private AgreementType? agreementType = null;
-    private AgreementStatus? agreementStatus = null;
+    private AgreementStatus? agreementStatus;
+    private AgreementType? agreementType;
     [Inject] private IAgreementService AgreementService { get; set; } = null!;
     protected override string CreateHref => "/agreements/create";
-    protected override Task<List<AgreementShort>> Load() => AgreementService.ReadAll(agreementType?.Id, agreementStatus?.Id); 
 
-    protected override string RowHref(AgreementShort item) => $"/agreements/{item.Id}";
+    protected override Task<List<AgreementShort>> Load()
+    {
+        return AgreementService.ReadAll(agreementType?.Id, agreementStatus?.Id);
+    }
+
+    protected override string RowHref(AgreementShort item)
+    {
+        return $"/agreements/{item.Id}";
+    }
 
     private Task Select(AgreementType? agreementType)
     {

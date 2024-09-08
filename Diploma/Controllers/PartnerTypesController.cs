@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Diploma.Services;
+﻿using Diploma.Services;
+using Microsoft.AspNetCore.Mvc;
 using Model.Partners;
 
 namespace Diploma.Controllers;
@@ -19,7 +19,7 @@ public class PartnerTypesController(IPartnerTypesRepository partnerTypesReposito
         var partnerType = await partnerTypesRepository.GetPartnerTypeByIdAsync(id);
         return new JsonResult(partnerType);
     }
- 
+
     [HttpPost]
     public async Task<IActionResult> AddPartnerType(PartnerType partnerPartnerType)
     {
@@ -33,9 +33,9 @@ public class PartnerTypesController(IPartnerTypesRepository partnerTypesReposito
         await partnerTypesRepository.DeletePartnerTypeByIdAsync(id);
     }
 
-    [HttpPut("{id}")] 
-    public async Task UpdatePartnerType(int id,PartnerType partnerPartnerType)
+    [HttpPut("{id}")]
+    public async Task UpdatePartnerType(int id, PartnerType partnerPartnerType)
     {
-        await partnerTypesRepository.UpdatePartnerTypeAsync(id,partnerPartnerType);
+        await partnerTypesRepository.UpdatePartnerTypeAsync(id, partnerPartnerType);
     }
 }

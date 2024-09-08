@@ -1,68 +1,87 @@
-using System.Data.Common;
 using DataBase.Models;
 using Model.Partners;
 using Interaction = Model.Interactions.Interaction;
 using DataBaseInteraction = DataBase.Models.Interaction;
+using InteractionType = Model.Interactions.InteractionType;
 using Partner = DataBase.Models.Partner;
 
 namespace Model.Extensions;
 
 public static class InteractionExtensions
 {
-    public static InteractionInPartner ConvertToPartnerModel(this DataBaseInteraction interaction) => new()
+    public static InteractionInPartner ConvertToPartnerModel(this DataBaseInteraction interaction)
     {
-        Id = interaction.Id,
-        Description = interaction.ToString()
-    };
-    public static Interaction ConvertToModel(this DataBaseInteraction interaction) => new()
-    {
-        Id = interaction.Id,
-        Directions = interaction.Directions.Select(DirectionExtensions.ConvertToModel).ToList(),
-        Partner = interaction.Partner.ConvertToPartnerShort(),
-        Division = interaction.Division.ConvertToDivisionShort(),
-        Type = interaction.InteractionType.ConvertToModel(),
-        Theme = interaction.Theme,
-        ContactCode = interaction.ContactCode,
-        SigningDate = interaction.SigningDateTime,
-        Begin = interaction.BeginigDateTime,
-        End = interaction.EndingDateTime,
-    };
-
-    public static DataBaseInteraction ConvertToDatabaseModel(this Interaction interaction) => new()
-    {
-        Id = interaction.Id,
-        InteractionType = new ()
+        return new InteractionInPartner
         {
-            Id = interaction.Type!.Id,
-            Name = interaction.Type!.Name
-        },
-        Theme = interaction.Theme,
-        ContactCode = interaction.ContactCode,
-        SigningDateTime = interaction.SigningDate,
-        BeginigDateTime = interaction.Begin,
-        EndingDateTime = interaction.End,
-        Division = new()
-        {
-            Id = interaction.Division!.Id
-        },
-        Partner = new()
-        {
-            Id = interaction.Partner!.Id
-        },
-        Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
-    };
+            Id = interaction.Id,
+            Description = interaction.ToString()
+        };
+    }
 
-    public static Interactions.InteractionType ConvertToModel(this InteractionType type) => new()
+    public static Interaction ConvertToModel(this DataBaseInteraction interaction)
     {
-        Id = type.Id,
-        Name = type.Name,
-    };
+        return new Interaction
+        {
+            Id = interaction.Id,
+            Directions = interaction.Directions.Select(DirectionExtensions.ConvertToModel).ToList(),
+            Partner = interaction.Partner.ConvertToPartnerShort(),
+            Division = interaction.Division.ConvertToDivisionShort(),
+            Type = interaction.InteractionType.ConvertToModel(),
+            Theme = interaction.Theme,
+            ContactCode = interaction.ContactCode,
+            SigningDate = interaction.SigningDateTime,
+            Begin = interaction.BeginigDateTime,
+            End = interaction.EndingDateTime
+        };
+    }
 
-    public static InteractionType ConvertToDao(this Interactions.InteractionType interactionType) => new()
+    public static DataBaseInteraction ConvertToDatabaseModel(this Interaction interaction)
     {
-        Id = interactionType.Id,
-        Name = interactionType.Name,
-    };
+        return new DataBaseInteraction
+        {
+            Id = interaction.Id,
+            InteractionType = new DataBase.Models.InteractionType
+            {
+                Id = interaction.Type!.Id,
+                Name = interaction.Type!.Name
+            },
+            Theme = interaction.Theme,
+            ContactCode = interaction.ContactCode,
+            SigningDateTime = interaction.SigningDate,
+            BeginigDateTime = interaction.Begin,
+            EndingDateTime = interaction.End,
+            Division = new Division
+            {
+                Id = interaction.Division!.Id
+            },
+            Partner = new Partner
+            {
+                Id = interaction.Partner!.Id
+            },
+            Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
+        };
+    }
 
-    public static PartnerShort ConvertToPartnerShort(this Partner partner) => new(partner.Id, partner.ShortName);
+    public static InteractionType ConvertToModel(this DataBase.Models.InteractionType type)
+    {
+        return new InteractionType
+        {
+            Id = type.Id,
+            Name = type.Name
+        };
+    }
+
+    public static DataBase.Models.InteractionType ConvertToDao(this InteractionType interactionType)
+    {
+        return new DataBase.Models.InteractionType
+        {
+            Id = interactionType.Id,
+            Name = interactionType.Name
+        };
+    }
+
+    public static PartnerShort ConvertToPartnerShort(this Partner partner)
+    {
+        return new PartnerShort(partner.Id, partner.ShortName);
+    }
 }

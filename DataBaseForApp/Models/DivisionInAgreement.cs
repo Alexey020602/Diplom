@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Models;
+
 [PrimaryKey(nameof(DivisionId), nameof(AgreementId))]
 public class DivisionInAgreement
 {

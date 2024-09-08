@@ -1,12 +1,10 @@
-@using Client.Services
 @using Client.Services.Api
-@using Client.Shared.Form
-@using Model.Agreements
+@using Client.Shared.Select
 @using Client.Shared.Text
 @using Microsoft.AspNetCore.Components.Forms
-@using Client.Shared.Select
+@using Model.Agreements
 @using Type = Model.Agreements.AgreementType
-@inherits BaseForm<Agreement>
+@inherits Client.Shared.Form.BaseForm<Agreement>
 @inject IDivisionsForAgreementService DivisionsService
 @inject IPartnersForAgreementService PartnersService
 
@@ -19,32 +17,30 @@
     private List<PartnerInAgreement> _partners = [];
 
     protected override RenderFragment Content => @<div>
-        <InputWithFloatTitle @bind-Value=@Item.Number Title="Номер соглашения"/>
-        <ValidationMessage For=@(() => Item.Number)></ValidationMessage>
-        
+        <InputWithFloatTitle @bind-Value="@Item.Number" Title="Номер соглашения"/>
+        <ValidationMessage For="@(() => Item.Number)"></ValidationMessage>
+
         <UniversalCustomSelect
-            @bind-SelectedItem=@Item.Type
-            TItem=@Type
-            GetStringIdentifier=@(type => type.Id.ToString())/>
-        <ValidationMessage For=@(() => Item.Type)></ValidationMessage>
-        
+            @bind-SelectedItem="@Item.Type"
+            TItem="@Type"/>
+        <ValidationMessage For="@(() => Item.Type)"></ValidationMessage>
+
         <UniversalCustomSelect
-            @bind-SelectedItem=@Item.Status
-            TItem=@Status
-            GetStringIdentifier=@(status => status.Id.ToString())/>
-        <ValidationMessage For=@(() => Item.Status)></ValidationMessage>
-        
-        <InputDate @bind-Value=@Item.Start>Начало</InputDate>
-        <ValidationMessage For=@(() => Item.Start)></ValidationMessage>
-        
-        <InputDate @bind-Value=@Item.End>Конец</InputDate>
-        <ValidationMessage For=@(() => Item.End)></ValidationMessage>
-        
-        <MultipleSelectWithText NoSelected=@_divisions Selected=@Item.Divisions/>
-        <ValidationMessage For=@(() => Item.Divisions)></ValidationMessage>
-        
-        <MultipleSelectWithText NoSelected=@_partners Selected=@Item.Partners/>
-        <ValidationMessage For=@(() => Item.Partners)></ValidationMessage>
+            @bind-SelectedItem="@Item.Status"
+            TItem="@Status"/>
+        <ValidationMessage For="@(() => Item.Status)"></ValidationMessage>
+
+        <InputDate @bind-Value="@Item.Start">Начало</InputDate>
+        <ValidationMessage For="@(() => Item.Start)"></ValidationMessage>
+
+        <InputDate @bind-Value="@Item.End">Конец</InputDate>
+        <ValidationMessage For="@(() => Item.End)"></ValidationMessage>
+
+        <MultipleSelectWithText NoSelected="@_divisions" Selected="@Item.Divisions"/>
+        <ValidationMessage For="@(() => Item.Divisions)"></ValidationMessage>
+
+        <MultipleSelectWithText NoSelected="@_partners" Selected="@Item.Partners"/>
+        <ValidationMessage For="@(() => Item.Partners)"></ValidationMessage>
     </div>;
 
     protected override async Task OnParametersSetAsync()
@@ -52,8 +48,8 @@
         await Task.WhenAll(
             LoadDivisions(),
             LoadPartners()
-            );
-        
+        );
+
         await base.OnParametersSetAsync();
     }
 
@@ -69,5 +65,9 @@
         }
     }
 
-    private async Task LoadPartners() => _partners = await PartnersService.GetPartners();
+    private async Task LoadPartners()
+    {
+        _partners = await PartnersService.GetPartners();
+    }
+
 }

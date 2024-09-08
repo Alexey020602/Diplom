@@ -6,7 +6,7 @@ namespace Client.Components.Authorization;
 
 public partial class Login
 {
-    private AuthRequest AuthRequest { get; set; } = new();
+    private AuthRequest AuthRequest { get; } = new();
     [Inject] private IAuthenticationService AuthenticationService { get; set; } = default!;
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
     private bool ShowAuthError { get; set; }

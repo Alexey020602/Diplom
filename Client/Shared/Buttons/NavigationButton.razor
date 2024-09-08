@@ -1,0 +1,17 @@
+@inject NavigationManager NavigationManager
+@inherits RadzenButton
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Parameter] public string Path { get; set; } = default!;
+
+    public override Task OnClick(MouseEventArgs args)
+    {
+        NavigationManager.NavigateTo(Path);
+        return Task.CompletedTask;
+    }
+
+}

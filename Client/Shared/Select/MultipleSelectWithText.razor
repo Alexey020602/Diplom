@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Components.Forms
-@typeparam T where T:Model.ISelectionWithTextElement
+@typeparam T where T : Model.ISelectionWithTextElement
 
 <div class="multiple-selector">
     <ul class="selectable">
@@ -12,11 +12,11 @@
             </li>
         }
     </ul>
-    
+
     <div class="multiple-selector-buttons">
-        <button type="button" @onclick=@DeselectAll>@RemoveAllText</button>
+        <button type="button" @onclick="@DeselectAll">@RemoveAllText</button>
     </div>
-    
+
     <ul class="selectable">
         @foreach (var item in Selected)
         {
@@ -24,6 +24,7 @@
         }
     </ul>
 </div>
+
 @code {
     private const string RemoveAllText = "<<";
     [Parameter] public List<T> NoSelected { get; set; } = [];
@@ -49,4 +50,5 @@
         NoSelected.AddRange(Selected);
         Selected.Clear();
     }
+
 }

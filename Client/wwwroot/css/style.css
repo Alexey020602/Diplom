@@ -11,52 +11,52 @@
     border-radius: 15px;
     border-style: solid;
     padding: 5px 10px;
-    margin:10px;
+    margin: 10px;
     display: block;
     text-decoration: none;
 }
 
-    .oval-button:hover {
-        cursor: pointer;
-    }
+.oval-button:hover {
+    cursor: pointer;
+}
 
-    .oval-button:focus {
-        outline:none;
-    }
+.oval-button:focus {
+    outline: none;
+}
 
 .blue-outline {
     color: #010087;
     border-color: #010087;
 }
 
-    .blue-outline:hover,
-    .blue-outline:focus {
-        border-color: #8ba5ff;
-    }
+.blue-outline:hover,
+.blue-outline:focus {
+    border-color: #8ba5ff;
+}
 
-    .blue-outline:active {
-        background-color: #ebebff;
-        border-color: #010087;
-    }
+.blue-outline:active {
+    background-color: #ebebff;
+    border-color: #010087;
+}
 
-    .blue-outline:focus {
-        border-color: #010087;
-    }
+.blue-outline:focus {
+    border-color: #010087;
+}
 
 .orange-outline {
     color: #F18200;
     border-color: #F18200;
 }
 
-    .orange-outline:hover,
-    .orange-outline:focus {
-        border-color: #FFC37C;
-    }
+.orange-outline:hover,
+.orange-outline:focus {
+    border-color: #FFC37C;
+}
 
-    .orange-outline:active {
-        background-color: #FFEAD2;
-        border-color: #F18200;
-    }
+.orange-outline:active {
+    background-color: #FFEAD2;
+    border-color: #F18200;
+}
 
 
 .blue-fill {
@@ -65,14 +65,14 @@
     border-color: #010087;
 }
 
-    .blue-fill:hover,
-    .blue-fill:focus {
-        border-color: #8BA5FF;
-    }
+.blue-fill:hover,
+.blue-fill:focus {
+    border-color: #8BA5FF;
+}
 
-    .blue-fill:active {
-        background-color: #010156;
-    }
+.blue-fill:active {
+    background-color: #010156;
+}
 
 .orange-fill {
     color: white;
@@ -80,15 +80,15 @@
     border-color: #F18200;
 }
 
-    .orange-fill:hover,
-    .orange-fill:focus {
-        border-color: #FFC37C;
-    }
+.orange-fill:hover,
+.orange-fill:focus {
+    border-color: #FFC37C;
+}
 
-    .orange-fill:active {
-        background-color: #C36A00;
-        border-color: #C36A00;
-    }
+.orange-fill:active {
+    background-color: #C36A00;
+    border-color: #C36A00;
+}
 
 .title {
     font-size: small;

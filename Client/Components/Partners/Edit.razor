@@ -1,9 +1,8 @@
 ﻿@page "/partners/{id:int}/edit"
-@attribute [Authorize(Roles = "Ctt")]
-@using Client.Services;
 @using Client.Services.Api
 @using Microsoft.AspNetCore.Authorization
 @using Model.Partners
+@attribute [Authorize(Roles = "Ctt")]
 <div>
     @if (partner is not null)
     {
@@ -27,4 +26,5 @@
         if (partner is null) return;
         await PartnersService.Update(Id, partner);
     }
+
 }

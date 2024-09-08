@@ -1,15 +1,12 @@
-﻿@using Client.Services
-@using Client.Services.Api
-@using Microsoft.AspNetCore.Components.Forms;
-@using Client.Shared.Text;
-@using Client.Shared.Select;
-@using Client.Shared.Form
+﻿@using Client.Services.Api
+@using Client.Shared.Select
+@using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
 @using Model
-@using Model.Partners
 @using Type = Model.Partners.PartnerType
 @attribute [Authorize(Roles = "Ctt")]
-@inherits BaseForm<Partner>
+@inherits Client.Shared.Form.BaseForm<Model.Partners.Partner>
 
 @{
     base.BuildRenderTree(__builder);
@@ -20,24 +17,26 @@
     protected override RenderFragment Content =>
         @<div>
             <DataAnnotationsValidator/>
-            <InputWithFloatTitle Title="Краткое название" @bind-Value=@Item.ShortName/>
+            <InputWithFloatTitle Title="Краткое название" @bind-Value="@Item.ShortName"/>
             <ValidationMessage For="@(() => Item.ShortName)"/>
-            <InputWithFloatTitle Title="Полное название" @bind-Value=@Item.FullName/>
+            <InputWithFloatTitle Title="Полное название" @bind-Value="@Item.FullName"/>
             <ValidationMessage For="() => Item.FullName"/>
-            <InputWithFloatTitle Title="Адрес" @bind-Value=@Item.Address/>
+            <InputWithFloatTitle Title="Адрес" @bind-Value="@Item.Address"/>
             <ValidationMessage For="() => Item.Address"/>
             <div>
                 <p>Контактные данные</p>
-                <InputTextArea @bind-Value=@Item.ContactData/>
+                <InputTextArea @bind-Value="@Item.ContactData"/>
                 <ValidationMessage For="() => Item.ContactData"/>
             </div>
-            <InputWithFloatTitle Title="Город" @bind-Value=@Item.City/>
+            <InputWithFloatTitle Title="Город" @bind-Value="@Item.City"/>
             <ValidationMessage For="() => Item.City"/>
             <div>
-                <UniversalCustomSelect TItem=@Type @bind-SelectedItem=@Item.Type GetStringIdentifier=@(type => type.Id.ToString())/>
+                <UniversalCustomSelect 
+                    TItem="@Type"
+                                       @bind-SelectedItem="@Item.Type"/>
                 <ValidationMessage For="() => Item.Type"/>
             </div>
-            <UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction Selected=@Item.Directions/>
+            <UniversalMultipleSelect TApi="@IDirectionsService" TItem="@Direction" Selected="@Item.Directions"/>
             <ValidationMessage For="() => Item.Directions"/>
     </div>;
 }

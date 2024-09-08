@@ -1,14 +1,12 @@
-﻿@using Client.Services
+﻿@attribute [Authorize(Roles = "Ctt")]
 @using Client.Services.Api
-@using Microsoft.AspNetCore.Components.Forms;
-@using Client.Shared.Text
 @using Client.Shared.Select
-@using Client.Shared.Form
+@using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
 @using Model
 @using Model.Divisions
-@attribute [Authorize(Roles = "Ctt")]
-@inherits BaseForm<Division>
+@inherits Client.Shared.Form.BaseForm<Model.Divisions.Division>
 
 @{
     base.BuildRenderTree(__builder);
@@ -18,23 +16,22 @@
 
     protected override RenderFragment Content =>
         @<div>
-            <InputWithFloatTitle Title="Краткое название" @bind-Value=@Item.ShortName/>
-            <ValidationMessage For=@(() => Item.ShortName)/>
-            <InputWithFloatTitle Title="Полное название" @bind-Value=@Item.FullName/>
-            <ValidationMessage For=@(() => Item.FullName)/>
-            <InputWithFloatTitle Title="Сайт" @bind-Value=@Item.Site/>
-            <ValidationMessage For=@(() => Item.Site)/>
+            <InputWithFloatTitle Title="Краткое название" @bind-Value="@Item.ShortName"/>
+            <ValidationMessage For="@(() => Item.ShortName)"/>
+            <InputWithFloatTitle Title="Полное название" @bind-Value="@Item.FullName"/>
+            <ValidationMessage For="@(() => Item.FullName)"/>
+            <InputWithFloatTitle Title="Сайт" @bind-Value="@Item.Site"/>
+            <ValidationMessage For="@(() => Item.Site)"/>
             <div>
                 <p>Контактные данные</p>
-                <InputTextArea @bind-Value=@Item.Contacts/>
-                <ValidationMessage For=@( () => Item.Contacts)/>
+                <InputTextArea @bind-Value="@Item.Contacts"/>
+                <ValidationMessage For="@(() => Item.Contacts)"/>
             </div>
             <UniversalCustomSelect
-                TItem=@Faculty                @bind-SelectedItem=@Item.Faculty
-                GetStringIdentifier=@(faculty => faculty.Id.ToString())/>
-            <ValidationMessage For=@(() => Item.Faculty)/>
-            <UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction Selected=@Item.Directions/>
-            <ValidationMessage For=@(() => Item.Directions)/>
+                TItem=@Faculty @bind-SelectedItem="@Item.Faculty"/>
+            <ValidationMessage For="@(() => Item.Faculty)"/>
+            <UniversalMultipleSelect TApi="@IDirectionsService" TItem="@Direction" Selected="@Item.Directions"/>
+            <ValidationMessage For="@(() => Item.Directions)"/>
     </div>;
 
 }

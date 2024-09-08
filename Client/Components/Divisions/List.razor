@@ -1,9 +1,8 @@
-﻿@using Client.Shared.List;
-@using Client.Shared.Select;
+﻿@attribute [Authorize(Roles = "Cip")]
+@using Client.Shared.Select
 @using Microsoft.AspNetCore.Authorization
 @using Model.Divisions
-@attribute [Authorize(Roles = "Cip")]
-@inherits SearchableStyledList<Model.Divisions.DivisionShort>
+@inherits Client.Shared.List.SearchableStyledList<Model.Divisions.DivisionShort>
 
 @page "/divisions"
 
@@ -13,15 +12,16 @@
 }
 
 @* <SearchableStyledList ListDelegate=@this /> *@
+
 @code {
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
     }
 
-    protected override RenderFragment Filters => @<UniversalCustomSelect 
-    TItem=Faculty 
-    @bind-SelectedItem:get=@facultyFilterValue 
-    @bind-SelectedItem:set=@SelectFaculty
-    GetStringIdentifier=@(faculty => faculty.Id.ToString())/>;
+    protected override RenderFragment Filters => @<UniversalCustomSelect
+                                                      TItem="Faculty"
+                                                      @bind-SelectedItem:get=@facultyFilterValue @bind-SelectedItem:set=@SelectFaculty/>;
+
 }

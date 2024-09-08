@@ -1,7 +1,8 @@
 ﻿using Client.Services.Api.BaseApi;
+using Model.Partners;
 
 namespace Client.Services.Api;
 
-public interface IPartnerTypesService: IReadApi<Model.Partners.PartnerType>
+public interface IPartnerTypesService : IReadApi<PartnerType>
 {
 }
