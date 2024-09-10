@@ -55,14 +55,7 @@
 
     private async Task LoadDivisions()
     {
-        //TODO Сделать получение подразделений
-        try
-        {
-            _divisions = await DivisionsService.GetDivisions();
-        }
-        catch
-        {
-        }
+        _divisions = await DivisionsService.GetDivisions();
     }
 
     private async Task LoadPartners()

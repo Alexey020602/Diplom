@@ -4,50 +4,32 @@
 @using Model.Agreements
 @attribute [Authorize(Roles = "Ctt")]
 
-@if (_agreement is not null)
+@if (agreement is not null)
 {
-    <Form OnSubmit=@UpdateInteraction Item=@_agreement></Form>
+    <Form OnSubmit=@UpdateInteraction Item=@agreement></Form>
 }
 else
 {
-    @_message
+    <RadzenProgressBarCircular Value="100" ShowValue=false Mode=@ProgressBarMode.Indeterminate></RadzenProgressBarCircular>
 }
 
 @code {
     private static readonly string LoadingMessage = "Загрузка...";
     [Parameter] public int Id { get; set; }
     [Inject] private IAgreementService AgreementService { get; set; } = null!;
-    private Agreement? _agreement;
-    private string _message = LoadingMessage;
+    private Agreement? agreement;
+    private string message = LoadingMessage;
 
-    protected override Task OnParametersSetAsync()
-    {
-        return LoadAgreement();
-    }
+    protected override Task OnParametersSetAsync() => LoadAgreement();
+    
 
-    private async Task LoadAgreement()
-    {
-        try
-        {
-            _agreement = await AgreementService.ReadOne(Id);
-        }
-        catch (Exception ex)
-        {
-            _message = ex.Message;
-        }
-    }
+    private async Task LoadAgreement() => agreement = await AgreementService.ReadOne(Id);
+    
 
     private async Task UpdateInteraction()
     {
-        if (_agreement is null) return;
-        try
-        {
-            await AgreementService.Update(Id, _agreement);
-        }
-        catch
-        {
-            //TODO Обработка исключения
-        }
+        if (agreement is null) return;
+        await AgreementService.Update(Id, agreement);
     }
 
 }
