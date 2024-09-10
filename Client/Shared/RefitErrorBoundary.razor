@@ -13,7 +13,11 @@
     protected override async Task OnErrorAsync(Exception exception)
     {
         if (exception is not ApiException { StatusCode: HttpStatusCode.Unauthorized })
+        {
             Notify(exception);
+            return;
+        }
+
         Console.WriteLine("Not authorized");
         await AuthorizationStorage.RemoveAuthorization();
         NavigationManager.NavigateTo("login");
