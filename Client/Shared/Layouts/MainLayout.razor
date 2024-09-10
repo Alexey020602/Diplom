@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@using Client.Components.Authorization
 
 @rendermode RenderMode.InteractiveWebAssembly
 
@@ -7,6 +9,10 @@
     <NavLink href="divisions">Подразделения</NavLink>
     <NavLink href="agreements">Соглашения</NavLink>
     <NavLink href="interactions">Взаимодействия</NavLink>
+    <AuthorizeView Roles="Admin">
+        <NavLink href="registration">Регистрация</NavLink>
+    </AuthorizeView>
+    <Profile/>
     <NavLink href="swagger/index.html">Обзор API</NavLink>
 </header>
 <div>
