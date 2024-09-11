@@ -1,4 +1,5 @@
 ﻿using Diploma.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
@@ -6,7 +7,7 @@ namespace Diploma.Controllers;
 
 public class DirectionsController(IDirectionsRepository directionsRepository) : ApiControllerBase
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Cip")]
     [HttpGet]
     public async Task<IActionResult> GetDirections()
     {
@@ -14,6 +15,7 @@ public class DirectionsController(IDirectionsRepository directionsRepository) : 
         return new JsonResult(directions);
     }
 
+    [Authorize(Roles = "Cip")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDirection(int id)
     {
@@ -21,6 +23,7 @@ public class DirectionsController(IDirectionsRepository directionsRepository) : 
         return new JsonResult(direction);
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDirection(int id)
     {
@@ -28,6 +31,7 @@ public class DirectionsController(IDirectionsRepository directionsRepository) : 
         return Ok();
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpPost]
     public async Task<IActionResult> AddDirection([FromBody] Direction direction)
     {
@@ -35,6 +39,7 @@ public class DirectionsController(IDirectionsRepository directionsRepository) : 
         return Ok();
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDirection(int id, [FromBody] Direction direction)
     {

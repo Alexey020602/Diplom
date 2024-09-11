@@ -7,7 +7,7 @@ namespace Diploma.Controllers;
 
 public class AgreementsController(IAgreementRepository repository) : ApiControllerBase
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Cip")]
     [HttpGet]
     public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId)
     {
@@ -15,13 +15,16 @@ public class AgreementsController(IAgreementRepository repository) : ApiControll
             await repository.GetAgreements(agreementTypeId, agreementStatusId)
         );
     }
-
+    
+    [Authorize(Roles = "Cip")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetOne(int id)
     {
         return new JsonResult(await repository.GetAgreementById(id));
     }
 
+    
+    [Authorize(Roles = "Ctt")]
     [HttpPost]
     public async Task<IActionResult> Add(Agreement agreement)
     {
@@ -30,6 +33,7 @@ public class AgreementsController(IAgreementRepository repository) : ApiControll
         return NoContent();
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, Agreement agreement)
     {
@@ -45,6 +49,7 @@ public class AgreementsController(IAgreementRepository repository) : ApiControll
         return NoContent();
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

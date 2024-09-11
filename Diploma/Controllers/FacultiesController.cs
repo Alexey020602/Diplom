@@ -1,4 +1,5 @@
 ﻿using Diploma.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Divisions;
 
@@ -9,6 +10,7 @@ namespace Diploma.Controllers;
 public class FacultiesController(IFacultyRepository repository) : ApiControllerBase
 {
     // GET: api/<FacultiesController>
+    [Authorize(Roles = "Cip")]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -17,13 +19,15 @@ public class FacultiesController(IFacultyRepository repository) : ApiControllerB
 
 
     // GET api/<FacultiesController>/5
-    [HttpGet("{id}")]
+    [Authorize(Roles = "Cip")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> Get(int id)
     {
         return new JsonResult(await repository.GetFaculty(id));
     }
 
     // POST api/<FacultiesController>
+    [Authorize(Roles = "Ctt")]
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] Faculty faculty)
     {
@@ -33,6 +37,7 @@ public class FacultiesController(IFacultyRepository repository) : ApiControllerB
 
 
     // PUT api/<FacultiesController>/5
+    [Authorize(Roles = "Ctt")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] Faculty faculty)
     {
@@ -41,6 +46,7 @@ public class FacultiesController(IFacultyRepository repository) : ApiControllerB
     }
 
     // DELETE api/<FacultiesController>/5
+    [Authorize(Roles = "Ctt")]
     [HttpDelete("{id}")]
     public Task Delete(int id)
     {

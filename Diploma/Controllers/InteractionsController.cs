@@ -1,4 +1,5 @@
 ﻿using Diploma.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Interactions;
 
@@ -6,6 +7,7 @@ namespace Diploma.Controllers;
 
 public class InteractionsController(IInteractionRepository interactionRepository) : ApiControllerBase
 {
+    [Authorize(Roles = "Cip")]
     [HttpGet]
     public async Task<IActionResult> Get(int? interactionTypeId = null)
     {
@@ -15,6 +17,7 @@ public class InteractionsController(IInteractionRepository interactionRepository
         );
     }
 
+    [Authorize(Roles = "Cip")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetInteraction(int id)
     {
@@ -24,12 +27,14 @@ public class InteractionsController(IInteractionRepository interactionRepository
     }
 
     [HttpPost]
+    [Authorize(Roles = "Ctt")]
     public async Task<IActionResult> AddInteraction(Interaction interaction)
     {
         await interactionRepository.AddInteraction(interaction);
         return Ok();
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateInteraction(int id, Interaction interaction)
     {
@@ -37,6 +42,7 @@ public class InteractionsController(IInteractionRepository interactionRepository
         return Ok();
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

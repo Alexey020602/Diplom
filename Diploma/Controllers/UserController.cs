@@ -1,4 +1,5 @@
 using DataBase.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Model.Identity;
@@ -11,6 +12,7 @@ public class UserController(
     UserManager<IdentityUser<Guid>> userManager,
     ITokenService tokenService) : ControllerBase
 {
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("register")]
     public async Task<IActionResult> Register(RegistrationRequest request)
