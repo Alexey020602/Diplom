@@ -3,7 +3,7 @@
 
 @inject IReadApi<TItem> Service
 
-<RadzenDropDown TValue=@(TItem?) @bind-Value:get=@SelectedItem @bind-Value:set=@SelectedItemChanged Data=@items Placeholder=@Placeholder/>
+<RadzenDropDown AllowClear=true @bind-Value:get=@SelectedItem @bind-Value:set=@(item => SelectedItemChanged.InvokeAsync(item)) Data=@items Placeholder=@Placeholder/>
 
 @code {
     private List<TItem> items = [];
