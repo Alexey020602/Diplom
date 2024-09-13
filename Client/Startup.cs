@@ -37,43 +37,52 @@ public class Startup(string baseAddress)
         services.AddTransient<IPartnersForAgreementService, PartnersForAgreementService>();
         services.AddTransient<IDivisionsForAgreementService, DivisionsForAgreementService>();
         services.AddRefitClient<IPartnersService>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("partners"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("partners"))
+            .AddHttpMessageHandler<DelegatingHandler>();
         services.AddTransient<IReadApi<PartnerShort>>(p => p.GetRequiredService<IPartnersService>());
 
 
         services.AddRefitClient<IPartnerTypesService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"))
-            .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>());
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IDirectionsService>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("directions"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("directions"))
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddTransient<IReadApi<Direction>>(p => p.GetRequiredService<IDirectionsService>());
         //services.AddTransient<IReadApi<Model.Divisions.>>()
         services.AddRefitClient<IDivisionsService>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"))
+            .AddHttpMessageHandler<DelegatingHandler>();
         services.AddTransient<IReadApi<DivisionShort>>(p => p.GetRequiredService<IDivisionsService>());
 
         services.AddRefitClient<IReadApi<Faculty>>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"))
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IReadApi<AgreementType>>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("agreementTypes"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("agreementTypes"))
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IReadApi<AgreementStatus>>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("agreementStatuses"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("agreementStatuses"))
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IReadApi<InteractionType>>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("interactiontypes"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("interactiontypes"))
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IReadApi<PartnerType>>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("partnerTypes"))
+            .AddHttpMessageHandler<DelegatingHandler>();
         services.AddRefitClient<IAgreementService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("agreements"))
             .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IInteractionsService>(settings)
-            .ConfigureHttpClient(ConfigureHttpClientForPath("interactions"));
+            .ConfigureHttpClient(ConfigureHttpClientForPath("interactions"))
+            .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IAuthApi>()
             .ConfigureHttpClient(client => client.BaseAddress = new Uri(baseAddress));
