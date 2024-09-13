@@ -11,7 +11,7 @@
 
 @code {
 
-    protected override RenderFragment Filters => @<RadzenStack Orientation="@Orientation.Vertical">
+    protected override RenderFragment Filters => @<RadzenStack Orientation="@Orientation.Horizontal">
                                                      @TypeFilter
                                                      @StatusFilter
                                                  </RadzenStack>;
@@ -19,13 +19,13 @@
     private RenderFragment TypeFilter => @<UniversalCustomSelect
                                               Placeholder="Тип соглашения"
                                               TItem="@AgreementType"
-                                              SelectedItem="@agreementType"
-                                              SelectedItemChanged="@Select"/>;
+                                              Value="@agreementType"
+                                              ValueChanged="@Select"/>;
 
     private RenderFragment StatusFilter => @<UniversalCustomSelect
                                                 TItem="@AgreementStatus"
                                                 Placeholder="Статус соглашения"
-                                                SelectedItem="@agreementStatus"
-                                                SelectedItemChanged="@Select"/>;
+                                                Value="@agreementStatus"
+                                                ValueChanged="@Select"/>;
 
 }

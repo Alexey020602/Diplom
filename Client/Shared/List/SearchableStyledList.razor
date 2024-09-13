@@ -8,23 +8,27 @@
 
     private RenderFragment Body => @<div class="list">
                                        <RadzenCard>
-                                           <RadzenStack
-                                               Orientation=@Orientation.Vertical
-                                               AlignItems=@AlignItems.Center>
-                                               @Filters
-                                               @Search
-                                           </RadzenStack>
-                                           <RadzenStack
-                                               Style="padding-top:10px"
-                                               Orientation=@Orientation.Horizontal
-                                               AlignItems=@AlignItems.Center
-                                               JustifyContent=@JustifyContent.SpaceBetween>
-                                               @LinkToCreate
-                                               @EmptyListButton
-                                           </RadzenStack>
+                                           @FiltersContent
+                                           @ButtonsContent
                                            @List
                                        </RadzenCard>
                                    </div>;
+
+    private RenderFragment FiltersContent => @<RadzenStack
+                                                  Orientation=@Orientation.Horizontal
+                                                  AlignItems=@AlignItems.Center>
+                                                 @Filters
+                                                 @Search
+                                             </RadzenStack>;
+
+    private RenderFragment ButtonsContent => @<RadzenStack
+                                                  Style="padding-top:10px"
+                                                  Orientation=@Orientation.Horizontal
+                                                  AlignItems=@AlignItems.Center
+                                                  JustifyContent=@JustifyContent.SpaceBetween>
+                                                 @LinkToCreate
+                                                 @EmptyListButton
+                                             </RadzenStack>;
 
     private RenderFragment LinkToCreate => @<NavigationButton Path=@CreateHref Text="Добавить"/>;
 

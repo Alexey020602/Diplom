@@ -21,19 +21,19 @@ public class Interaction
     [Required(ErrorMessage = "Необходимо ввести тему взаимодействия")]
     public string Theme { get; set; } = string.Empty;
 
-    [StringLength(9, ErrorMessage = "Код не может быть больше 9 символов")]
     [Required(ErrorMessage = "Необходимо ввести код взаимодействия")]
+    [StringLength(9, ErrorMessage = "Код не может быть больше 9 символов")]
     public string ContactCode { get; set; } = string.Empty;
 
-    public DateTime SigningDate { get; set; } = DateTime.Today;
-    public DateTime Begin { get; set; } = DateTime.Today;
-    public DateTime End { get; set; } = DateTime.Today;
-    [MinLength(1)] public List<Direction> Directions { get; set; } = [];
+    public DateOnly SigningDate { get; set; }
+    public DateOnly Begin { get; set; }
+    public DateOnly End { get; set; }
+    [MinLength(1, ErrorMessage = "Необходимо выбрать хотя бы одно направление")] public List<Direction> Directions { get; set; } = [];
 
     public static Interaction Default => new();
 
     public override string ToString()
     {
-        return $"{ContactCode} типа {Type} от {SigningDate}, {Begin} - {End}";
+        return $"{ContactCode} типа {Type} от {SigningDate.ToLongDateString()}, {Begin.ToShortDateString()} - {End.ToShortDateString()}";
     }
 }

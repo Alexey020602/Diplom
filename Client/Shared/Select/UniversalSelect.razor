@@ -1,0 +1,22 @@
+@using Client.Services.Api.BaseApi
+@typeparam TItem where TItem : class
+@typeparam TApi where TApi: IReadApi<TItem>
+@inherits RadzenDropDown<TItem>
+@inject TApi Service
+
+@{
+    base.BuildRenderTree(__builder);
+}
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        AllowClear = true;
+        AllowFiltering = true;
+        return LoadPartnerTypes();
+    }
+
+    private async Task LoadPartnerTypes()
+    {
+        Data = await Service.ReadAll();
+    }
+}

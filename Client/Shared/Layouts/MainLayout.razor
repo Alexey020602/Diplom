@@ -5,15 +5,14 @@
 @rendermode RenderMode.InteractiveWebAssembly
 
 <header class="myHeader">
+    <RadzenStack Orientation=@Orientation.Horizontal AlignItems=@AlignItems.Center>
     <NavLink href="partners">Партнеры</NavLink>
     <NavLink href="divisions">Подразделения</NavLink>
     <NavLink href="agreements">Соглашения</NavLink>
     <NavLink href="interactions">Взаимодействия</NavLink>
-    <AuthorizeView Roles="Admin">
-        <NavLink href="registration">Регистрация</NavLink>
-    </AuthorizeView>
     <Profile/>
     <NavLink href="swagger/index.html">Обзор API</NavLink>
+    </RadzenStack>
 </header>
 <div>
     <div class="center">

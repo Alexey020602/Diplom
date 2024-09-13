@@ -1,22 +1,25 @@
-﻿@typeparam TItem where TItem : class
-    @using Client.Services.Api.BaseApi
-    @typeparam TApi where TApi : Client.Services.Api.BaseApi.IReadApi<TItem>
+﻿@using Client.Services.Api.BaseApi
+@typeparam TItem where TItem : class
+@typeparam TApi where TApi : IReadApi<TItem>
+@inherits RadzenDropDown<List<TItem>>
 
-@inject IReadApi<TItem> Api
+@inject TApi Api
 
-<MultipleSelect NoSelected="@items"
-                Selected="@Selected"/>
+@{
+    base.BuildRenderTree(__builder);
+}
 
 @code {
-    [Parameter] public List<TItem> Selected { get; set; } = [];
-    private List<TItem> items = [];
 
     protected override async Task OnInitializedAsync()
     {
-        var items = await Api.ReadAll();
-        this.items = items
-            .Where(item => !Selected.Contains(item))
-            .ToList();
+        Multiple = true;
+        AllowClear = true;
+        AllowFiltering = true;
+        AllowSelectAll = true;
+        Placeholder = "Заместитель";
+        SelectedItemsText = "Выбраны все";
+        Data = await Api.ReadAll();
     }
 
     // private RenderFragment Select => @<MultipleSelect NoSelected=@items

@@ -40,8 +40,8 @@ public static class AgreementsConvertExtension
             AgreementNumber = agreement.Number,
             AgreementType = ConvertToDatabaseModel(agreement.Type!),
             AgreementStatus = ConvertToDatabaseModel(agreement.Status!),
-            StarDateTime = agreement.Start,
-            EndDateTime = agreement.End,
+            StarDateTime = agreement.Start.ToDateTime(default),
+            EndDateTime = agreement.End.ToDateTime(default),
             DivisionInAgreements = ConvertToDatabaseModel(agreement.Divisions, agreement.Id),
             PartnerInAgreements = ConvertToDatabaseModel(agreement.Partners, agreement.Id)
         };
@@ -112,8 +112,8 @@ public static class AgreementsConvertExtension
             Number = agreement.AgreementNumber,
             Type = ConvertToModel(agreement.AgreementType),
             Status = ConvertToModel(agreement.AgreementStatus),
-            Start = agreement.StarDateTime,
-            End = agreement.EndDateTime,
+            Start = DateOnly.FromDateTime( agreement.StarDateTime),
+            End = DateOnly.FromDateTime(agreement.EndDateTime),
             Divisions = agreement.DivisionInAgreements.Select(ConvertToModel).ToList(),
             Partners = agreement.PartnerInAgreements.Select(ConvertToModel).ToList()
         };

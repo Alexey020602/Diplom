@@ -67,9 +67,9 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
             InteractionType = ConvertToDatabaseModel(interaction.Type!),
             Theme = interaction.Theme,
             ContactCode = interaction.ContactCode,
-            SigningDateTime = interaction.SigningDate,
-            BeginigDateTime = interaction.Begin,
-            EndingDateTime = interaction.End,
+            SigningDateTime = interaction.SigningDate.ToDateTime(default),
+            BeginigDateTime = interaction.Begin.ToDateTime(default),
+            EndingDateTime = interaction.End.ToDateTime(default),
             Division = GetDivisionFormDivisionShort(interaction.Division!),
             Partner = GetPartnerFromPartnerShort(interaction.Partner!),
             Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
@@ -97,9 +97,9 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
             Type = ConvertToModel(interaction.InteractionType),
             Theme = interaction.Theme,
             ContactCode = interaction.ContactCode,
-            SigningDate = interaction.SigningDateTime,
-            Begin = interaction.BeginigDateTime,
-            End = interaction.EndingDateTime,
+            SigningDate = DateOnly.FromDateTime(interaction.SigningDateTime),
+            Begin = DateOnly.FromDateTime(interaction.BeginigDateTime),
+            End = DateOnly.FromDateTime(interaction.EndingDateTime),
             Directions = ConvertToModel(interaction.Directions)
         };
     }

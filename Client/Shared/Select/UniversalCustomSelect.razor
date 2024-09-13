@@ -1,24 +1,7 @@
 ﻿@using Client.Services.Api.BaseApi
-@typeparam TItem where TItem : class
+@typeparam TItem where TItem: class
+@inherits UniversalSelect<TItem, IReadApi<TItem>>
 
-@inject IReadApi<TItem> Service
-
-<RadzenDropDown AllowClear=true @bind-Value:get=@SelectedItem @bind-Value:set=@(item => SelectedItemChanged.InvokeAsync(item)) Data=@items Placeholder=@Placeholder/>
-
-@code {
-    private List<TItem> items = [];
-    [Parameter] public string? Placeholder { get; set; }
-    [Parameter] public TItem? SelectedItem { get; set; }
-    [Parameter] public EventCallback<TItem?> SelectedItemChanged { get; set; }
-
-    protected override Task OnInitializedAsync()
-    {
-        return LoadPartnerTypes();
-    }
-
-    private async Task LoadPartnerTypes()
-    {
-        items = await Service.ReadAll();
-    }
-
+@{
+    base.BuildRenderTree(__builder);
 }

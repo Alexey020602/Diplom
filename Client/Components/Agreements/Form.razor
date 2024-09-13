@@ -16,32 +16,66 @@
     private List<DivisionInAgreement> _divisions = [];
     private List<PartnerInAgreement> _partners = [];
 
-    protected override RenderFragment Content => @<div>
-        <InputWithFloatTitle @bind-Value="@Item.Number" Title="Номер соглашения"/>
-        <ValidationMessage For="@(() => Item.Number)"></ValidationMessage>
+    protected override RenderFragment Content => @<RadzenStack Orientation=@Orientation.Vertical>
+        @Number
+        @Type
+        @Status
+        @Start
+        @End
 
-        <UniversalCustomSelect
-            @bind-SelectedItem="@Item.Type"
-            TItem="@Type"/>
-        <ValidationMessage For="@(() => Item.Type)"></ValidationMessage>
+        @* <MultipleSelectWithText NoSelected="@_divisions" Selected="@Item.Divisions"/> *@
+        @* <ValidationMessage For="@(() => Item.Divisions)"></ValidationMessage> *@
+        @* *@
+        @* <MultipleSelectWithText NoSelected="@_partners" Selected="@Item.Partners"/> *@
+        @* <ValidationMessage For="@(() => Item.Partners)"></ValidationMessage> *@
+    </RadzenStack>;
 
-        <UniversalCustomSelect
-            @bind-SelectedItem="@Item.Status"
-            TItem="@Status"/>
-        <ValidationMessage For="@(() => Item.Status)"></ValidationMessage>
+    private RenderFragment Number => FormRow(
+        "Номер соглашения",
+        "Number",
+        @<RadzenTextBox @bind-Value=@Item.Number Name="Number" Placeholder="Номер соглашения"/>
+    );
 
-        <InputDate @bind-Value="@Item.Start">Начало</InputDate>
-        <ValidationMessage For="@(() => Item.Start)"></ValidationMessage>
+    private RenderFragment Type => FormRow(
+        "Тип соглашения",
+        "Type",
+        @<UniversalCustomSelect
+             Name="Type"
+             @bind-Value="@Item.Type"/>
+    );
 
-        <InputDate @bind-Value="@Item.End">Конец</InputDate>
-        <ValidationMessage For="@(() => Item.End)"></ValidationMessage>
+    private RenderFragment Status => FormRow(
+        "Статус соглашения",
+        "Status",
+        @<UniversalCustomSelect
+             Name="Status"
+             @bind-Value="@Item.Status"/>
+    );
 
-        <MultipleSelectWithText NoSelected="@_divisions" Selected="@Item.Divisions"/>
-        <ValidationMessage For="@(() => Item.Divisions)"></ValidationMessage>
+    private RenderFragment Start => FormRow(
+        "Начало",
+        "Start",
+        @<RadzenDatePicker 
+             TValue=@(DateOnly) 
+             Value=@Item.Start 
+             ShowTime=false
+             Change=@(start => Item.Start = DateOnly.FromDateTime(start ?? DateTime.Today)) 
+             Name="Start"/>
+    );
 
-        <MultipleSelectWithText NoSelected="@_partners" Selected="@Item.Partners"/>
-        <ValidationMessage For="@(() => Item.Partners)"></ValidationMessage>
-    </div>;
+    private RenderFragment End => FormRow(
+        "Конец",
+        "End",
+        @<RadzenDatePicker 
+             TValue=@(DateOnly)
+             ShowTime=false
+             Value=@Item.End
+             Change=@(end => Item.End = DateOnly.FromDateTime(end ?? DateTime.Today))
+             Name="End"/>
+    );
+
+    private RenderFragment Divisions => throw new NotImplementedException();
+    private RenderFragment Partners => throw new NotImplementedException();
 
     protected override async Task OnParametersSetAsync()
     {

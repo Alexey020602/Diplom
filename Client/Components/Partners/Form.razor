@@ -1,8 +1,6 @@
 ﻿@using Client.Services.Api
 @using Client.Shared.Select
-@using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Forms
 @using Model
 @using Type = Model.Partners.PartnerType
 @attribute [Authorize(Roles = "Ctt")]
@@ -15,28 +13,85 @@
 @code
 {
     protected override RenderFragment Content =>
-        @<div>
-            <DataAnnotationsValidator/>
-            <InputWithFloatTitle Title="Краткое название" @bind-Value="@Item.ShortName"/>
-            <ValidationMessage For="@(() => Item.ShortName)"/>
-            <InputWithFloatTitle Title="Полное название" @bind-Value="@Item.FullName"/>
-            <ValidationMessage For="() => Item.FullName"/>
-            <InputWithFloatTitle Title="Адрес" @bind-Value="@Item.Address"/>
-            <ValidationMessage For="() => Item.Address"/>
-            <div>
-                <p>Контактные данные</p>
-                <InputTextArea @bind-Value="@Item.ContactData"/>
-                <ValidationMessage For="() => Item.ContactData"/>
-            </div>
-            <InputWithFloatTitle Title="Город" @bind-Value="@Item.City"/>
-            <ValidationMessage For="() => Item.City"/>
-            <div>
-                <UniversalCustomSelect 
-                    TItem="@Type"
-                                       @bind-SelectedItem="@Item.Type"/>
-                <ValidationMessage For="() => Item.Type"/>
-            </div>
-            <UniversalMultipleSelect TApi="@IDirectionsService" TItem="@Direction" Selected="@Item.Directions"/>
-            <ValidationMessage For="() => Item.Directions"/>
-    </div>;
+        @<RadzenStack Orientation=@Orientation.Vertical>
+
+            @* <DataAnnotationsValidator/> *@
+            @* <InputWithFloatTitle Title="Краткое название" @bind-Value="@Item.ShortName"/> *@
+            @* <ValidationMessage For="@(() => Item.ShortName)"/> *@
+            @* <InputWithFloatTitle Title="Полное название" @bind-Value="@Item.FullName"/> *@
+            @* <ValidationMessage For="() => Item.FullName"/> *@
+            @* <InputWithFloatTitle Title="Адрес" @bind-Value="@Item.Address"/> *@
+            @* <ValidationMessage For="() => Item.Address"/> *@
+            @* <div> *@
+            @*     <p>Контактные данные</p> *@
+            @*     <InputTextArea @bind-Value="@Item.ContactData"/> *@
+            @*     <ValidationMessage For="() => Item.ContactData"/> *@
+            @* </div> *@
+            @* <InputWithFloatTitle Title="Город" @bind-Value="@Item.City"/> *@
+            @* <ValidationMessage For="() => Item.City"/> *@
+            @* <div> *@
+            @*     <UniversalCustomSelect *@
+            @*         TItem="@Type" *@
+            @*         @bind-Value="@Item.Type"/> *@
+            @*     <ValidationMessage For="() => Item.Type"/> *@
+            @* </div> *@
+            @* <UniversalMultipleSelect TApi="@IDirectionsService" TItem="@Direction" Selected="@Item.Directions"/> *@
+            @* <ValidationMessage For="() => Item.Directions"/> *@
+            @ShortName
+            @FullName
+            @Address
+            @ContactData
+            @City
+            @Type
+            @Directions
+    </RadzenStack>;
+
+    private RenderFragment ShortName => FormRow(
+        "Краткое название",
+        "ShortName",
+        @<RadzenTextBox @bind-Value=@Item.ShortName Name="ShortName"/>
+    );
+
+    private RenderFragment FullName => FormRow(
+        "Полное название",
+        "FullName",
+        @<RadzenTextBox @bind-Value=@Item.FullName Name="FullName"/>
+    );
+
+    private RenderFragment Address => FormRow(
+        "Адрес",
+        "Address",
+        @<RadzenTextBox @bind-Value=@Item.Address Name="Address"/>
+    );
+
+    private RenderFragment ContactData => FormRow(
+        "Контактные данные",
+        "ContactData",
+        @<RadzenTextArea @bind-Value=@Item.ContactData Name="ContactData"/>
+    );
+
+    private RenderFragment City => FormRow(
+        "Город",
+        "City",
+        @<RadzenTextBox @bind-Value=@Item.City Name="City"/>
+    );
+
+    private RenderFragment Type => FormRow(
+        "Тип партнера",
+        "Type",
+        @<UniversalCustomSelect
+             TItem=@Type             
+             @bind-Value=@Item.Type
+             Name="Type"/>
+    );
+
+    private RenderFragment Directions => FormRow(
+        "Направления",
+        "Directions",
+        @<UniversalMultipleSelect
+             TApi=@IDirectionsService
+             TItem=@Direction             @bind-Value=@Item.Directions
+             Name="Directions"
+             Multiple=true/>
+    );
 }

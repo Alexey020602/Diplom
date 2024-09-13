@@ -1,5 +1,6 @@
 ﻿@attribute [Authorize(Roles = "Ctt")]
 @using Client.Services.Api
+@using Client.Services.Api.BaseApi
 @using Client.Shared.Select
 @using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
@@ -15,23 +16,49 @@
 @code {
 
     protected override RenderFragment Content =>
-        @<div>
-            <InputWithFloatTitle Title="Краткое название" @bind-Value="@Item.ShortName"/>
-            <ValidationMessage For="@(() => Item.ShortName)"/>
-            <InputWithFloatTitle Title="Полное название" @bind-Value="@Item.FullName"/>
-            <ValidationMessage For="@(() => Item.FullName)"/>
-            <InputWithFloatTitle Title="Сайт" @bind-Value="@Item.Site"/>
-            <ValidationMessage For="@(() => Item.Site)"/>
-            <div>
-                <p>Контактные данные</p>
-                <InputTextArea @bind-Value="@Item.Contacts"/>
-                <ValidationMessage For="@(() => Item.Contacts)"/>
-            </div>
-            <UniversalCustomSelect
-                TItem=@Faculty @bind-SelectedItem="@Item.Faculty"/>
-            <ValidationMessage For="@(() => Item.Faculty)"/>
-            <UniversalMultipleSelect TApi="@IDirectionsService" TItem="@Direction" Selected="@Item.Directions"/>
-            <ValidationMessage For="@(() => Item.Directions)"/>
-    </div>;
+        @<RadzenStack>
+            @ShortName
+            @FullName
+            @Site
+            @Contacts
+            @Faculty
+            @Directions
+    </RadzenStack>;
+
+    private RenderFragment ShortName => FormRow(
+        "Краткое название",
+        "ShortName",
+        @<RadzenTextBox Name="ShortName" @bind-Value=@Item.ShortName />
+        );
+
+    private RenderFragment FullName => FormRow(
+        "Полное название",
+        "FullName",
+        @<RadzenTextBox Name="FullName" @bind-Value=@Item.FullName/>
+    );
+
+    private RenderFragment Site => FormRow(
+        "Сайт",
+        "Site",
+        @<RadzenTextBox Name="Site" @bind-Value=@Item.Site/>
+    );
+
+    private RenderFragment Contacts => FormRow(
+        "Контактные данные",
+        "Contacts",
+        @<RadzenTextArea Name="Contacts" @bind-Value=@Item.Contacts/>
+    );
+
+    private RenderFragment Faculty => FormRow(
+        "Факультет",
+        "Faculty",
+        @<UniversalCustomSelect TItem=@Faculty Name="Faculty" @bind-Value=@Item.Faculty/>
+    );
+
+    private RenderFragment Directions => FormRow(
+        "Направление",
+        "Directions",
+        @<UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions/>
+    );
 
 }
