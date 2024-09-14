@@ -14,6 +14,7 @@ public interface IPartnersRepository
     // Task<IEnumerable<Partner>> GetPartnersAsync();
     Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId = null, int? directionId = null);
     Task<Partner> GetPartnerByIdAsync(int id);
+    Task<bool> CanDeletePartner(int id);
     Task<List<AgreementInPartner>> GetAgreementsForPartnerWithId(int id);
     Task<List<InteractionInPartner>> GetInteractionsForPartnerWithId(int id);
 }

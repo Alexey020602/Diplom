@@ -18,6 +18,18 @@ public static class DivisionExtensions
         };
     }
 
+    public static DivisionDetail ToDivisionDetail(this DataBase.Models.Division division) => new()
+    {
+        Id = division.Id,
+        ShortName = division.ShortName,
+        FullName = division.FullName,
+        Faculty = division.Faculty.ToModel(),
+        Contacts = division.Contacts,
+        Site = division.Site,
+        Directions = division.Directions.Select(DirectionExtensions.ConvertToModel).ToList(),
+        CanDelete = division.Interactions.Count == 0 && division.DivisionsInAgreement.Count == 0
+    };
+
     public static DataBase.Models.Division ToDao(this Division division)
     {
         return new DataBase.Models.Division()

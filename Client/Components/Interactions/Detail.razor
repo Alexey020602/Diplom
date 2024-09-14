@@ -22,5 +22,6 @@
 
     protected override string? Title => Item?.ToString();
     protected override string EntitiesPath => "interactions";
-    protected override bool CanDelete => true;
+    protected override Task Delete() => InteractionsService.Delete(Id);
+
 }

@@ -27,7 +27,9 @@
 
     protected override string? Title => Item?.ShortName;
     protected override string EntitiesPath => "divisions";
-    protected override bool CanDelete => false;
+    protected override Task Delete() => DivisionsService.Delete(Id);
+    protected override Task<bool> CanDelete() => DivisionsService.CanDelete(Id);
+
     protected override Task<Division> LoadItem() => DivisionsService.ReadOne(Id);
 
 }

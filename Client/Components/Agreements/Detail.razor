@@ -34,5 +34,6 @@
 
     protected override string? Title => Item?.ToString();
     protected override string EntitiesPath => "agreements";
-    protected override bool CanDelete => true;
+    protected override Task Delete() => AgreementService.Delete(Id);
+
 }

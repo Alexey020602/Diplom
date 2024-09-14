@@ -47,6 +47,10 @@ public class PartnersController(IPartnersRepository partnersRepository) : ApiCon
                 new InteractionShort(i.Id, i.ToString()))
         );
     }
+    
+    [Authorize(Roles = "Ctt")]
+    [HttpGet("{id:int}/candelete")]
+    public async Task<IActionResult> CanDeleteDivision(int id) => Ok(await partnersRepository.CanDeletePartner(id));
  
     [Authorize(Roles = "Ctt")]
     [HttpPost]

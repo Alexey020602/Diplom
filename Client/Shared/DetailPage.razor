@@ -11,6 +11,7 @@
                 <BackButton ButtonStyle=@ButtonStyle.Secondary Text="Назад" />
                 <AuthorizeView Roles="Ctt">
                     <NavigationButton Path=@EditPath Text="Редактировать"/>
+                    <DeleteButton ButtonStyle=@ButtonStyle.Danger CanDelete=@CanDelete Delete=@Delete Text="Удалить"/>
                 </AuthorizeView>
             </RadzenStack>
             @Content(Item)

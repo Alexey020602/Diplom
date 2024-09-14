@@ -35,24 +35,6 @@
 
 @code {
     [Inject] private IPartnersService PartnersService { get; set; } = default!;
-    private List<AgreementShort> agreements = [];
-    private List<InteractionShort> interactions = [];
-
-    protected override async Task OnParametersSetAsync()
-    {
-        try
-        {
-            Console.WriteLine($"{Id}");
-            agreements = await PartnersService.ReadAllAgreements(Id);
-            interactions = await PartnersService.ReadAllInteractions(Id);
-            await base.OnParametersSetAsync();
-        }
-        catch (Exception ex)
-        {
-            //TODO Обработка исключений
-            Console.WriteLine(ex);
-        }
-    }
 
     protected override RenderFragment Content(Partner item) => @<RadzenStack>
         <RadzenText TagName="TagName.H3" Text=@item.ShortName/>
@@ -67,7 +49,9 @@
         <ListWithTitle Title="Взаимодействия" Items="@item.Interactions"/>
     </RadzenStack>;
 
-    protected override bool CanDelete => !agreements.Any() && !interactions.Any();
+    protected override Task Delete() => PartnersService.Delete(Id);
+    protected override Task<bool> CanDelete() => PartnersService.CanDelete(Id);
+
     protected override string EntitiesPath => "partners";
     protected override string? Title => Item?.ShortName;
 

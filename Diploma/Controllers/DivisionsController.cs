@@ -23,6 +23,10 @@ public class DivisionsController(IDivisionRepository repository) : ApiController
     }
 
     [Authorize(Roles = "Ctt")]
+    [HttpGet("{id:int}/candelete")]
+    public async Task<IActionResult> CanDeleteDivision(int id) => Ok(await repository.CanDeleteDivision(id));
+
+    [Authorize(Roles = "Ctt")]
     [HttpPost]
     public async Task<IActionResult> CreateDivision(Division division)
     {

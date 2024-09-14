@@ -29,9 +29,6 @@ public class Interaction
     public DateOnly Begin { get; set; }
     public DateOnly End { get; set; }
     [MinLength(1, ErrorMessage = "Необходимо выбрать хотя бы одно направление")] public List<Direction> Directions { get; set; } = [];
-
-    public static Interaction Default => new();
-
     public override string ToString()
     {
         return $"{ContactCode} типа {Type} от {SigningDate.ToLongDateString()}, {Begin.ToShortDateString()} - {End.ToShortDateString()}";

@@ -50,6 +50,14 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .FirstAsync(partner => partner.Id == id)).ConvertToModel();
     }
 
+    public async Task<bool> CanDeletePartner(int id)
+    {
+        var partner = await context.Partners.AsNoTracking().Include(p => p.PartnersInAgreement)
+            .Include(p => p.Interactions).FirstAsync(p => p.Id == id);
+
+        return partner.PartnersInAgreement.Count == 0 && partner.Interactions.Count == 0;
+    }
+
     public async Task AddPartnerAsync(Partner newPartner)
     {
         var partner = newPartner.ConvertToDao();

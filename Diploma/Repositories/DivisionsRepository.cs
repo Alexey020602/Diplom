@@ -3,7 +3,9 @@ using DataBase.Extensions;
 using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model.Divisions;
 using Model.Extensions;
+using Division = DataBase.Models.Division;
 using ModelDivision = Model.Divisions.Division;
 
 namespace Diploma.Repositories;
@@ -34,6 +36,17 @@ public class DivisionsRepository(ApplicationContext context) : IDivisionReposito
             .Include(d => d.Faculty)
             .Include(d => d.Directions)
             .FirstAsync(d => d.Id == id)).ToModel();
+    }
+
+    public async Task<bool> CanDeleteDivision(int id)
+    {
+        
+        var division = (await context.Divisions
+            .Include(d => d.Interactions)
+            .Include(d => d.DivisionsInAgreement)
+            .FirstAsync(d => d.Id == id));
+        
+        return division.Interactions.Count == 0 && division.DivisionsInAgreement.Count == 0;
     }
 
     public async Task<IEnumerable<ModelDivision>> GetDivisions(int? facultyId)
