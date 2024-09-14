@@ -1,14 +1,14 @@
 @using Microsoft.AspNetCore.Components.Authorization
 
-<RadzenProfileMenu Style="color:white;background-color:unset">
+<RadzenMenuItem Style="color:white;background-color:unset;" >
     <Template>
-        <RadzenIcon Icon="account_circle" ></RadzenIcon>
+        <RadzenIcon Icon="account_circle"/>
     </Template>
     <ChildContent>
-        <RadzenProfileMenuItem Text="Профиль"/>
-        <RadzenProfileMenuItem Text="Выход" Path="/logout"/>
+        @* <RadzenMenuItem Text="Профиль"/> *@
+        <RadzenMenuItem Text="Выход" Path="/logout"/>
         <AuthorizeView Roles="Admin">
-            <RadzenProfileMenuItem Text="Регистрация" Path="/registration"/>
+            <RadzenMenuItem Text="Регистрация" Path="/registration"/>
         </AuthorizeView>
     </ChildContent>
-</RadzenProfileMenu>
+</RadzenMenuItem>
