@@ -1,4 +1,5 @@
 using DataBase.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,7 @@ public class UserController(
         return Ok(
             new AuthResponse
             {
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
                 Login = managedUser.UserName!,
                 Token = tokenService.CreateToken(managedUser, roles),
                 Roles = roles.Select(role => new Role(role)).ToList()

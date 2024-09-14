@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace Client.Dto;
 
-public record class Authorization([Required] string Token, string Login, [MinLength(1)] List<string> Roles)
+public record class Authorization([Required] string Scheme, [Required] string Token, string Login, [MinLength(1)] List<string> Roles)
 {
     // public string Token { get; set; } = token;
     // public List<string> Roles { get; set; } = roles;
@@ -21,6 +21,7 @@ public record class Authorization([Required] string Token, string Login, [MinLen
         return $"""
                 Login: {Login}
                 Roles: {Roles}
+                Scheme: {Scheme}
                 Token: {Token}
                 """;
     }

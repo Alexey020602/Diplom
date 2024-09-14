@@ -15,12 +15,12 @@ public class MyDelegatingHandler(ITokenStorage authorizationStorage) : Delegatin
         var auth = request.Headers.Authorization;
         // if (auth is not null)
         // {
-        var token = await authorizationStorage.GetAuthorization();
+        var authorization = await authorizationStorage.GetAuthorization();
+        if (authorization is not null)
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue(authorization.Scheme, authorization.Token);
+        }
 
-        if (token is null)
-            return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
-
-        request.Headers.Authorization = new AuthenticationHeaderValue("bearer", token.Token);
         Console.WriteLine(request.Headers.Authorization);
         // }
         Console.WriteLine("End");

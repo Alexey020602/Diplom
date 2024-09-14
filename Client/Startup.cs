@@ -19,7 +19,7 @@ using InteractionType = Model.Interactions.InteractionType;
 
 namespace Client;
 
-public class Startup(string baseAddress)
+public class  Startup(string baseAddress)
 {
     private string ApiAddress => baseAddress + "api/";
 
@@ -85,7 +85,9 @@ public class Startup(string baseAddress)
             .AddHttpMessageHandler<DelegatingHandler>();
 
         services.AddRefitClient<IAuthApi>()
-            .ConfigureHttpClient(client => client.BaseAddress = new Uri(baseAddress));
+            .ConfigureHttpClient(client => client.BaseAddress = new Uri(baseAddress))
+            .AddHttpMessageHandler<DelegatingHandler>();
+        
         services.AddTransient<IAuthenticationService, AuthenticationService>();
 
         services.AddRefitClient<IReadApi<Role>>()
