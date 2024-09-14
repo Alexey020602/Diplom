@@ -4,18 +4,16 @@ namespace Client.Shared;
 
 public abstract partial class DetailPage<TItem> : ComponentBase
 {
-    protected TItem? item;
+    protected TItem? Item;
     [Parameter] public int Id { get; set; }
-    protected abstract RenderFragment Content { get; }
+    protected abstract RenderFragment Content(TItem item);
     protected abstract string? Title { get; }
     protected abstract string EntitiesPath { get; }
     protected abstract bool CanDelete { get; }
-
     private string EditPath => $"{EntitiesPath}/{Id}/edit";
     protected abstract Task<TItem> LoadItem();
-
     protected override async Task OnParametersSetAsync()
     {
-        item = await LoadItem();
+        Item = await LoadItem();
     }
 }

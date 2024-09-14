@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components.Forms
+﻿@using Client.Shared.Buttons
 @typeparam TItem where TItem : class
 
 <RadzenCard>
@@ -6,7 +6,7 @@
         <RadzenStack Orientation=@Orientation.Vertical>
             @Content
             <RadzenStack Orientation=@Orientation.Horizontal JustifyContent=@JustifyContent.SpaceBetween>
-                <RadzenButton ButtonStyle=@ButtonStyle.Secondary onclick="history.back()" Text="Назад"/>
+                <BackButton ButtonStyle=@ButtonStyle.Secondary Text="Назад"/>
                 <RadzenButton ButtonType=@ButtonType.Reset Text="Очистить"/>
                 <RadzenButton ButtonType=@ButtonType.Submit Text="Сохранить"/>
             </RadzenStack >

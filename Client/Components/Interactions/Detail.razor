@@ -16,8 +16,11 @@
         return InteractionsService.ReadOne(Id);
     }
 
-    protected override RenderFragment Content => @<div></div>;
-    protected override string? Title => item?.ToString();
+    protected override RenderFragment Content(Interaction item) => @<RadzenStack>
+                                                                       
+                                                                   </RadzenStack>;
+
+    protected override string? Title => Item?.ToString();
     protected override string EntitiesPath => "interactions";
     protected override bool CanDelete => true;
 }

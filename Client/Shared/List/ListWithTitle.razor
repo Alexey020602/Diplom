@@ -1,18 +1,22 @@
 ﻿@typeparam TItem
-<div>
+<RadzenRow>
     @if (Items.Any())
     {
-        <p class="title">@Title</p>
-        <ul>
-            @foreach (var item in Items)
-            {
-                <li>
-                    @item
-                </li>
-            }
-        </ul>
+        <RadzenColumn>
+            <RadzenText Style="color:darkgray;" Text=@Title/>
+        </RadzenColumn>
+        <RadzenColumn>
+            <ul>
+                @foreach (var item in Items)
+                {
+                    <li>
+                        @item
+                    </li>
+                }
+            </ul>
+        </RadzenColumn>
     }
-</div>
+</RadzenRow>
 
 @code {
     [Parameter] public string? Title { get; set; } = string.Empty;

@@ -13,8 +13,8 @@
 }
 
 @code {
-    private List<DivisionInAgreement> _divisions = [];
-    private List<PartnerInAgreement> _partners = [];
+    private List<DivisionInAgreement> divisions = [];
+    private List<PartnerInAgreement> partners = [];
 
     protected override RenderFragment Content => @<RadzenStack Orientation=@Orientation.Vertical>
         @Number
@@ -22,12 +22,6 @@
         @Status
         @Start
         @End
-
-        @* <MultipleSelectWithText NoSelected="@_divisions" Selected="@Item.Divisions"/> *@
-        @* <ValidationMessage For="@(() => Item.Divisions)"></ValidationMessage> *@
-        @* *@
-        @* <MultipleSelectWithText NoSelected="@_partners" Selected="@Item.Partners"/> *@
-        @* <ValidationMessage For="@(() => Item.Partners)"></ValidationMessage> *@
     </RadzenStack>;
 
     private RenderFragment Number => FormRow(
@@ -89,12 +83,12 @@
 
     private async Task LoadDivisions()
     {
-        _divisions = await DivisionsService.GetDivisions();
+        divisions = await DivisionsService.GetDivisions();
     }
 
     private async Task LoadPartners()
     {
-        _partners = await PartnersService.GetPartners();
+        partners = await PartnersService.GetPartners();
     }
 
 }

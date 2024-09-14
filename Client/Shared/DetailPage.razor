@@ -1,30 +1,23 @@
 @using Microsoft.AspNetCore.Components.Authorization
+@using Client.Shared.Buttons
 @typeparam TItem
 
 <RadzenCard>
-    <RadzenStack Orientation=@Orientation.Vertical>
-        @if (item != null)
-        {
+    @if (Item != null)
+    {
+        <RadzenStack Orientation=@Orientation.Vertical>
             <PageTitle>@Title</PageTitle>
-            <div style="justify-content: space-between">
-                <button class="oval-button blue-fill" style="display: inline-block" onclick="history.back()">Назад</button>
+            <RadzenStack Orientation=@Orientation.Horizontal JustifyContent=@JustifyContent.SpaceBetween>
+                <BackButton ButtonStyle=@ButtonStyle.Secondary Text="Назад" />
                 <AuthorizeView Roles="Ctt">
-                    <NavLink class="oval-button blue-outline" style="display: inline-block" href=@EditPath>
-                        Редактировать
-                    </NavLink>
+                    <NavigationButton Path=@EditPath Text="Редактировать"/>
                 </AuthorizeView>
-            </div>
-            <div>
-                @Content
-            </div>
-        }
-        else
-        {
-            <RadzenProgressBarCircular Value=100 ShowValue=false Mode=@ProgressBarMode.Indeterminate/>
-        }
-    </RadzenStack>
+            </RadzenStack>
+            @Content(Item)
+        </RadzenStack>
+    }
+    else
+    {
+        <RadzenProgressBarCircular Value=100 ShowValue=false Mode=@ProgressBarMode.Indeterminate/>
+    }
 </RadzenCard>
-
-@code {
-
-}

@@ -1,19 +1,14 @@
-﻿<div>
-    @if (ShowContent)
-    {
-        <p>
-            <span class="title">@Title</span><br/>
-            @Text
-        </p>
-    }
-</div>
+﻿<RadzenRow>
+    <RadzenColumn>
+        <RadzenText Style="color:darkgray;" Text=@Title/>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenText Text=@Text/>
+    </RadzenColumn>
+</RadzenRow>
 
 
 @code {
     [Parameter] public string? Title { get; set; }
     [Parameter] public string? Text { get; set; }
-
-    private bool ShowContent => !(TitleNotSuitableForDisplay || TextNotSuitableForDisplay);
-    private bool TitleNotSuitableForDisplay => string.IsNullOrWhiteSpace(Title);
-    private bool TextNotSuitableForDisplay => string.IsNullOrWhiteSpace(Text);
 }
