@@ -1,0 +1,18 @@
+﻿@attribute [Authorize(Roles = "Ctt")]
+@inject IDivisionsService api
+@page "/divisions/create"
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
+@using Model.Divisions
+
+<Form Item="@division" OnSubmit="@OnValidSubmit"></Form>
+
+@code {
+    private readonly Division division = new();
+
+    private Task OnValidSubmit()
+    {
+        return api.Create(division);
+    }
+
+}

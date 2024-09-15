@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DataBase.Models;
-using Diploma.Services;
+﻿using Diploma.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Model.Partners;
+
 namespace Diploma.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class PartnerTypesController(IPartnerTypesRepository partnerTypesRepository) : ControllerBase
+public class PartnerTypesController(IPartnerTypesRepository partnerTypesRepository) : ApiControllerBase
 {
+    [Authorize(Roles = "Cip")]
     [HttpGet]
     public async Task<IActionResult> GetPartnerTypes()
     {
@@ -14,35 +15,33 @@ public class PartnerTypesController(IPartnerTypesRepository partnerTypesReposito
         return new JsonResult(partnerTypes);
     }
 
+    [Authorize(Roles = "Cip")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPartnerType(int id)
     {
         var partnerType = await partnerTypesRepository.GetPartnerTypeByIdAsync(id);
         return new JsonResult(partnerType);
     }
- 
-    [HttpPut]
-    public async Task<IActionResult> AddPartnerType(PartnerType partnerType)
+
+    [Authorize(Roles = "Ctt")]
+    [HttpPost]
+    public async Task<IActionResult> AddPartnerType(PartnerType partnerPartnerType)
     {
-        await partnerTypesRepository.AddPartnerTypeAsync(partnerType);
+        await partnerTypesRepository.AddPartnerTypeAsync(partnerPartnerType);
         return Ok();
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpDelete("{id}")]
     public async Task DeletePartnerType(int id)
     {
         await partnerTypesRepository.DeletePartnerTypeByIdAsync(id);
     }
 
-    [HttpDelete] 
-    public async Task DeletePartnerType(PartnerType partnerType)
+    [Authorize(Roles = "Ctt")]
+    [HttpPut("{id}")]
+    public async Task UpdatePartnerType(int id, PartnerType partnerPartnerType)
     {
-        await partnerTypesRepository.DeletePartnerTypeAsync(partnerType);
-    }
-
-    [HttpPost] 
-    public async Task UpdatePartnerType(PartnerType partnerType)
-    {
-        await partnerTypesRepository.UpdatePartnerTypeAsync(partnerType);
+        await partnerTypesRepository.UpdatePartnerTypeAsync(id, partnerPartnerType);
     }
 }

@@ -1,0 +1,62 @@
+﻿@using Client.Shared.Buttons
+@using Client.Shared.Text
+@typeparam TItem where TItem : notnull
+
+@Body
+
+@code {
+
+    private RenderFragment Body => @<div class="list">
+                                       <RadzenCard>
+                                           @FiltersContent
+                                           @ButtonsContent
+                                           @List
+                                       </RadzenCard>
+                                   </div>;
+
+    private RenderFragment FiltersContent => @<RadzenStack
+                                                  Orientation=@Orientation.Horizontal
+                                                  AlignItems=@AlignItems.Center>
+                                                 @Filters
+                                                 @Search
+                                             </RadzenStack>;
+
+    private RenderFragment ButtonsContent => @<RadzenStack
+                                                  Style="padding-top:10px"
+                                                  Orientation=@Orientation.Horizontal
+                                                  AlignItems=@AlignItems.Center
+                                                  JustifyContent=@JustifyContent.SpaceBetween>
+                                                 @LinkToCreate
+                                                 @EmptyListButton
+                                             </RadzenStack>;
+
+    private RenderFragment LinkToCreate => @<NavigationButton Path=@CreateHref Text="Добавить"/>;
+
+    private RenderFragment List => @<RadzenDataList
+                                        WrapItems=false
+                                        AllowVirtualization=false
+                                        TItem=@TItem
+                                        Data=@ShowedItems
+                                        IsLoading=@isLoading
+                                        Count=@ShowedItems.Count()
+                                        PageSize="5"
+                                        LoadData=@LoadItems
+                                        ShowEmptyMessage=true>
+                                       <Template>
+                                           @Row(context)
+                                       </Template>
+                                       <EmptyTemplate>
+                                           Список пуст
+                                       </EmptyTemplate>
+                                   </RadzenDataList>;
+
+    private RenderFragment Row(TItem item) => @<RadzenLink
+                                                   style="text-decoration:none;color:unset;padding:0"
+                                                   Path=@RowHref(item)
+                                                   Text=@item.ToString()/>;
+
+    private RenderFragment EmptyListButton => @<RadzenButton Icon="cached" Click=@LoadItems ButtonStyle=@ButtonStyle.Primary/>;
+
+    private RenderFragment Search => @<SearchText @bind-Value=@namesFilter/>;
+
+}

@@ -1,0 +1,43 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@using Client.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+
+@inject IWebAssemblyHostEnvironment Environment
+
+@rendermode RenderMode.InteractiveWebAssembly
+
+<RadzenHeader>
+    <AuthorizeView>
+        <RadzenMenu Style="padding-left:10px;">
+            <RadzenStack Orientation=@Orientation.Horizontal AlignItems=@AlignItems.Center>
+                @* <NavLink href="partners">Партнеры</NavLink> *@
+                @* <NavLink href="divisions">Подразделения</NavLink> *@
+                @* <NavLink href="agreements">Соглашения</NavLink> *@
+                @* <NavLink href="interactions">Взаимодействия</NavLink> *@
+                <RadzenMenuItem Path="partners" Text="Партнеры"/>
+                <RadzenMenuItem Path="divisions" Text="Подразделения"/>
+                <RadzenMenuItem Path="agreements" Text="Соглашения"/>
+                <RadzenMenuItem Path="interactions" Text="Взаимодействия"/>
+                <Profile/>
+                @if (Environment.IsDevelopment())
+                {
+                    <RadzenMenuItem Path="swagger/index.html" Text="Обзор API"/>
+                }
+                @* <NavLink href="swagger/index.html">Обзор API</NavLink> *@
+            </RadzenStack>
+        </RadzenMenu>
+    </AuthorizeView>
+</RadzenHeader>
+<RadzenBody>
+    <div style="width:fit-content;">
+        <RefitErrorBoundary>
+            <ChildContent>@Body</ChildContent>
+            <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
+        </RefitErrorBoundary>
+        <RadzenComponents @rendermode="@(new InteractiveWebAssemblyRenderMode())"/>
+    </div>
+</RadzenBody>
+<RadzenFooter>
+    @* Footer страницы *@
+</RadzenFooter>

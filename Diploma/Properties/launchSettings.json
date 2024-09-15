@@ -12,12 +12,14 @@
     "https": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "partners",
+      "launchUrl": "agreements",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7217;http://localhost:5242"
+      "applicationUrl": "https://localhost:7217;http://localhost:5242",
+      "nativeDebugging": false,
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}"
     },
     "IIS Express": {
       "commandName": "IISExpress",

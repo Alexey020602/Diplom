@@ -1,0 +1,35 @@
+@page "/agreements/{id:int}/Edit"
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
+@using Model.Agreements
+@attribute [Authorize(Roles = "Ctt")]
+
+@if (agreement is not null)
+{
+    <Form OnSubmit=@UpdateInteraction Item=@agreement></Form>
+}
+else
+{
+    <RadzenProgressBarCircular Value="100" ShowValue=false Mode=@ProgressBarMode.Indeterminate></RadzenProgressBarCircular>
+}
+
+@code {
+    private static readonly string LoadingMessage = "Загрузка...";
+    [Parameter] public int Id { get; set; }
+    [Inject] private IAgreementService AgreementService { get; set; } = null!;
+    private Agreement? agreement;
+    private string message = LoadingMessage;
+
+    protected override Task OnParametersSetAsync() => LoadAgreement();
+    
+
+    private async Task LoadAgreement() => agreement = await AgreementService.ReadOne(Id);
+    
+
+    private async Task UpdateInteraction()
+    {
+        if (agreement is null) return;
+        await AgreementService.Update(Id, agreement);
+    }
+
+}

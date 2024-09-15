@@ -1,0 +1,14 @@
+﻿<RadzenRow>
+    <RadzenColumn>
+        <RadzenText Style="color:darkgray;" Text=@Title/>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenText Text=@Text/>
+    </RadzenColumn>
+</RadzenRow>
+
+
+@code {
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? Text { get; set; }
+}

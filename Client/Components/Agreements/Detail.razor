@@ -1,0 +1,39 @@
+﻿@using Client.Services.Api
+@using Client.Shared.List
+@using Client.Shared.Text
+@using Microsoft.AspNetCore.Authorization
+@using Model.Agreements
+@inherits Client.Shared.DetailPage<Agreement>
+@attribute [Authorize(Roles = "Cip")]
+
+@page "/agreements/{id:int}"
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Inject] private IAgreementService AgreementService { get; set; } = null!;
+
+    protected override Task<Agreement> LoadItem()
+    {
+        return AgreementService.ReadOne(Id);
+    }
+
+    //TODO Доделать экраны деталей
+    protected override RenderFragment Content(Agreement item) =>
+        @<RadzenStack Orientation=@Orientation.Vertical>
+            <TextWithTitle Title="Номер" Text=@item.Number/>
+            <TextWithTitle Title="Тип" Text=@item.Type?.Name/>
+            <TextWithTitle Title="Статус" Text=@item.Status?.Name/>
+            <TextWithTitle Title="Начало" Text=@item.Start.ToShortDateString()/>
+            <TextWithTitle Title="Конец" Text=@item.End.ToLongDateString()/>
+            <ListWithTitle Title="Подразделения" Items=@item.Divisions/>
+            <ListWithTitle Title="Партнеры" Items=@item.Partners/>
+        </RadzenStack>;
+
+    protected override string? Title => Item?.ToString();
+    protected override string EntitiesPath => "agreements";
+    protected override Task Delete() => AgreementService.Delete(Id);
+
+}

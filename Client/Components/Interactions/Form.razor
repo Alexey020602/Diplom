@@ -1,0 +1,109 @@
+@using Client.Services.Api
+@using Client.Shared.Select
+@using Client.Shared.Text
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Model
+@using Model.Divisions
+@using Model.Interactions
+@using PartnerShort = Model.Partners.PartnerShort
+@attribute [Authorize(Roles = "Ctt")]
+@inherits Client.Shared.Form.BaseForm<Model.Interactions.Interaction>
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+
+    protected override RenderFragment Content =>
+        @<RadzenStack>
+            @* <UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction Selected=@Item.Directions/> *@
+            @* <ValidationMessage For=@(() => Item.Directions)/> *@
+            @* <InputWithFloatTitle Title="Код" @bind-Value=@Item.ContactCode/> *@
+            @* <ValidationMessage For=@(() => Item.ContactCode)/> *@
+            @* <InputWithFloatTitle Title="Тема" @bind-Value=@Item.Theme/> *@
+            @* *@
+            @* <ValidationMessage For="@(() => Item.Theme)"/> *@
+            @* <UniversalCustomSelect *@
+            @*     TItem=@PartnerShort @bind-Value=@Item.Partner/> *@
+            @* <ValidationMessage For="@(() => Item.Partner)"/> *@
+            @* <UniversalCustomSelect *@
+            @*     TItem=@DivisionShort @bind-Value=@Item.Division/> *@
+            @* *@
+            @* <ValidationMessage For="@(() => Item.Division)"/> *@
+            @* *@
+            @* *@
+            @* <ValidationMessage For="@(() => Item.Type)"/> *@
+            @* <InputDate @bind-Value="@Item.Begin">Начало</InputDate> *@
+            @* *@
+            @* <ValidationMessage For="@(() => Item.Begin)"/> *@
+            @* <InputDate @bind-Value="@Item.End">Конец</InputDate> *@
+            @* *@
+            @* <ValidationMessage For="@(() => Item.End)"/> *@
+            @* <InputDate @bind-Value="@Item.SigningDate">Дата подписания</InputDate> *@
+            @* <ValidationMessage For="@(() => Item.SigningDate)"/> *@
+            @* <ValidationMessage For="@(() => Item.SigningDate)"/> *@
+            @Directions
+            @ContactCode
+            @Theme
+            @Partner
+            @Division
+            @Type
+            @Begin
+            @End
+            @SigningDate
+    </RadzenStack>;
+
+    private RenderFragment Directions => FormRow(
+        "Направления",
+        "Directions",
+        @<UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions Name="Directions"/>
+        );
+
+    private RenderFragment ContactCode => FormRow(
+        "Код",
+        "Code",
+        @<RadzenTextBox @bind-Value=@Item.ContactCode Name="Code"/>
+        );
+
+    private RenderFragment Theme => FormRow(
+        "Тема",
+        "Theme",
+        @<RadzenTextArea @bind-Value=@Item.Theme Name="Theme"/>
+    );
+
+    private RenderFragment Partner => FormRow(
+        "Партнер",
+        "Partner",
+        @<UniversalCustomSelect Name="Partner" @bind-Value=@Item.Partner/>
+    );
+
+    private RenderFragment Division => FormRow(
+        "Подразделение",
+        "Division",
+        @<UniversalCustomSelect Name="Division" @bind-Value=@Item.Division/>
+    );
+
+    private RenderFragment Type => FormRow(
+        "Тип",
+        "Type",
+        @<UniversalCustomSelect @bind-Value=@Item.Type Name="Type"/>
+    );
+
+    private RenderFragment Begin => FormRow(
+        "Начало",
+        "Begin",
+        @<RadzenDatePicker TValue=@DateOnly Name="Begin" Value=@Item.Begin Change=@(begin => Item.Begin = DateOnly.FromDateTime(begin ?? DateTime.Today))/>
+        );
+    private RenderFragment End => FormRow(
+        "Конец",
+        "End",
+        @<RadzenDatePicker TValue=@DateOnly Name="End" Value=@Item.End Change=@(end => Item.End = DateOnly.FromDateTime(end ?? DateTime.Today))/>
+    );
+    private RenderFragment SigningDate => FormRow(
+        "Начало",
+        "SigningDate",
+        @<RadzenDatePicker TValue=@DateOnly Name="SigningDate" Value=@Item.SigningDate Change=@(signingDate => Item.SigningDate = DateOnly.FromDateTime(signingDate ?? DateTime.Today))/>
+    );
+}

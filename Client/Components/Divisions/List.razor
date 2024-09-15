@@ -1,0 +1,27 @@
+﻿@attribute [Authorize(Roles = "Cip")]
+@using Client.Shared.Select
+@using Microsoft.AspNetCore.Authorization
+@using Model.Divisions
+@inherits Client.Shared.List.SearchableStyledList<Model.Divisions.DivisionShort>
+
+@page "/divisions"
+
+<PageTitle>Подразделения</PageTitle>
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@* <SearchableStyledList ListDelegate=@this /> *@
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    protected override RenderFragment Filters => @<UniversalCustomSelect
+                                                      TItem="Faculty"
+                                                      @bind-Value:get=@facultyFilterValue @bind-Value:set=@SelectFaculty/>;
+
+}

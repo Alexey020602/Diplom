@@ -1,0 +1,35 @@
+﻿@attribute [Authorize(Roles = "Cip")]
+@page "/divisions/{id:int}"
+@using Client.Services.Api
+@using Client.Shared.List
+@using Client.Shared.Text
+@using Client.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Model.Divisions
+@inherits DetailPage<Division>
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Inject] private IDivisionsService DivisionsService { get; set; } = null!;
+
+    protected override RenderFragment Content(Division item) =>
+        @<RadzenStack>
+            <RadzenText TagName="TagName.H3" Text=@item.ShortName/>
+            <RadzenText TagName="TagName.H4" Text="@item.FullName"/>
+            <TextWithTitle Title="Факультет" Text=@item.Faculty?.ToString()/>
+            <TextWithTitle Title="Контактные данные" Text=@item.Contacts/>
+            <TextWithTitle Title="Сайт" Text=@item.Site/>
+            <ListWithTitle Title="Направления" Items=@item.Directions/>
+    </RadzenStack>;
+
+    protected override string? Title => Item?.ShortName;
+    protected override string EntitiesPath => "divisions";
+    protected override Task Delete() => DivisionsService.Delete(Id);
+    protected override Task<bool> CanDelete() => DivisionsService.CanDelete(Id);
+
+    protected override Task<Division> LoadItem() => DivisionsService.ReadOne(Id);
+
+}

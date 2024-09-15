@@ -1,0 +1,29 @@
+﻿@attribute [Authorize(Roles = "Cip")]
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
+@using Model.Interactions
+@inherits Client.Shared.List.SearchableStyledList<InteractionShort>
+
+@page "/interactions"
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Inject] private IInteractionsService InteractionService { get; set; } = null!;
+
+    protected override Task<List<InteractionShort>> Load()
+    {
+        return InteractionService.ReadAll();
+    }
+
+    protected override string CreateHref => "/interactions/create";
+
+    protected override string RowHref(InteractionShort item)
+    {
+        return $"/interactions/{item.Id}";
+    }
+
+    protected override RenderFragment Filters => @<div></div>;
+}

@@ -1,0 +1,12 @@
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject  NavigationManager Navigation
+
+@code {
+    [Parameter] public string Path { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Navigation.NavigateToLogin(Path);
+    }
+
+}

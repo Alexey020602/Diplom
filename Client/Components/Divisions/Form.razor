@@ -1,0 +1,64 @@
+﻿@attribute [Authorize(Roles = "Ctt")]
+@using Client.Services.Api
+@using Client.Services.Api.BaseApi
+@using Client.Shared.Select
+@using Client.Shared.Text
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Model
+@using Model.Divisions
+@inherits Client.Shared.Form.BaseForm<Model.Divisions.Division>
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+
+    protected override RenderFragment Content =>
+        @<RadzenStack>
+            @ShortName
+            @FullName
+            @Site
+            @Contacts
+            @Faculty
+            @Directions
+    </RadzenStack>;
+
+    private RenderFragment ShortName => FormRow(
+        "Краткое название",
+        "ShortName",
+        @<RadzenTextBox Name="ShortName" @bind-Value=@Item.ShortName />
+        );
+
+    private RenderFragment FullName => FormRow(
+        "Полное название",
+        "FullName",
+        @<RadzenTextBox Name="FullName" @bind-Value=@Item.FullName/>
+    );
+
+    private RenderFragment Site => FormRow(
+        "Сайт",
+        "Site",
+        @<RadzenTextBox Name="Site" @bind-Value=@Item.Site/>
+    );
+
+    private RenderFragment Contacts => FormRow(
+        "Контактные данные",
+        "Contacts",
+        @<RadzenTextArea Name="Contacts" @bind-Value=@Item.Contacts/>
+    );
+
+    private RenderFragment Faculty => FormRow(
+        "Факультет",
+        "Faculty",
+        @<UniversalCustomSelect TItem=@Faculty Name="Faculty" @bind-Value=@Item.Faculty/>
+    );
+
+    private RenderFragment Directions => FormRow(
+        "Направление",
+        "Directions",
+        @<UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions/>
+    );
+
+}

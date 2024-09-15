@@ -1,0 +1,54 @@
+@page "/login"
+@using Client.Services.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Model.Identity
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+@* <EditForm Model="@AuthRequest" OnValidSubmit="@ExecuteLogin"> *@
+@*     <DataAnnotationsValidator/> *@
+@*     <InputText @bind-Value="@AuthRequest.Login"/> *@
+@*     <ValidationMessage For="@(() => AuthRequest.Login)"/> *@
+@*     <InputText type="password" @bind-Value="@AuthRequest.Password"/> *@
+@*     <ValidationMessage For="@(() => AuthRequest.Password)"/> *@
+@*     <button type="submit">Войти</button> *@
+@* </EditForm> *@
+
+<RadzenCard>
+    @* <RadzenTextBox @bind-Value=@AuthRequest.Login Name="Login"/> *@
+    @* <RadzenRequiredValidator Component="Login"/> *@
+    @* <RadzenPassword @bind-Value=@AuthRequest.Password Name="Password"/> *@
+    @* <RadzenRequiredValidator Component="Password"/> *@
+    <RadzenLogin 
+        Login=@LoginAction
+        LoginText="Логин"
+        ShowLoginButton=@true 
+        AllowRegister=false 
+        AllowRememberMe=false 
+        AllowResetPassword=false 
+        />
+</RadzenCard>
+
+@code {
+    [Parameter] public string Action { get; set; } = string.Empty;
+    [Parameter] public string RedirectTo { get; set; } = "/";
+    private AuthRequest AuthRequest { get; } = new();
+    private bool ShowAuthError { get; set; }
+    private string Error { get; set; } = default!;
+    private Task ExecuteLogin()
+    {
+        ShowAuthError = false;
+        return ExecuteLoginAction(AuthRequest);
+    }
+    private Task LoginAction(LoginArgs login) => ExecuteLoginAction(new ()
+    {
+        Login = login.Username, 
+        Password = login.Password
+    });
+    
+    private async Task ExecuteLoginAction(AuthRequest authRequest)
+    {
+        await AuthenticationService.Login(authRequest);
+        NavigationManager.NavigateTo(RedirectTo);
+    }
+}

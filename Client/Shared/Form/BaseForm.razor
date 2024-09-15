@@ -1,0 +1,33 @@
+﻿@using Client.Shared.Buttons
+@typeparam TItem where TItem : class
+
+<RadzenCard>
+    <RadzenTemplateForm TItem=@TItem Data="@Item" Submit=@((TItem item) => OnValueSubmit())>
+        <RadzenStack Orientation=@Orientation.Vertical>
+            @Content
+            <RadzenStack Orientation=@Orientation.Horizontal JustifyContent=@JustifyContent.SpaceBetween>
+                <BackButton ButtonStyle=@ButtonStyle.Secondary Text="Назад"/>
+                <RadzenButton ButtonType=@ButtonType.Reset Text="Очистить"/>
+                <RadzenButton ButtonType=@ButtonType.Submit Text="Сохранить"/>
+            </RadzenStack >
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenCard>
+
+@code {
+
+    protected RenderFragment FormRow(
+        string labelText,
+        string name,
+        RenderFragment formComponent
+    ) => @<RadzenRow AlignItems="AlignItems.Center">
+             <RadzenColumn>
+                 <RadzenLabel Component=@name Text=@labelText/>
+             </RadzenColumn>
+             <RadzenColumn>
+                 @formComponent
+                 <RadzenDataAnnotationValidator Component=@name/>
+             </RadzenColumn>
+         </RadzenRow>;
+
+}

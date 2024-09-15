@@ -1,0 +1,94 @@
+@using Client.Services.Api
+@using Client.Shared.Select
+@using Client.Shared.Text
+@using Microsoft.AspNetCore.Components.Forms
+@using Model.Agreements
+@using Type = Model.Agreements.AgreementType
+@inherits Client.Shared.Form.BaseForm<Agreement>
+@inject IDivisionsForAgreementService DivisionsService
+@inject IPartnersForAgreementService PartnersService
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    private List<DivisionInAgreement> divisions = [];
+    private List<PartnerInAgreement> partners = [];
+
+    protected override RenderFragment Content => @<RadzenStack Orientation=@Orientation.Vertical>
+        @Number
+        @Type
+        @Status
+        @Start
+        @End
+    </RadzenStack>;
+
+    private RenderFragment Number => FormRow(
+        "Номер соглашения",
+        "Number",
+        @<RadzenTextBox @bind-Value=@Item.Number Name="Number" Placeholder="Номер соглашения"/>
+    );
+
+    private RenderFragment Type => FormRow(
+        "Тип соглашения",
+        "Type",
+        @<UniversalCustomSelect
+             Name="Type"
+             @bind-Value="@Item.Type"/>
+    );
+
+    private RenderFragment Status => FormRow(
+        "Статус соглашения",
+        "Status",
+        @<UniversalCustomSelect
+             Name="Status"
+             @bind-Value="@Item.Status"/>
+    );
+
+    private RenderFragment Start => FormRow(
+        "Начало",
+        "Start",
+        @<RadzenDatePicker 
+             TValue=@(DateOnly) 
+             Value=@Item.Start 
+             ShowTime=false
+             Change=@(start => Item.Start = DateOnly.FromDateTime(start ?? DateTime.Today)) 
+             Name="Start"/>
+    );
+
+    private RenderFragment End => FormRow(
+        "Конец",
+        "End",
+        @<RadzenDatePicker 
+             TValue=@(DateOnly)
+             ShowTime=false
+             Value=@Item.End
+             Change=@(end => Item.End = DateOnly.FromDateTime(end ?? DateTime.Today))
+             Name="End"/>
+    );
+
+    private RenderFragment Divisions => throw new NotImplementedException();
+    private RenderFragment Partners => throw new NotImplementedException();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Task.WhenAll(
+            LoadDivisions(),
+            LoadPartners()
+        );
+
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task LoadDivisions()
+    {
+        divisions = await DivisionsService.GetDivisions();
+    }
+
+    private async Task LoadPartners()
+    {
+        partners = await PartnersService.GetPartners();
+    }
+
+}

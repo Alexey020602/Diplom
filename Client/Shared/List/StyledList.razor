@@ -1,0 +1,19 @@
+﻿@typeparam TItem
+
+<div class="list">
+    <ul>
+        @foreach (var item in List)
+        {
+            @if (RowFragment is not null)
+            {
+                <li>@RowFragment(item)</li>
+            }
+        }
+    </ul>
+</div>
+
+@code {
+    [Parameter] public IEnumerable<TItem> List { get; set; } = new List<TItem>();
+
+    [Parameter] public RenderFragment<TItem>? RowFragment { get; set; }
+}

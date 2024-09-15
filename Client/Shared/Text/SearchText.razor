@@ -1,0 +1,21 @@
+﻿<RadzenStack Orientation="@Orientation.Horizontal" AlignItems="@AlignItems.Center">
+    <RadzenTextBox @bind-Value:get="@Value" @bind-Value:set="@ValueChanged"/>
+    @* <button style="display:inline-block" onclick=@SendUpdatedValue class="oval-button blue-outline">Поиск</button> *@
+    <RadzenButton
+        Icon="highlight_off"
+        Click="@ClearFilterField"
+        Variant="@Variant.Text"
+        ButtonStyle="@ButtonStyle.Primary"
+        class="rz-border-radius-10"/>
+</RadzenStack>
+
+@code {
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+
+    private Task ClearFilterField()
+    {
+        return ValueChanged.InvokeAsync(string.Empty);
+    }
+
+}

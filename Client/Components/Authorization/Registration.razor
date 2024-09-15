@@ -1,0 +1,47 @@
+@page "/Registration"
+@using System.ComponentModel.DataAnnotations
+@using Client.Services.Api.BaseApi
+@using Client.Services.Authorization
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Model.Identity
+@attribute [Authorize(Roles = "Admin")]
+@inject IAuthenticationService AuthenticationService
+@inject IReadApi<Role> RolesApi
+
+<RadzenCard>
+    <RadzenTemplateForm TItem=@RegistrationRequest Data=@RegistrationRequest Submit=@Register>
+        <RadzenStack>
+            <RadzenTextBox Placeholder="Логин" @bind-Value="@RegistrationRequest.Login" Name="Login"/>
+            <RadzenDataAnnotationValidator Component="Login"/>
+            <RadzenPassword Placeholder="Пароль" @bind-Value="@RegistrationRequest.Password" Name="Password"/>
+            <RadzenDataAnnotationValidator Component="Password"/>
+            <RadzenCheckBoxList
+                Name="Roles"
+                TValue=@Role
+                @bind-Value=@RegistrationRequest.Roles
+                Orientation=@Orientation.Vertical>
+                <Items>
+                    @foreach (var role in Roles)
+                    {
+                        <RadzenCheckBoxListItem Text=@role.Name Value=@role/>
+                    }
+                </Items>
+            </RadzenCheckBoxList>
+            <RadzenDataAnnotationValidator Component="Roles"/>
+            <RadzenButton Text="Регистрация" ButtonType=@ButtonType.Submit/>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenCard>
+
+@code {
+    private RegistrationRequest RegistrationRequest { get; } = new();
+    private IEnumerable<Role> Roles { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Roles = await RolesApi.ReadAll();
+    }
+
+    private Task Register(RegistrationRequest registrationRequest) => AuthenticationService.RegisterUser(registrationRequest);
+}

@@ -1,0 +1,27 @@
+@using Client.Services.Api
+@using Microsoft.AspNetCore.Authorization
+@using Model.Interactions
+@inherits Client.Shared.DetailPage<Interaction>
+@page "/interactions/{id:int}"
+@attribute [Authorize(Roles = "Cip")]
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Inject] private IInteractionsService InteractionsService { get; set; } = null!;
+
+    protected override Task<Interaction> LoadItem()
+    {
+        return InteractionsService.ReadOne(Id);
+    }
+
+    protected override RenderFragment Content(Interaction item) => @<RadzenStack>
+                                                                       
+                                                                   </RadzenStack>;
+
+    protected override string? Title => Item?.ToString();
+    protected override string EntitiesPath => "interactions";
+    protected override Task Delete() => InteractionsService.Delete(Id);
+
+}

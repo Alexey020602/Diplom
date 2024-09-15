@@ -1,13 +1,13 @@
 ﻿using Diploma.Services;
-using DataBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 
 namespace Diploma.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class DirectionsController(IDirectionsRepository directionsRepository): ControllerBase
+public class DirectionsController(IDirectionsRepository directionsRepository) : ApiControllerBase
 {
+    [Authorize(Roles = "Cip")]
     [HttpGet]
     public async Task<IActionResult> GetDirections()
     {
@@ -15,6 +15,7 @@ public class DirectionsController(IDirectionsRepository directionsRepository): C
         return new JsonResult(directions);
     }
 
+    [Authorize(Roles = "Cip")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDirection(int id)
     {
@@ -22,6 +23,7 @@ public class DirectionsController(IDirectionsRepository directionsRepository): C
         return new JsonResult(direction);
     }
 
+    [Authorize(Roles = "Ctt")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDirection(int id)
     {
@@ -29,17 +31,19 @@ public class DirectionsController(IDirectionsRepository directionsRepository): C
         return Ok();
     }
 
-    [HttpPut]
+    [Authorize(Roles = "Ctt")]
+    [HttpPost]
     public async Task<IActionResult> AddDirection([FromBody] Direction direction)
     {
         await directionsRepository.AddDirection(direction);
         return Ok();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateDirection([FromBody] Direction direction)
+    [Authorize(Roles = "Ctt")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateDirection(int id, [FromBody] Direction direction)
     {
-        await directionsRepository.UpdateDirection(direction);
+        await directionsRepository.UpdateDirection(id, direction);
         return Ok();
     }
 }

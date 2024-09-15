@@ -1,13 +1,27 @@
-﻿@using Shared
+﻿@using Client.Components
+@using Client.Shared.Layouts
+@using Microsoft.AspNetCore.Components.Authorization
 @rendermode RenderMode.InteractiveAuto
-<Router AppAssembly="@typeof(Program).Assembly" >
-    <Found Context="routeData">
-        <RouteView RouteData = "@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-         <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+<head>
+    <RadzenTheme Theme="material"></RadzenTheme>
+</head>
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <Authorizing>
+                    <p>Авторизация...</p>
+                </Authorizing>
+                <NotAuthorized>
+                    <RedirectToLogin Path="/login"/>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

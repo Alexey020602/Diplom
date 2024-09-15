@@ -1,0 +1,7 @@
+﻿@using Client.Services.Api.BaseApi
+@typeparam TItem where TItem: class
+@inherits UniversalSelect<TItem, IReadApi<TItem>>
+
+@{
+    base.BuildRenderTree(__builder);
+}
