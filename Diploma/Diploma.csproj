@@ -11,6 +11,7 @@
         <ProjectReference Include="..\Client\Client.csproj"/>
         <ProjectReference Include="..\DataBaseForApp\DataBaseForApp.csproj"/>
         <ProjectReference Include="..\Model\Model.csproj"/>
+        <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
     </ItemGroup>
 
     <ItemGroup>

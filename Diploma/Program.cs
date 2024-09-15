@@ -139,6 +139,7 @@ builder.Services.AddSwaggerGen(o =>
 
 builder.Services.AddCors();
 
+builder.AddServiceDefaults();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
