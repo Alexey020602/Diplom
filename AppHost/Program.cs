@@ -9,4 +9,7 @@ var postgres = builder
     .AddDatabase("DiplomaDb");
 builder.AddProject<Projects.Diploma>("diploma")
     .WithReference(postgres);
+
+// builder.AddProject<Projects.MigrationService>("migrations")
+//     .WithReference(postgres);
 builder.Build().Run();

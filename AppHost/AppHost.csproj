@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Diploma\Diploma.csproj" />
+      <ProjectReference Include="..\MigrationService\MigrationService.csproj" />
     </ItemGroup>
 
 </Project>
