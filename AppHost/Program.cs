@@ -7,9 +7,12 @@ var postgres = builder
     // .PublishAsConnectionString()
     .WithPgAdmin()
     .AddDatabase("DiplomaDb");
-builder.AddProject<Projects.Diploma>("diploma")
+var migrations = builder.AddProject<Projects.MigrationService>("migrations")
     .WithReference(postgres);
 
-// builder.AddProject<Projects.MigrationService>("migrations")
-//     .WithReference(postgres);
-builder.Build().Run();
+builder.AddProject<Projects.Diploma>("diploma")
+    .WithReference(migrations)
+    .WithReference(postgres);
+
+var app = builder.Build();
+await app.RunAsync();
