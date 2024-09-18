@@ -7,7 +7,8 @@ namespace Diploma;
 public class ApplicationContextSeed(
     ApplicationContext context,
     ILogger<ApplicationContextSeed> logger,
-    IWebHostEnvironment environment)
+    IWebHostEnvironment environment
+    )
 {
     public void Seed(int retry = 0)
     {
@@ -33,7 +34,7 @@ public class ApplicationContextSeed(
 
     private void SeedThrows()
     {
-        Migrate();
+        // Migrate();
         if (!environment.IsDevelopment()) return;
         SeedData();
     }

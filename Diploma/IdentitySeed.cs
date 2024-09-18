@@ -3,32 +3,59 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Diploma;
 
-public class IdentitySeed(UserManager<IdentityUser<Guid>> userManager, RoleManager<IdentityRole<Guid>> roleManager)
+public class IdentitySeed(
+    UserManager<IdentityUser<Guid>> userManager,
+    RoleManager<IdentityRole<Guid>> roleManager,
+    IHostEnvironment hostEnvironment)
 {
     private const string AdminName = "Admin";
     private const string AdminPassword = "123456";
+    private const string CttName = "Ctt";
+    private const string CipName = "Cip";
     private readonly RoleManager<IdentityRole<Guid>> roleManager = roleManager;
     private readonly UserManager<IdentityUser<Guid>> userManager = userManager;
+    private readonly IHostEnvironment hostEnvironment = hostEnvironment;
 
     public async Task Seed()
     {
-        await AddAdmin();
+        await SeedUsers();
         await SeedRoles();
-        await AddAdminToRolesAsync();
+        await AddUsersToRoles();
     }
 
-    private async Task AddAdmin()
+    private async Task SeedUsers()
     {
-        var user = await userManager.FindByNameAsync(AdminName);
+        await AddAdmin();
+        if (!hostEnvironment.IsDevelopment()) return;
+        await AddCipUser();
+        await AddCttUser();
+    }
+
+    private async Task AddUsersToRoles()
+    {
+        await AddAdminToRolesAsync();
+        if (!hostEnvironment.IsDevelopment()) return;
+        await AddCipToRolesAsync();
+        await AddCttToRolesAsync();
+    }
+    private Task AddAdmin() => AddUserWithNameAndPassword(AdminName, AdminPassword);
+
+    private Task AddCipUser() => AddUserWithNameAndPassword(CipName, AdminPassword);
+
+    private Task AddCttUser() => AddUserWithNameAndPassword(CttName, AdminPassword);
+
+    private async Task AddUserWithNameAndPassword(string name, string password)
+    {
+        var user = await userManager.FindByNameAsync(name);
         if (user is not null)
             return;
 
         var result = await userManager.CreateAsync(
             new IdentityUser<Guid>
             {
-                UserName = AdminName
+                UserName = name
             },
-            AdminPassword
+            password
         );
 
         if (result.Succeeded)
@@ -37,23 +64,41 @@ public class IdentitySeed(UserManager<IdentityUser<Guid>> userManager, RoleManag
         throw new InvalidOperationException(result.Errors.ToString());
     }
 
-    private async Task AddAdminToRolesAsync()
+    private async Task AddUserToRolesAsync(string name, IEnumerable<string> roles)
     {
-        var user = await userManager.FindByNameAsync(AdminName);
+        var user = await userManager.FindByNameAsync(name);
 
         if (user is null)
             throw new InvalidOperationException();
 
         var result = await userManager.AddToRolesAsync(
             user,
-            new[]
-            {
-                RoleDefaults.Admin,
-                RoleDefaults.Ctt,
-                RoleDefaults.Cip
-            }
+            roles
         );
+
+        if (result.Succeeded) return;
+
+        // throw new InvalidOperationException(result.Errors.ToString());
     }
+
+    private Task AddAdminToRolesAsync() => AddUserToRolesAsync(
+        AdminName,
+        [
+            RoleDefaults.Admin,
+            RoleDefaults.Ctt,
+            RoleDefaults.Cip
+        ]
+    );
+
+    private Task AddCipToRolesAsync() => AddUserToRolesAsync(
+        CipName,
+        [RoleDefaults.Cip]
+    );
+
+    private Task AddCttToRolesAsync() => AddUserToRolesAsync(
+        CttName,
+        [RoleDefaults.Cip, RoleDefaults.Ctt]
+    );
 
     private async Task SeedRoles()
     {
