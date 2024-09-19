@@ -3,6 +3,8 @@ using MigrationService;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+builder.Services.AddTransient<ApplicationContextSeed>();
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
     // .WithTracing(tracing => tracing.AddSource(Worker.ActivitySourceName))

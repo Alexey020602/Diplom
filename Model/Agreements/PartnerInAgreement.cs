@@ -5,8 +5,8 @@ namespace Model.Agreements;
 
 public class PartnerInAgreement : ISelectionWithTextElement
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public required int Id { get; init; }
+    public required string Name { get; init; }
     [StringLength(500)] public string ContactPersons { get; set; } = string.Empty;
 
     [JsonIgnore]
@@ -24,5 +24,20 @@ public class PartnerInAgreement : ISelectionWithTextElement
                 {Name}
                 {ContactPersons}
                 """;
+    }
+    
+    
+
+    public override bool Equals(object? obj)
+    {
+        
+        if (obj is not PartnerInAgreement other) return false;
+        
+        return Id == other.Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
     }
 }

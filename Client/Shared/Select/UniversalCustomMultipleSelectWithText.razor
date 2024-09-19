@@ -1,6 +1,6 @@
 @typeparam TItem where TItem : class, Model.ISelectionWithTextElement
-    @typeparam TBaseItem where TBaseItem : class 
-    @typeparam TApi where TApi : class, Client.Services.Api.BaseApi.IReadApi<TBaseItem>
+@typeparam TBaseItem where TBaseItem : class 
+@typeparam TApi where TApi : class, Client.Services.Api.BaseApi.IReadApi<TBaseItem>
 
 <MultipleSelectWithText
     Selected="@Selected"
@@ -12,28 +12,16 @@
     [Parameter] public Func<TBaseItem, TItem> Convert { get; set; } = null!;
     private List<TItem> noSelected = [];
 
-    protected override Task OnParametersSetAsync()
-    {
-        return LoadItems();
-    }
+    protected override Task OnParametersSetAsync() => LoadItems();
+    
 
     private async Task LoadItems()
     {
-        try
-        {
-            noSelected = FilterItem(await Api.ReadAll());
-        }
-        catch
-        {
-        }
+        noSelected = FilterItem(await Api.ReadAll());
     }
 
-    private List<TItem> FilterItem(IEnumerable<TBaseItem> items)
-    {
-        return items
+    private List<TItem> FilterItem(IEnumerable<TBaseItem> items) => items
             .Select(Convert)
             .Where(item => !Selected.Contains(item))
             .ToList();
-    }
-
 }

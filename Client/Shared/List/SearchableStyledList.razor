@@ -1,5 +1,6 @@
 ﻿@using Client.Shared.Buttons
 @using Client.Shared.Text
+@using Microsoft.AspNetCore.Components.Authorization
 @typeparam TItem where TItem : notnull
 
 @Body
@@ -30,7 +31,9 @@
                                                  @EmptyListButton
                                              </RadzenStack>;
 
-    private RenderFragment LinkToCreate => @<NavigationButton Path=@CreateHref Text="Добавить"/>;
+    private RenderFragment LinkToCreate => @<AuthorizeView Roles="Ctt">
+                                               <NavigationButton Path=@CreateHref Text="Добавить"/>
+                                           </AuthorizeView>;
 
     private RenderFragment List => @<RadzenDataList
                                         WrapItems=false

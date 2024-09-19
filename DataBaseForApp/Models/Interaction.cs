@@ -17,6 +17,6 @@ public class Interaction
 
     public override string ToString()
     {
-        return $"{ContactCode} {InteractionType} от {SigningDateTime}, {BeginigDateTime} - {EndingDateTime}";
+        return $"{ContactCode} {InteractionType} от {SigningDateTime.ToShortDateString()}, {BeginigDateTime.ToShortDateString()} - {EndingDateTime.ToShortDateString()}";
     }
 }

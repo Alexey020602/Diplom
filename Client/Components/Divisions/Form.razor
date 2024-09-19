@@ -58,7 +58,7 @@
     private RenderFragment Directions => FormRow(
         "Направление",
         "Directions",
-        @<UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions/>
+        @<UniversalMultipleSelect Name="Directions" TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions/>
     );
 
 }

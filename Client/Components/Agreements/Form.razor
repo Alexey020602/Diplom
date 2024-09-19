@@ -3,6 +3,8 @@
 @using Client.Shared.Text
 @using Microsoft.AspNetCore.Components.Forms
 @using Model.Agreements
+@using Model.Divisions
+@using Model.Partners
 @using Type = Model.Agreements.AgreementType
 @inherits Client.Shared.Form.BaseForm<Agreement>
 @inject IDivisionsForAgreementService DivisionsService
@@ -22,6 +24,8 @@
         @Status
         @Start
         @End
+        @Partners
+        @Divisions
     </RadzenStack>;
 
     private RenderFragment Number => FormRow(
@@ -68,8 +72,20 @@
              Name="End"/>
     );
 
-    private RenderFragment Divisions => throw new NotImplementedException();
-    private RenderFragment Partners => throw new NotImplementedException();
+    private RenderFragment Divisions => @<UniversalCustomMultipleSelectWithText 
+                                             TBaseItem=@PartnerShort
+                                             TItem=@PartnerInAgreement
+                                             TApi=@IPartnersService
+                                             Convert=@ConvertPartner
+                                             Selected=@Item.Partners
+                                             />;
+    private RenderFragment Partners => @<UniversalCustomMultipleSelectWithText 
+                                            TApi=@IDivisionsService
+                                            TBaseItem=@DivisionShort
+                                            TItem=@DivisionInAgreement
+                                            Convert=@ConvertDivision
+                                            Selected=@Item.Divisions
+                                        />;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -90,5 +106,17 @@
     {
         partners = await PartnersService.GetPartners();
     }
+
+    private static PartnerInAgreement ConvertPartner(PartnerShort partner) => new()
+    {
+Id = partner.Id,
+Name = partner.Name
+    };
+
+    private static DivisionInAgreement ConvertDivision(DivisionShort division) => new()
+    {
+Id = division.Id, 
+Description = division.Name,
+    };
 
 }

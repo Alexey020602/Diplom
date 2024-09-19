@@ -31,6 +31,6 @@ public class Interaction
     [MinLength(1, ErrorMessage = "Необходимо выбрать хотя бы одно направление")] public List<Direction> Directions { get; set; } = [];
     public override string ToString()
     {
-        return $"{ContactCode} типа {Type} от {SigningDate.ToLongDateString()}, {Begin.ToShortDateString()} - {End.ToShortDateString()}";
+        return $"{ContactCode} типа {Type} от {SigningDate.ToShortDateString()}, {Begin.ToShortDateString()} - {End.ToShortDateString()}";
     }
 }

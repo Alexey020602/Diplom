@@ -74,7 +74,6 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddLogging();
 
-builder.Services.AddTransient<ApplicationContextSeed>();
 builder.Services.AddTransient<IdentitySeed>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -116,8 +115,6 @@ builder.AddServiceDefaults();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
-    var contextSeed = scope.ServiceProvider.GetRequiredService<ApplicationContextSeed>();
-    contextSeed.Seed();
     var identitySeed = scope.ServiceProvider.GetRequiredService<IdentitySeed>();
     await identitySeed.Seed();
 }

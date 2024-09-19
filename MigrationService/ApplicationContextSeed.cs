@@ -1,16 +1,17 @@
 ﻿using DataBase.Data;
 using DataBase.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
-namespace Diploma;
+namespace MigrationService;
 
 public class ApplicationContextSeed(
     ApplicationContext context,
     ILogger<ApplicationContextSeed> logger,
     IWebHostEnvironment environment
-    )
+)
 {
-    public void Seed(int retry = 0)
+    public async Task Seed(CancellationToken cancellationToken)
     {
         try
         {
@@ -18,10 +19,7 @@ public class ApplicationContextSeed(
         }
         catch (Exception ex)
         {
-            if (retry >= 10) throw;
-            retry++;
             logger.LogError("{Message}", ex.Message);
-            Seed(retry);
             throw;
         }
     }
@@ -32,14 +30,14 @@ public class ApplicationContextSeed(
         context.Database.Migrate();
     }
 
-    private void SeedThrows()
+    private Task SeedThrows(CancellationToken cancellationToken)
     {
         // Migrate();
-        if (!environment.IsDevelopment()) return;
-        SeedData();
+        if (!environment.IsDevelopment()) return Task.CompletedTask;
+        return SeedData(cancellationToken);
     }
 
-    private void SeedData()
+    private async Task SeedData(CancellationToken cancellationToken)
     {
         AddFaculties();
         AddPartnerTypes();
@@ -50,7 +48,7 @@ public class ApplicationContextSeed(
         // AddUsers();
     }
 
-    private void AddInteractionTypes()
+    private Task AddInteractionTypes(CancellationToken cancellationToken)
     {
         var interactionTypes = new List<InteractionType>
         {
@@ -62,10 +60,10 @@ public class ApplicationContextSeed(
 
         foreach (var interactionType in interactionTypes) Add(interactionType);
 
-        context.SaveChanges();
+        return context.SaveChangesAsync(cancellationToken);
     }
 
-    private void AddAgreementTypes()
+    private Task AddAgreementTypes(CancellationToken cancellationToken)
     {
         var agreementTypes = new List<AgreementType>
         {
@@ -76,10 +74,10 @@ public class ApplicationContextSeed(
         };
 
         foreach (var agreementType in agreementTypes) Add(agreementType);
-        context.SaveChanges();
+        return context.SaveChangesAsync(cancellationToken);
     }
 
-    private void AddAgreementStatuses()
+    private Task AddAgreementStatuses(CancellationToken cancellationToken)
     {
         var agreementsStatuses = new List<AgreementStatus>
         {
@@ -91,28 +89,32 @@ public class ApplicationContextSeed(
 
         foreach (var agreementStatus in agreementsStatuses) Add(agreementStatus);
 
-        context.SaveChanges();
+        return context.SaveChangesAsync(cancellationToken);
     }
 
-    private void Add(InteractionType interactionType)
+    private Task Add(InteractionType interactionType, CancellationToken cancellationToken)
     {
         var storedInteractionType = context.InteractionTypes.FirstOrDefault(type => type.Id == interactionType.Id);
-        if (storedInteractionType is null) context.InteractionTypes.Add(interactionType);
+        if (storedInteractionType is not null)
+            return Task.CompletedTask;
+        return context.InteractionTypes.AddAsync(interactionType, cancellationToken).AsTask();
     }
 
-    private void Add(AgreementType agreementType)
+    private Task Add(AgreementType agreementType, CancellationToken cancellationToken)
     {
         var storedAgreementType = context.AgreementType.FirstOrDefault(type => type.Id == agreementType.Id);
-        if (storedAgreementType is null) context.AgreementType.Add(agreementType);
+        if (storedAgreementType is not null)
+            return Task.CompletedTask;
+        return context.AgreementType.AddAsync(agreementType, cancellationToken).AsTask();
     }
 
-    private void Add(AgreementStatus agreementStatus)
+    private async Task Add(AgreementStatus agreementStatus, CancellationToken cancellationToken)
     {
         var storedAgreementStatus = context.AgreementStatus.FirstOrDefault(status => status.Id == agreementStatus.Id);
-        if (storedAgreementStatus is null) context.AgreementStatus.Add(agreementStatus);
+        if (storedAgreementStatus is null) await context.AgreementStatus.AddAsync(agreementStatus, cancellationToken);
     }
 
-    private void AddPartnerTypes()
+    private async Task AddPartnerTypes(CancellationToken cancellationToken)
     {
         var dictionary = new Dictionary<int, string>
         {
@@ -122,22 +124,22 @@ public class ApplicationContextSeed(
             { 4, "ЦНИИ" }
         };
 
-        foreach (var pair in dictionary) AddPartnerType(pair.Key, pair.Value);
-        context.SaveChanges();
+        foreach (var pair in dictionary) await AddPartnerType(pair.Key, pair.Value, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
-    private void AddPartnerType(int id, string name)
+    private Task AddPartnerType(int id, string name, CancellationToken cancellationToken)
     {
         var storedPartnerType = context.PartnerTypes.FirstOrDefault(t => t.Id == id);
-        if (storedPartnerType is null)
-            context.PartnerTypes.Add(new PartnerType
-            {
-                Id = id,
-                Name = name
-            });
+        if (storedPartnerType is not null) return Task.CompletedTask;
+        return context.PartnerTypes.AddAsync(new PartnerType
+        {
+            Id = id,
+            Name = name
+        }, cancellationToken).AsTask();
     }
 
-    private void AddDirections()
+    private async Task AddDirections(CancellationToken cancellationToken)
     {
         var dictionary = new Dictionary<int, string>
         {
@@ -147,22 +149,23 @@ public class ApplicationContextSeed(
             { 4, "ЭТПТ" }
         };
 
-        foreach (var pair in dictionary) AddDirection(pair.Key, pair.Value);
-        context.SaveChanges();
+        foreach (var pair in dictionary) await AddDirection(pair.Key, pair.Value, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
-    private void AddDirection(int id, string name)
+    private Task AddDirection(int id, string name, CancellationToken cancellationToken)
     {
         var storedDirection = context.Directions.FirstOrDefault(d => d.Id == id);
-        if (storedDirection is null)
-            context.Directions.Add(new Direction
-            {
-                Id = id,
-                Name = name
-            });
+        if (storedDirection is not null)
+            return Task.CompletedTask;
+        return context.Directions.AddAsync(new Direction
+        {
+            Id = id,
+            Name = name
+        }, cancellationToken).AsTask();
     }
 
-    private void AddFaculties()
+    private async Task AddFaculties(CancellationToken cancellationToken)
     {
         var dictionary = new Dictionary<int, string>
         {
@@ -179,33 +182,11 @@ public class ApplicationContextSeed(
         foreach (var faculty in dictionary)
         {
             var storedFaculty = context.Faculties.FirstOrDefault(f => f.Id == faculty.Key);
-            if (storedFaculty is null) context.Faculties.Add(new Faculty { Id = faculty.Key, Name = faculty.Value });
+            if (storedFaculty is null)
+                await context.Faculties.AddAsync(new Faculty { Id = faculty.Key, Name = faculty.Value },
+                    cancellationToken);
         }
 
-        context.SaveChanges();
+        await context.SaveChangesAsync(cancellationToken);
     }
-
-    // private void AddUsers()
-    // {
-    //     var hasher = new PasswordHasher<User>();
-    //     var users = new List<User>
-    //     {
-    //     new ()
-    //     {
-    //         Id = "login",
-    //         PasswordHash = hasher.HashPassword(null, "password"),
-    //         Role = Role.Admin,
-    //     }
-    //     };
-    //     foreach (var user in users)
-    //     {
-    //         var storedUser = context.Users.Find(user.Id);
-    //         if (storedUser is null)
-    //         {
-    //             context.Users.Add(user);
-    //         }
-    //     }
-    //
-    //     context.SaveChanges();
-    // }
 }
