@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Text;
 using DataBase.Data;
 using DataBase.Models.Identity;
@@ -6,15 +7,17 @@ using Diploma.Repositories;
 using Diploma.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var validIssuer = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
-var validAudience = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
-var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
+var securitySettingsSection = builder.Configuration.GetSection("JwtTokenSettings");
+var validIssuer = securitySettingsSection["ValidIssuer"];
+var validAudience = securitySettingsSection["ValidAudience"];
+var symmetricSecurityKey = securitySettingsSection["SymmetricSecurityKey"];
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 
@@ -53,18 +56,9 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricSecurityKey!))
         };
     });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("WatchOnly", policy => policy.RequireRole(Role.Cip.ToString()));
-    options.AddPolicy("Edit", policy => policy.RequireRole(Role.Cip.ToString(), Role.Ctt.ToString()));
-    options.AddPolicy("Admin",
-        policy => policy.RequireRole(Role.Cip.ToString(), Role.Ctt.ToString(), Role.Admin.ToString()));
-});
+builder.Services.AddAuthorization();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql(connectionString).LogTo(Console.WriteLine));
+builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDb");
 
 builder.Services.AddTransient<IPartnerTypesRepository, PartnerTypeRepository>();
 builder.Services.AddTransient<IPartnersRepository, PartnersRepository>();
@@ -86,23 +80,6 @@ builder.Services.AddTransient<IdentitySeed>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
 {
-    // var loginSecurityScheme = new OpenApiSecurityScheme
-    // {
-    //     Description = "JWT Authorization header using the Bearer scheme.",
-    //     Name = "Authorization",
-    //     Scheme = "bearer",
-    //     Type = SecuritySchemeType.OAuth2,
-    //     BearerFormat = "JWT",
-    //     In = ParameterLocation.Header,
-    //     Flows = new()
-    //     {
-    //         Password = new()
-    //         {
-    //             TokenUrl = Uri.TryCreate("/login", UriKind.Relative, out var u) ? u : default,
-    //             Scopes = { { "Admin", "Administrator" }, { "ЦТТ", "Ctt" }, {"ЦИП","Cip"}, },
-    //         },
-    //     },
-    // };
     var loginSecurityScheme = new OpenApiSecurityScheme
     {
         Description = "JWT Token",
@@ -113,7 +90,6 @@ builder.Services.AddSwaggerGen(o =>
         Scheme = JwtBearerDefaults.AuthenticationScheme
     };
     o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, loginSecurityScheme);
-    // o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, tokenSecurityScheme);
     loginSecurityScheme.Reference = new OpenApiReference
         { Type = ReferenceType.SecurityScheme, Id = JwtBearerDefaults.AuthenticationScheme };
     o.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -130,15 +106,12 @@ builder.Services.AddSwaggerGen(o =>
             new List<string>()
         }
     });
-    // o.AddSecurityRequirement(new()
-    // {
-    //     {tokenSecurityScheme, new List<string>()}
-    // });
 });
 
 
 builder.Services.AddCors();
 
+builder.AddServiceDefaults();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

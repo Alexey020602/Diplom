@@ -11,12 +11,13 @@
         <ProjectReference Include="..\Client\Client.csproj"/>
         <ProjectReference Include="..\DataBaseForApp\DataBaseForApp.csproj"/>
         <ProjectReference Include="..\Model\Model.csproj"/>
+        <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.8" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">

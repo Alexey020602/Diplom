@@ -6,7 +6,6 @@ using Client.Services.Api;
 using Client.Services.Api.BaseApi;
 using Client.Services.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Model;
 using Model.Agreements;
 using Model.Divisions;
