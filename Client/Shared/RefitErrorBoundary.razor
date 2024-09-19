@@ -28,8 +28,8 @@
         NotificationService.Notify(new NotificationMessage
         {
             Severity = NotificationSeverity.Error,
-            SummaryContent = (ns => @<RadzenText>Произошлаошибка</RadzenText>),
-            DetailContent = ns => @<RadzenText>@exception.Message</RadzenText>
+            SummaryContent = _ => @<RadzenText>Произошлаошибка</RadzenText>,
+            DetailContent = _ => @<RadzenText>@exception.Message</RadzenText>
         });
     }
 

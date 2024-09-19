@@ -7,14 +7,15 @@
 
 @rendermode RenderMode.InteractiveWebAssembly
 
-<RadzenHeader>
-    <AuthorizeView>
-        <RadzenMenu Style="padding-left:10px;">
-            <RadzenStack Orientation=@Orientation.Horizontal AlignItems=@AlignItems.Center>
-                @* <NavLink href="partners">Партнеры</NavLink> *@
-                @* <NavLink href="divisions">Подразделения</NavLink> *@
-                @* <NavLink href="agreements">Соглашения</NavLink> *@
-                @* <NavLink href="interactions">Взаимодействия</NavLink> *@
+<RadzenHeader >
+    @* <AuthorizeView style="width:100%;"> *@
+        <RadzenMenu>
+            <RadzenStack 
+                Style="width:100%"
+                Orientation=@Orientation.Horizontal 
+                AlignItems=@AlignItems.Center 
+                JustifyContent="JustifyContent.SpaceEvenly"
+                >
                 <RadzenMenuItem Path="partners" Text="Партнеры"/>
                 <RadzenMenuItem Path="divisions" Text="Подразделения"/>
                 <RadzenMenuItem Path="agreements" Text="Соглашения"/>
@@ -24,10 +25,9 @@
                 {
                     <RadzenMenuItem Path="swagger/index.html" Text="Обзор API"/>
                 }
-                @* <NavLink href="swagger/index.html">Обзор API</NavLink> *@
             </RadzenStack>
         </RadzenMenu>
-    </AuthorizeView>
+    @* </AuthorizeView> *@
 </RadzenHeader>
 <RadzenBody>
     <div style="width:fit-content;">
