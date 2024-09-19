@@ -21,8 +21,7 @@ public class Worker(
             var seed = scope.ServiceProvider.GetRequiredService<ApplicationContextSeed>();
             await dbContext.EnsureDatabaseAsync(cancellationToken);
             await dbContext.RunMigrationAsync(cancellationToken);
-            seed.Seed();
-            // await SeedDataAsync(dbContext, cancellationToken);
+            await seed.Seed(cancellationToken);
         }
         catch (Exception ex)
         {

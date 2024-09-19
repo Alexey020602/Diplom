@@ -8,14 +8,14 @@ namespace MigrationService;
 public class ApplicationContextSeed(
     ApplicationContext context,
     ILogger<ApplicationContextSeed> logger,
-    IWebHostEnvironment environment
+    IHostEnvironment environment
 )
 {
     public async Task Seed(CancellationToken cancellationToken)
     {
         try
         {
-            SeedThrows();
+            await SeedThrows(cancellationToken);
         }
         catch (Exception ex)
         {
@@ -39,16 +39,16 @@ public class ApplicationContextSeed(
 
     private async Task SeedData(CancellationToken cancellationToken)
     {
-        AddFaculties();
-        AddPartnerTypes();
-        AddDirections();
-        AddInteractionTypes();
-        AddAgreementStatuses();
-        AddAgreementTypes();
+        await AddFaculties(cancellationToken);
+        await AddPartnerTypes(cancellationToken);
+        await AddDirections(cancellationToken);
+        await AddInteractionTypes(cancellationToken);
+        await AddAgreementStatuses(cancellationToken);
+        await AddAgreementTypes(cancellationToken);
         // AddUsers();
     }
 
-    private Task AddInteractionTypes(CancellationToken cancellationToken)
+    private async Task AddInteractionTypes(CancellationToken cancellationToken)
     {
         var interactionTypes = new List<InteractionType>
         {
@@ -58,12 +58,12 @@ public class ApplicationContextSeed(
             new() { Id = 4, Name = "Четвертый" }
         };
 
-        foreach (var interactionType in interactionTypes) Add(interactionType);
+        foreach (var interactionType in interactionTypes) await Add(interactionType, cancellationToken);
 
-        return context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
-    private Task AddAgreementTypes(CancellationToken cancellationToken)
+    private async Task AddAgreementTypes(CancellationToken cancellationToken)
     {
         var agreementTypes = new List<AgreementType>
         {
@@ -73,11 +73,11 @@ public class ApplicationContextSeed(
             new() { Id = 4, Name = "Четвертый" }
         };
 
-        foreach (var agreementType in agreementTypes) Add(agreementType);
-        return context.SaveChangesAsync(cancellationToken);
+        foreach (var agreementType in agreementTypes) await Add(agreementType, cancellationToken);
+        await  context.SaveChangesAsync(cancellationToken);
     }
 
-    private Task AddAgreementStatuses(CancellationToken cancellationToken)
+    private async Task AddAgreementStatuses(CancellationToken cancellationToken)
     {
         var agreementsStatuses = new List<AgreementStatus>
         {
@@ -87,9 +87,9 @@ public class ApplicationContextSeed(
             new() { Id = 4, Name = "Завершено" }
         };
 
-        foreach (var agreementStatus in agreementsStatuses) Add(agreementStatus);
+        foreach (var agreementStatus in agreementsStatuses) await Add(agreementStatus, cancellationToken);
 
-        return context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     private Task Add(InteractionType interactionType, CancellationToken cancellationToken)
@@ -108,10 +108,11 @@ public class ApplicationContextSeed(
         return context.AgreementType.AddAsync(agreementType, cancellationToken).AsTask();
     }
 
-    private async Task Add(AgreementStatus agreementStatus, CancellationToken cancellationToken)
+    private Task Add(AgreementStatus agreementStatus, CancellationToken cancellationToken)
     {
         var storedAgreementStatus = context.AgreementStatus.FirstOrDefault(status => status.Id == agreementStatus.Id);
-        if (storedAgreementStatus is null) await context.AgreementStatus.AddAsync(agreementStatus, cancellationToken);
+        if (storedAgreementStatus is not null) return Task.CompletedTask;
+        return context.AgreementStatus.AddAsync(agreementStatus, cancellationToken).AsTask();
     }
 
     private async Task AddPartnerTypes(CancellationToken cancellationToken)
