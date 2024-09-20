@@ -1,14 +1,26 @@
+@using Client.Services.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
-
+@inject  NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationService
 <RadzenMenuItem Style="color:white;background-color:unset;" >
     <Template>
         <RadzenIcon Icon="account_circle"/>
     </Template>
     <ChildContent>
         @* <RadzenMenuItem Text="Профиль"/> *@
-        <RadzenMenuItem Text="Выход" Path="/logout"/>
+        <RadzenMenuItem Text="Выход" Click=@Logout/>
         <AuthorizeView Roles="Admin">
             <RadzenMenuItem Text="Регистрация" Path="/registration"/>
         </AuthorizeView>
     </ChildContent>
 </RadzenMenuItem>
+
+@code {
+
+    [Parameter] public string ReturnUrl { get; set; } = string.Empty;
+
+    private async Task Logout()
+    {
+        await AuthenticationService.Logout();
+    }
+}

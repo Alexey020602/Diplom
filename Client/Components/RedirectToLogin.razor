@@ -2,11 +2,9 @@
 @inject  NavigationManager Navigation
 
 @code {
-    [Parameter] public string Path { get; set; } = string.Empty;
-
+    [Parameter] public string ReturnUrl { get; set; } = string.Empty;
     protected override void OnInitialized()
     {
-        Navigation.NavigateToLogin(Path);
+        Navigation.NavigateToLogin($"/login?returnUrl={ReturnUrl}");
     }
-
 }

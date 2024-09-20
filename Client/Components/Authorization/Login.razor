@@ -14,14 +14,16 @@
 @*     <button type="submit">Войти</button> *@
 @* </EditForm> *@
 
-<RadzenCard>
+<RadzenCard Style="min-width: 50%;width:fit-content;">
     @* <RadzenTextBox @bind-Value=@AuthRequest.Login Name="Login"/> *@
     @* <RadzenRequiredValidator Component="Login"/> *@
     @* <RadzenPassword @bind-Value=@AuthRequest.Password Name="Password"/> *@
     @* <RadzenRequiredValidator Component="Password"/> *@
-    <RadzenLogin 
+    <RadzenLogin
         Login=@LoginAction
-        LoginText="Логин"
+        LoginText="Войти"
+        UserText="Пользователь"
+        PasswordText="Пароль"
         ShowLoginButton=@true 
         AllowRegister=false 
         AllowRememberMe=false 
@@ -31,7 +33,7 @@
 
 @code {
     [Parameter] public string Action { get; set; } = string.Empty;
-    [Parameter] public string RedirectTo { get; set; } = "/";
+    [SupplyParameterFromQuery] private string ReturnUrl { get; set; } = "/";
     private AuthRequest AuthRequest { get; } = new();
     private bool ShowAuthError { get; set; }
     private string Error { get; set; } = default!;
@@ -49,6 +51,6 @@
     private async Task ExecuteLoginAction(AuthRequest authRequest)
     {
         await AuthenticationService.Login(authRequest);
-        NavigationManager.NavigateTo(RedirectTo);
+        NavigationManager.NavigateTo(ReturnUrl);
     }
 }

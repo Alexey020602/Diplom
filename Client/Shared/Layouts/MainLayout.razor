@@ -7,37 +7,38 @@
 
 @rendermode RenderMode.InteractiveWebAssembly
 
-<RadzenHeader >
-    @* <AuthorizeView style="width:100%;"> *@
+<RadzenLayout>
+    <RadzenHeader>
         <RadzenMenu>
-            <RadzenStack 
-                Style="width:100%"
-                Orientation=@Orientation.Horizontal 
-                AlignItems=@AlignItems.Center 
-                JustifyContent="JustifyContent.SpaceEvenly"
-                >
-                <RadzenMenuItem Path="partners" Text="Партнеры"/>
-                <RadzenMenuItem Path="divisions" Text="Подразделения"/>
-                <RadzenMenuItem Path="agreements" Text="Соглашения"/>
-                <RadzenMenuItem Path="interactions" Text="Взаимодействия"/>
-                <Profile/>
-                @if (Environment.IsDevelopment())
-                {
-                    <RadzenMenuItem Path="swagger/index.html" Text="Обзор API"/>
-                }
-            </RadzenStack>
+            <AuthorizeView>
+                <RadzenStack
+                    Style="width:100%"
+                    Orientation=@Orientation.Horizontal
+                    AlignItems=@AlignItems.Center
+                    JustifyContent="JustifyContent.SpaceEvenly">
+                    <RadzenMenuItem Path="partners" Text="Партнеры"/>
+                    <RadzenMenuItem Path="divisions" Text="Подразделения"/>
+                    <RadzenMenuItem Path="agreements" Text="Соглашения"/>
+                    <RadzenMenuItem Path="interactions" Text="Взаимодействия"/>
+                    <Profile/>
+                    @if (Environment.IsDevelopment())
+                    {
+                        <RadzenMenuItem Path="swagger/index.html" Text="Обзор API"/>
+                    }
+                </RadzenStack>
+            </AuthorizeView>
         </RadzenMenu>
-    @* </AuthorizeView> *@
-</RadzenHeader>
-<RadzenBody>
-    <div style="width:fit-content;">
-        <RefitErrorBoundary>
-            <ChildContent>@Body</ChildContent>
-            <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
-        </RefitErrorBoundary>
-        <RadzenComponents @rendermode="@(new InteractiveWebAssemblyRenderMode())"/>
-    </div>
-</RadzenBody>
-<RadzenFooter>
-    @* Footer страницы *@
-</RadzenFooter>
+    </RadzenHeader>
+    <RadzenBody>
+        <div style="width:100%;" class="rz-p-4">
+            <RefitErrorBoundary>
+                <ChildContent>@Body</ChildContent>
+                <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
+            </RefitErrorBoundary>
+            <RadzenComponents @rendermode="@(new InteractiveWebAssemblyRenderMode())"/>
+        </div>
+    </RadzenBody>
+    <RadzenFooter>
+        @* Footer страницы *@
+    </RadzenFooter>
+</RadzenLayout>
