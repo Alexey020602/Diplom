@@ -29,16 +29,15 @@
             </AuthorizeView>
         </RadzenMenu>
     </RadzenHeader>
-    <RadzenBody Style="width:100%;justify-content:center;">
+    <RadzenBody Style="width:100%;justify-content:space-around;">
         @* <div style="width:100%;justify-content: center" class="rz-p-4"> *@
-            <RefitErrorBoundary>
-                <ChildContent>@Body</ChildContent>
-                <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
-            </RefitErrorBoundary>
-            <RadzenComponents @rendermode="@(new InteractiveWebAssemblyRenderMode())"/>
+        <RadzenStack Orientation=@Orientation.Horizontal JustifyContent=@JustifyContent.Center>
+            @Body
+        </RadzenStack>
         @* </div> *@
     </RadzenBody>
     <RadzenFooter>
         @* Footer страницы *@
     </RadzenFooter>
+    <RadzenComponents @rendermode="@(new InteractiveWebAssemblyRenderMode())"/>
 </RadzenLayout>

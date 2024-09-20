@@ -4,22 +4,21 @@
 @typeparam TItem where TItem : notnull
 
 @Body
+
 @code {
 
-    private RenderFragment Body => @<div class="list">
-        <RadzenCard>
-            @FiltersContent
-            @ButtonsContent
-            @List
-        </RadzenCard>
-    </div>;
+    private RenderFragment Body => @<RadzenCard Style="min-width:30%; width: fit-content">
+        @FiltersContent
+        @ButtonsContent
+        @List
+    </RadzenCard>;
 
     private RenderFragment FiltersContent => @<RadzenStack
                                                   Orientation=@Orientation.Horizontal
                                                   AlignItems=@AlignItems.Center>
-                                                 @Filters
-                                                 @Search
-                                             </RadzenStack>;
+        @Filters
+        @Search
+    </RadzenStack>;
 
     private RenderFragment ButtonsContent => @<RadzenStack
                                                   Style="padding-top:10px"

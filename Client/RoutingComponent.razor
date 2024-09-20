@@ -1,5 +1,6 @@
 ﻿@using Client.Components
 @using Client.Features
+@using Client.Shared
 @using Client.Shared.Layouts
 @using Microsoft.AspNetCore.Components.Authorization
 @rendermode RenderMode.InteractiveAuto
@@ -8,26 +9,30 @@
     <RadzenTheme Theme="material"></RadzenTheme>
 </head>
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly">
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <Authorizing>
-                    <p>Авторизация...</p>
-                </Authorizing>
-                <NotAuthorized>
-                    @{
-                        //var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-                        <RedirectToLogin ReturnUrl=@NavigationManager.GetCurrentPath()/>
-                    }
-                </NotAuthorized>
-            </AuthorizeRouteView>
-        </Found>
-        <NotFound>
-            <PageTitle>Не найдено</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">По данному адресу ничего не найдено</p>
-            </LayoutView>
-        </NotFound>
-    </Router>
+    <RefitErrorBoundary>
+        <ChildContent>
+            <Router AppAssembly="@typeof(Program).Assembly">
+                <Found Context="routeData">
+                    <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                        <Authorizing>
+                            <p>Авторизация...</p>
+                        </Authorizing>
+                        <NotAuthorized>
+                            @{
+                                //var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+                                <RedirectToLogin ReturnUrl=@NavigationManager.GetCurrentPath()/>
+                            }
+                        </NotAuthorized>
+                    </AuthorizeRouteView>
+                </Found>
+                <NotFound>
+                    <PageTitle>Не найдено</PageTitle>
+                    <LayoutView Layout="@typeof(MainLayout)">
+                        <p role="alert">По данному адресу ничего не найдено</p>
+                    </LayoutView>
+                </NotFound>
+            </Router>
+        </ChildContent>
+        <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
+    </RefitErrorBoundary>
 </CascadingAuthenticationState>
-

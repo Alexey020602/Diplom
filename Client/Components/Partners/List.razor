@@ -15,6 +15,12 @@
 
 @code {
     protected override RenderFragment Filters =>
-        @<UniversalCustomSelect
-             TItem=@PartnerType @bind-Value:get=@PartnerType @bind-Value:set=@SelectPartnerType/>;
-}
+        @* @<UniversalCustomSelect TItem=@PartnerType @bind-Value:get=@PartnerType @bind-Value:set=@SelectPartnerType/>; *@
+        @<RadzenDataFilter Data=@items Auto=false ApplyFilterText="Применить" ClearFilterText="Очистить">
+            <Properties>
+                <RadzenDataFilterProperty Property=@(nameof(PartnerShort.Name)) Title="Имя" />
+                <RadzenDataFilterProperty Property="@nameof(Partner.Type)"/>
+            </Properties>
+        </RadzenDataFilter>;
+    
+    }
