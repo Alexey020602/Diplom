@@ -10,7 +10,7 @@
                 @foreach (var item in Items)
                 {
                     <li>
-                        @item
+                        @Row(item)
                     </li>
                 }
             </ul>
@@ -21,4 +21,5 @@
 @code {
     [Parameter] public string? Title { get; set; } = string.Empty;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = [];
+    [Parameter] public RenderFragment<TItem> Row { get; set; } = item => @<div>@item</div>;
 }

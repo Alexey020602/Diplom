@@ -4,16 +4,15 @@
 @typeparam TItem where TItem : notnull
 
 @Body
-
 @code {
 
     private RenderFragment Body => @<div class="list">
-                                       <RadzenCard>
-                                           @FiltersContent
-                                           @ButtonsContent
-                                           @List
-                                       </RadzenCard>
-                                   </div>;
+        <RadzenCard>
+            @FiltersContent
+            @ButtonsContent
+            @List
+        </RadzenCard>
+    </div>;
 
     private RenderFragment FiltersContent => @<RadzenStack
                                                   Orientation=@Orientation.Horizontal
@@ -36,6 +35,7 @@
                                            </AuthorizeView>;
 
     protected virtual string CreateText => "Добавить";
+
     private RenderFragment List => @<RadzenDataList
                                         WrapItems=false
                                         AllowVirtualization=false
@@ -55,7 +55,7 @@
                                    </RadzenDataList>;
 
     private RenderFragment Row(TItem item) => @<RadzenLink
-                                                   style="text-decoration:none;color:unset;padding:0"
+                                                   Style="text-decoration:none;color:unset;width:100%;height:100%;"
                                                    Path=@RowHref(item)
                                                    Text=@item.ToString()/>;
 

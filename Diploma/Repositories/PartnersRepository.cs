@@ -46,6 +46,9 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
     public async Task<Partner> GetPartnerByIdAsync(int id)
     {
         return (await GetPartnersWithTypesAndDirections()
+            .Include(p => p.Interactions)
+            .Include(P => P.PartnersInAgreement)
+            .ThenInclude(p => p.Agreement)
             // .Select(p => p.ConvertToModel())
             .FirstAsync(partner => partner.Id == id)).ConvertToModel();
     }

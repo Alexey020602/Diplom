@@ -31,26 +31,4 @@ public class Worker(
 
         hostApplicationLifetime.StopApplication();
     }
-
-    
-
-    private static async Task SeedDataAsync(ApplicationContext dbContext, CancellationToken cancellationToken)
-    {
-        // SupportTicket firstTicket = new()
-        // {
-        //     Title = "Test Ticket",
-        //     Description = "Default ticket, please ignore!",
-        //     Completed = true
-        // };
-        //
-        // var strategy = dbContext.Database.CreateExecutionStrategy();
-        // await strategy.ExecuteAsync(async () =>
-        // {
-        //     // Seed the database
-        //     await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-        //     await dbContext.Tickets.AddAsync(firstTicket, cancellationToken);
-        //     await dbContext.SaveChangesAsync(cancellationToken);
-        //     await transaction.CommitAsync(cancellationToken);
-        // });
-    }
 }
