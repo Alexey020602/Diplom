@@ -111,7 +111,8 @@ public class ApplicationContextSeed(
     private Task Add(AgreementStatus agreementStatus, CancellationToken cancellationToken)
     {
         var storedAgreementStatus = context.AgreementStatus.FirstOrDefault(status => status.Id == agreementStatus.Id);
-        if (storedAgreementStatus is not null) return Task.CompletedTask;
+        if (storedAgreementStatus is not null) 
+            return Task.CompletedTask;
         return context.AgreementStatus.AddAsync(agreementStatus, cancellationToken).AsTask();
     }
 

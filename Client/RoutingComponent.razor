@@ -1,7 +1,9 @@
 ﻿@using Client.Components
+@using Client.Features
 @using Client.Shared.Layouts
 @using Microsoft.AspNetCore.Components.Authorization
 @rendermode RenderMode.InteractiveAuto
+@inject NavigationManager NavigationManager
 <head>
     <RadzenTheme Theme="material"></RadzenTheme>
 </head>
@@ -13,7 +15,10 @@
                     <p>Авторизация...</p>
                 </Authorizing>
                 <NotAuthorized>
-                    <RedirectToLogin Path="/login"/>
+                    @{
+                        //var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+                        <RedirectToLogin ReturnUrl=@NavigationManager.GetCurrentPath()/>
+                    }
                 </NotAuthorized>
             </AuthorizeRouteView>
         </Found>
@@ -25,3 +30,4 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+

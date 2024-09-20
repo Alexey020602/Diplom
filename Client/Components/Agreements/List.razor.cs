@@ -11,7 +11,7 @@ public partial class List
     private AgreementType? agreementType;
     [Inject] private IAgreementService AgreementService { get; set; } = null!;
     protected override string CreateHref => "/agreements/create";
-
+    protected override string CreateText => "Добавить соглашение";
     protected override Task<List<AgreementShort>> Load()
     {
         return AgreementService.ReadAll(agreementType?.Id, agreementStatus?.Id);

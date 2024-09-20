@@ -32,9 +32,10 @@
                                              </RadzenStack>;
 
     private RenderFragment LinkToCreate => @<AuthorizeView Roles="Ctt">
-                                               <NavigationButton Path=@CreateHref Text="Добавить"/>
+                                               <NavigationButton Path=@CreateHref Text=@CreateText/>
                                            </AuthorizeView>;
 
+    protected virtual string CreateText => "Добавить";
     private RenderFragment List => @<RadzenDataList
                                         WrapItems=false
                                         AllowVirtualization=false

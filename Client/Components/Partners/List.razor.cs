@@ -1,5 +1,6 @@
 ﻿using Client.Services.Api;
 using Client.Shared.List;
+using Client.Shared.Select;
 using Microsoft.AspNetCore.Components;
 using Model.Partners;
 
@@ -15,6 +16,8 @@ public partial class List : SearchableStyledList<PartnerShort>
     {
         return $"partners/{partner.Id}";
     }
+
+    protected override string CreateText => "Добавить нового партнера";
 
     protected override Task<List<PartnerShort>> Load()
     {

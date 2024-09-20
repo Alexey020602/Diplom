@@ -10,6 +10,7 @@ public partial class List : SearchableStyledList<DivisionShort>
     private Faculty? facultyFilterValue;
     [Inject] private IDivisionsService DivisionsService { get; set; } = default!;
     protected override string CreateHref => "divisions/create";
+    protected override string CreateText => "Добавить подразделение";
 
     protected override Task<List<DivisionShort>> Load()
     {

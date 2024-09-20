@@ -1,7 +1,8 @@
 ﻿@using Client.Shared.Select
+@using Microsoft.AspNetCore.Authorization
 @using AgreementType = Model.Agreements.AgreementType
 @using AgreementStatus = Model.Agreements.Status
-
+@attribute [Authorize(Roles = "Cip")]
 @page "/agreements"
 @inherits Client.Shared.List.SearchableStyledList<Model.Agreements.AgreementShort>
 

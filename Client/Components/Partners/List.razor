@@ -14,9 +14,7 @@
 }
 
 @code {
-
     protected override RenderFragment Filters =>
         @<UniversalCustomSelect
              TItem=@PartnerType @bind-Value:get=@PartnerType @bind-Value:set=@SelectPartnerType/>;
-
 }
