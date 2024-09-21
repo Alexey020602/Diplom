@@ -1,5 +1,4 @@
 ﻿@attribute [Authorize(Roles = "Cip")]
-@using Client.Shared.Select
 @using Microsoft.AspNetCore.Authorization
 @using Model.Partners
 @inherits Client.Shared.List.SearchableStyledList<Model.Partners.PartnerShort>
@@ -22,5 +21,4 @@
                 <RadzenDataFilterProperty Property="@nameof(Partner.Type)"/>
             </Properties>
         </RadzenDataFilter>;
-    
-    }
+}

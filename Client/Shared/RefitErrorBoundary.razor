@@ -12,8 +12,10 @@
 
     protected override async Task OnErrorAsync(Exception exception)
     {
+        Console.WriteLine(exception);
         if (exception is not ApiException apiException) throw exception;
         
+        Console.WriteLine(apiException);
         if (apiException. StatusCode != HttpStatusCode.Unauthorized )
         {
             Notify(exception);
