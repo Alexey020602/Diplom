@@ -26,7 +26,7 @@
                                                   AlignItems=@AlignItems.Center
                                                   JustifyContent=@JustifyContent.SpaceBetween>
                                                  @LinkToCreate
-                                                 @EmptyListButton
+                                                 @* @EmptyListButton *@
                                              </RadzenStack>;
 
     private RenderFragment LinkToCreate => @<AuthorizeView Roles="Ctt">
@@ -58,7 +58,7 @@
                                                    Path=@RowHref(item)
                                                    Text=@item.ToString()/>;
 
-    private RenderFragment EmptyListButton => @<RadzenButton Icon="cached" Click=@LoadItems ButtonStyle=@ButtonStyle.Primary/>;
+    @* private RenderFragment EmptyListButton => @<RadzenButton Icon="cached" Click=@(() => LoadItems()) ButtonStyle=@ButtonStyle.Primary/>; *@
 
     private RenderFragment Search => @<SearchText @bind-Value=@namesFilter/>;
 

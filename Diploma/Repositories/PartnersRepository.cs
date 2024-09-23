@@ -1,10 +1,10 @@
 ﻿using DataBase.Data;
 using DataBase.Extensions;
 using DataBase.Models;
-using Diploma.Mappers;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Extensions;
+using Model.Mappers;
 using Model.Partners;
 using DBPartner = DataBase.Models.Partner;
 using Partner = Model.Partners.Partner;
@@ -23,7 +23,6 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .Select(p => p.Agreement.ConvertToPartnerModel())
             .ToList();
     }
-
     public async Task<List<InteractionInPartner>> GetInteractionsForPartnerWithId(int id)
     {
         return (
@@ -124,12 +123,10 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .FilterByType(partnerTypeId)
             .FilterByDirection(directionId);
     }
-
     private IQueryable<DBPartner> GetPartners()
     {
         return context.Partners.AsNoTracking();
     }
-
     private IQueryable<DBPartner> GetPartnersWithTypesAndDirections()
     {
         return GetPartners()

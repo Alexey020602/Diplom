@@ -1,9 +1,10 @@
 using DataBase.Models;
+using Model.Extensions;
 using Model.Partners;
 using Interaction = DataBase.Models.Interaction;
 using Partner = DataBase.Models.Partner;
 
-namespace Model.Extensions;
+namespace Model.Mappers;
 
 public static class PartnerExtensions
 {
@@ -19,12 +20,12 @@ public static class PartnerExtensions
             ContactData = partner.ContactData ?? string.Empty,
             Type = partner.PartnerType.ConvertToModel(),
             Agreements = partner.PartnersInAgreement.Select(ConvertToModel).ToList(),
-            Interactions = partner.Interactions.Select(ConvertToModel).ToList(),
+            Interactions = partner.Interactions.Select(ConvertToInteractionInPartner).ToList(),
             Directions = partner.Directions.Select(DirectionExtensions.ConvertToModel).ToList()
         };
     }
 
-    public static AgreementInPartner ConvertToModel(this PartnerInAgreement partnerInAgreement)
+    private static AgreementInPartner ConvertToModel(this PartnerInAgreement partnerInAgreement)
     {
         return new AgreementInPartner
         {
@@ -34,7 +35,7 @@ public static class PartnerExtensions
         };
     }
 
-    public static InteractionInPartner ConvertToModel(this Interaction interaction)
+    private static InteractionInPartner ConvertToInteractionInPartner(this Interaction interaction)
     {
         return new InteractionInPartner
         {
@@ -53,9 +54,14 @@ public static class PartnerExtensions
             Address = partner.Address,
             Site = partner.Site,
             ContactData = partner.ContactData,
-            PartnerType = (partner.Type ?? throw new ArgumentNullException("Type", "Тип партнера не задан"))
+            PartnerType = (partner.Type ?? throw new ArgumentNullException(nameof(Partners.Partner.Type), "Тип партнера не задан"))
                 .ConvertToDao(),
             Directions = partner.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
         };
     }
+
+    public static Partner GetPartnerFromPartnerShort(this PartnerShort partner) => new Partner
+    {
+        Id = partner.Id
+    };
 }

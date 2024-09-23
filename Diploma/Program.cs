@@ -1,16 +1,12 @@
-using System.Data.Common;
 using System.Text;
 using DataBase.Data;
-using DataBase.Models.Identity;
 using Diploma;
 using Diploma.Repositories;
 using Diploma.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +55,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDb");
-
+// builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IPartnerTypesRepository, PartnerTypeRepository>();
 builder.Services.AddTransient<IPartnersRepository, PartnersRepository>();
 builder.Services.AddTransient<IDirectionsRepository, DirectionsRepository>();
@@ -143,12 +139,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
-// app.MapGroup("/api")
-//     .MapControllers()
-// .RequireAuthorization()
-// ;
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-// app.MapGet("/", () => Results.Redirect("index.html"));
 app.Run();

@@ -2,6 +2,7 @@
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Extensions;
+using Model.Mappers;
 using Type = Model.Interactions.InteractionType;
 
 namespace Diploma.Repositories;

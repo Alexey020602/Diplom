@@ -7,7 +7,7 @@ using DivisionInAgreement = DataBase.Models.DivisionInAgreement;
 using ModelAgreement = Model.Agreements.Agreement;
 using PartnerInAgreement = DataBase.Models.PartnerInAgreement;
 
-namespace Diploma.Mappers;
+namespace Model.Mappers;
 
 public static class AgreementsConvertExtension
 {
@@ -65,7 +65,7 @@ public static class AgreementsConvertExtension
         };
     }
 
-    public static List<DivisionInAgreement> ConvertToDatabaseModel(
+    private static List<DivisionInAgreement> ConvertToDatabaseModel(
         this IEnumerable<Model.Agreements.DivisionInAgreement> newDivisions,
         int agreementId)
     {
@@ -74,8 +74,10 @@ public static class AgreementsConvertExtension
             .ToList();
     }
 
-    public static DivisionInAgreement ConvertToDatabaseModel(
-        this Model.Agreements.DivisionInAgreement newDivisionInAgreement, int agreementId)
+    private static DivisionInAgreement ConvertToDatabaseModel(
+        this Model.Agreements.DivisionInAgreement newDivisionInAgreement, 
+        int agreementId
+        )
     {
         return new DivisionInAgreement()
         {
@@ -85,16 +87,20 @@ public static class AgreementsConvertExtension
         };
     }
 
-    public static List<PartnerInAgreement> ConvertToDatabaseModel(
-        this IEnumerable<Model.Agreements.PartnerInAgreement> partners, int agreementId)
+    private static List<PartnerInAgreement> ConvertToDatabaseModel(
+        this IEnumerable<Model.Agreements.PartnerInAgreement> partners, 
+        int agreementId
+        )
     {
         return partners
             .Select(p => ConvertToDatabaseModel(p, agreementId))
             .ToList();
     }
 
-    public static PartnerInAgreement ConvertToDatabaseModel(
-        this Model.Agreements.PartnerInAgreement newPartnerInAgreement, int agreementId)
+    private static PartnerInAgreement ConvertToDatabaseModel(
+        this Model.Agreements.PartnerInAgreement newPartnerInAgreement, int 
+            agreementId
+        )
     {
         return new PartnerInAgreement
         {
@@ -137,7 +143,7 @@ public static class AgreementsConvertExtension
         };
     }
 
-    public static Model.Agreements.PartnerInAgreement ConvertToModel(this PartnerInAgreement partner)
+    private static Model.Agreements.PartnerInAgreement ConvertToModel(this PartnerInAgreement partner)
     {
         return new Model.Agreements.PartnerInAgreement
         {
@@ -147,7 +153,7 @@ public static class AgreementsConvertExtension
         };
     }
 
-    public static Model.Agreements.DivisionInAgreement ConvertToModel(this DivisionInAgreement divisionInAgreement)
+    private static Model.Agreements.DivisionInAgreement ConvertToModel(this DivisionInAgreement divisionInAgreement)
     {
         return new Model.Agreements.DivisionInAgreement
         {

@@ -1,6 +1,7 @@
 using Model.Divisions;
+using Model.Extensions;
 
-namespace Model.Extensions;
+namespace Model.Mappers;
 
 public static class DivisionExtensions
 {
@@ -48,4 +49,9 @@ public static class DivisionExtensions
     {
         return new DivisionShort(division.Id, division.ShortName);
     }
+    
+    public static DataBase.Models.Division GetDivisionFormDivisionShort(this DivisionShort division) => new ()
+        {
+            Id = division.Id
+        };
 }

@@ -7,6 +7,7 @@ using Model.Divisions;
 using Model.Extensions;
 using Model.Interactions;
 using Model.Partners;
+using Model.Mappers;
 using Division = DataBase.Models.Division;
 using Interaction = DataBase.Models.Interaction;
 using InteractionType = DataBase.Models.InteractionType;
@@ -19,8 +20,8 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
 {
     public async Task AddInteraction(ModelInteraction interaction)
     {
-        var newInteraction = ConvertToDatabaseModel(interaction);
-        AttachDirections(newInteraction.Directions);
+        var newInteraction = interaction.ConvertToDatabaseModel();
+        AttachEntities(newInteraction);
         await context.Interactions.AddAsync(newInteraction);
         await context.SaveChangesAsync();
     }
@@ -33,7 +34,7 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
 
     public async Task<ModelInteraction> GetInteractionById(int id)
     {
-        return ConvertToModel(await context.Interactions.AsNoTracking().FirstAsync(i => i.Id == id));
+        return (await context.Interactions.AsNoTracking().FirstAsync(i => i.Id == id)).ConvertToModel();
     }
 
     public Task<List<InteractionShort>> GetInteractions(int? interactionTypeId)
@@ -49,9 +50,13 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
 
     public async Task UpdateInteraction(int id, ModelInteraction interaction)
     {
-        var newInteraction = ConvertToDatabaseModel(interaction);
-        var existingInteraction = await context.Interactions.Include(i => i.Directions).FirstAsync(i => i.Id == id);
+        var newInteraction = interaction.ConvertToDatabaseModel();
+        AttachEntities(newInteraction);
+        var existingInteraction = await context.Interactions
+            .Include(i => i.Directions)
+            .FirstAsync(i => i.Id == id);
         context.Entry(existingInteraction).CurrentValues.SetValues(interaction);
+        
         existingInteraction.InteractionType = newInteraction.InteractionType;
         existingInteraction.Partner = newInteraction.Partner;
         existingInteraction.Division = newInteraction.Division;
@@ -59,48 +64,31 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         await context.SaveChangesAsync();
     }
 
-    private Interaction ConvertToDatabaseModel(ModelInteraction interaction)
+    private void AttachEntities(Interaction interaction)
     {
-        return new Interaction
-        {
-            Id = interaction.Id,
-            InteractionType = ConvertToDatabaseModel(interaction.Type!),
-            Theme = interaction.Theme,
-            ContactCode = interaction.ContactCode,
-            SigningDateTime = interaction.SigningDate.ToDateTime(default),
-            BeginigDateTime = interaction.Begin.ToDateTime(default),
-            EndingDateTime = interaction.End.ToDateTime(default),
-            Division = GetDivisionFormDivisionShort(interaction.Division!),
-            Partner = GetPartnerFromPartnerShort(interaction.Partner!),
-            Directions = interaction.Directions.Select(DirectionExtensions.ConvertToDao).ToList()
-        };
+        context.Partners.Attach(interaction.Partner);
+        context.Divisions.Attach(interaction.Division);
+        context.InteractionTypes.Attach(interaction.InteractionType);
+        context.Directions.AttachRange(interaction.Directions);
     }
 
-    private InteractionType ConvertToDatabaseModel(Model.Interactions.InteractionType interactionType)
-    {
-        var newType = new InteractionType
-        {
-            Id = interactionType.Id,
-            Name = interactionType.Name
-        };
-        context.Attach(newType);
-        return newType;
-    }
+
+
 
     private static ModelInteraction ConvertToModel(Interaction interaction)
     {
         return new ModelInteraction
         {
             Id = interaction.Id,
-            Partner = ConvertToModel(interaction.Partner),
-            Division = ConvertToModel(interaction.Division),
-            Type = ConvertToModel(interaction.InteractionType),
+            Partner = interaction.Partner.ConvertToPartnerShort(),//ConvertToPartnerShort(interaction.Partner),
+            Division = interaction.Division.ConvertToDivisionShort(),
+            Type = interaction.InteractionType.ConvertToModel(),
             Theme = interaction.Theme,
             ContactCode = interaction.ContactCode,
             SigningDate = DateOnly.FromDateTime(interaction.SigningDateTime),
             Begin = DateOnly.FromDateTime(interaction.BeginigDateTime),
             End = DateOnly.FromDateTime(interaction.EndingDateTime),
-            Directions = ConvertToModel(interaction.Directions)
+            Directions = interaction.Directions.Select(d => d.ConvertToModel()).ToList()
         };
     }
 
@@ -109,12 +97,12 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         return directions.Select(DirectionExtensions.ConvertToModel).ToList();
     }
 
-    private static PartnerShort ConvertToModel(Partner partner)
+    private static PartnerShort ConvertToPartnerShort(Partner partner)
     {
         return new PartnerShort(partner.Id, partner.ShortName);
     }
 
-    private static DivisionShort ConvertToModel(Division division)
+    private static DivisionShort ConvertToDivisionShort(Division division)
     {
         return new DivisionShort(division.Id, division.ShortName);
     }
@@ -133,23 +121,7 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         context.AttachRange(directions);
     }
 
-    private Partner GetPartnerFromPartnerShort(PartnerShort partner)
-    {
-        var exitingPartner = new Partner
-        {
-            Id = partner.Id
-        }; //await context.Partners.FirstAsync(p => p.Id == partner.Id);
-        context.Attach(exitingPartner);
-        return exitingPartner;
-    }
+    
 
-    private Division GetDivisionFormDivisionShort(DivisionShort division)
-    {
-        var existingDivision = new Division
-        {
-            Id = division.Id
-        };
-        context.Attach(existingDivision);
-        return existingDivision;
-    }
+    
 }

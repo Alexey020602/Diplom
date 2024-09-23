@@ -1,8 +1,8 @@
 ﻿using DataBase.Data;
-using Diploma.Mappers;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Agreements;
+using Model.Mappers;
 
 namespace Diploma.Repositories;
 

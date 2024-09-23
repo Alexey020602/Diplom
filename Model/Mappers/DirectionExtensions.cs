@@ -1,4 +1,4 @@
-namespace Model.Extensions;
+namespace Model.Mappers;
 
 public static class DirectionExtensions
 {

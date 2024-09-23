@@ -2,6 +2,7 @@
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Extensions;
+using Model.Mappers;
 using ModelFaculty = Model.Divisions.Faculty;
 
 namespace Diploma.Repositories;

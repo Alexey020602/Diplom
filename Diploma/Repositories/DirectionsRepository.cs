@@ -3,6 +3,7 @@ using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using Model.Extensions;
+using Model.Mappers;
 
 namespace Diploma.Repositories;
 

@@ -1,9 +1,9 @@
 ﻿using DataBase.Data;
 using DataBase.Extensions;
-using Diploma.Mappers;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
 using Model.Agreements;
+using Model.Mappers;
 
 namespace Diploma.Repositories;
 
@@ -14,10 +14,7 @@ public class AgreementRepository(ApplicationContext context) : IAgreementReposit
     public async Task AddAgreement(ModelAgreement newAgreement)
     {
         var agreement = newAgreement.ConvertToDatabaseModel();
-        context.Attach(agreement.AgreementStatus);
-        context.Attach(agreement.AgreementType);
-        // context.AttachRange(agreement.PartnerInAgreements);
-        // context.AttachRange(agreement.DivisionInAgreements);
+        AttachEntity(agreement);
         context.Agreements.Add(agreement);
         await context.SaveChangesAsync();
     }
@@ -56,6 +53,7 @@ public class AgreementRepository(ApplicationContext context) : IAgreementReposit
     public async Task UpdateAgreement(int id, ModelAgreement newAgreement)
     {
         var agreement = newAgreement.ConvertToDatabaseModel();
+        AttachEntity(agreement);
         var existingAgreement = await context.Agreements
             .Include(a => a.PartnerInAgreements)
             .Include(a => a.DivisionInAgreements)
@@ -69,6 +67,13 @@ public class AgreementRepository(ApplicationContext context) : IAgreementReposit
         await context.SaveChangesAsync();
     }
 
+    private void AttachEntity(DataBase.Models.Agreement agreement)
+    {
+        context.DivisionsInAgreement.AttachRange(agreement.DivisionInAgreements);
+        context.PartnersInAgreement.AttachRange(agreement.PartnerInAgreements);
+        context.AgreementType.Attach(agreement.AgreementType);
+        context.AgreementStatus.Attach(agreement.AgreementStatus);
+    }
     private IQueryable<DataBase.Models.Agreement> GetAgreementWithTypeAndStatus()
     {
         return context.Agreements

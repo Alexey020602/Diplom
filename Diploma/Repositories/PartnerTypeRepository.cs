@@ -33,16 +33,12 @@ public class PartnerTypeRepository(ApplicationContext context) : IPartnerTypesRe
     {
         return await context.PartnerTypes.Select(t => t.ConvertToModel()).ToListAsync();
     }
-
-
     public async Task<Type> GetPartnerTypeByIdAsync(int id)
     {
         var partnerType = await context.PartnerTypes.FirstOrDefaultAsync(p => p.Id == id);
 
         return partnerType?.ConvertToModel() ?? throw new KeyNotFoundException("Не найден тип партнера");
     }
-
-
     public async Task UpdatePartnerTypeAsync(int id, Type partnerPartnerType)
     {
         var existingPartnerType = await context.PartnerTypes.FindAsync(id) ??
