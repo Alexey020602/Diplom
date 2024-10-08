@@ -5,52 +5,39 @@
 @inject IAuthenticationService AuthenticationService
 @inject NavigationManager NavigationManager
 
-@* <EditForm Model="@AuthRequest" OnValidSubmit="@ExecuteLogin"> *@
-@*     <DataAnnotationsValidator/> *@
-@*     <InputText @bind-Value="@AuthRequest.Login"/> *@
-@*     <ValidationMessage For="@(() => AuthRequest.Login)"/> *@
-@*     <InputText type="password" @bind-Value="@AuthRequest.Password"/> *@
-@*     <ValidationMessage For="@(() => AuthRequest.Password)"/> *@
-@*     <button type="submit">Войти</button> *@
-@* </EditForm> *@
-
-<RadzenCard Style="min-width:50%;width:fit-content;justify-content: center">
-    @* <RadzenTextBox @bind-Value=@AuthRequest.Login Name="Login"/> *@
-    @* <RadzenRequiredValidator Component="Login"/> *@
-    @* <RadzenPassword @bind-Value=@AuthRequest.Password Name="Password"/> *@
-    @* <RadzenRequiredValidator Component="Password"/> *@
-    <RadzenLogin
-        Login=@LoginAction
-        LoginText="Войти"
-        UserText="Пользователь"
-        PasswordText="Пароль"
-        ShowLoginButton=@true 
-        AllowRegister=false 
-        AllowRememberMe=false 
-        AllowResetPassword=false 
-        />
-</RadzenCard>
+<RadzenLogin
+    Login=@LoginAction
+    LoginText="Войти"
+    UserText="Пользователь"
+    PasswordText="Пароль"
+    ShowLoginButton=@true
+    AllowRegister=false
+    AllowRememberMe=false
+    AllowResetPassword=false/>
 
 @code {
     [Parameter] public string Action { get; set; } = string.Empty;
-    [SupplyParameterFromQuery] private string ReturnUrl { get; set; } = "/";
+    [SupplyParameterFromQuery] private string? ReturnUrl { get; set; } = "/";
     private AuthRequest AuthRequest { get; } = new();
     private bool ShowAuthError { get; set; }
     private string Error { get; set; } = default!;
+
     private Task ExecuteLogin()
     {
         ShowAuthError = false;
         return ExecuteLoginAction(AuthRequest);
     }
-    private Task LoginAction(LoginArgs login) => ExecuteLoginAction(new ()
+
+    private Task LoginAction(LoginArgs login) => ExecuteLoginAction(new()
     {
-        Login = login.Username, 
+        Login = login.Username,
         Password = login.Password
     });
-    
+
     private async Task ExecuteLoginAction(AuthRequest authRequest)
     {
         await AuthenticationService.Login(authRequest);
-        NavigationManager.NavigateTo(ReturnUrl);
+        NavigationManager.NavigateTo(ReturnUrl ?? "/");
     }
+
 }

@@ -2,16 +2,20 @@
 @using Client.Shared.Buttons
 @typeparam TItem
 
-<RadzenCard>
     @if (Item != null)
     {
         <RadzenStack Orientation=@Orientation.Vertical>
             <PageTitle>@Title</PageTitle>
             <RadzenStack Orientation=@Orientation.Horizontal JustifyContent=@JustifyContent.SpaceBetween>
-                <BackButton ButtonStyle=@ButtonStyle.Secondary Text="Назад" />
+                <BackButton ButtonStyle=@ButtonStyle.Secondary Text="Назад"/>
                 <AuthorizeView Roles="Ctt">
-                    <NavigationButton Path=@EditPath Text="Редактировать"/>
-                    <DeleteButton ButtonStyle=@ButtonStyle.Danger CanDelete=@CanDelete Delete=@Delete Text="Удалить"/>
+                    <Authorized>
+                        <NavigationButton Path=@EditPath Text="Редактировать"/>
+                        <DeleteButton ButtonStyle=@ButtonStyle.Danger CanDelete=@CanDelete Delete=@Delete Text="Удалить"/>
+                    </Authorized>
+                    <NotAuthorized>
+                        Недостаточно прав для редактирования или удаления 
+                    </NotAuthorized>
                 </AuthorizeView>
             </RadzenStack>
             @Content(Item)
@@ -21,4 +25,3 @@
     {
         <RadzenProgressBarCircular Value=100 ShowValue=false Mode=@ProgressBarMode.Indeterminate/>
     }
-</RadzenCard>
