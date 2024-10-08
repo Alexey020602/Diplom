@@ -20,13 +20,11 @@
     private RenderFragment TypeFilter => @<UniversalCustomSelect
                                               Placeholder="Тип соглашения"
                                               TItem="@AgreementType"
-                                              Value="@agreementType"
-                                              ValueChanged="@Select"/>;
+                                              @bind-Value="@agreementType"/>;
 
     private RenderFragment StatusFilter => @<UniversalCustomSelect
                                                 TItem="@AgreementStatus"
                                                 Placeholder="Статус соглашения"
-                                                Value="@agreementStatus"
-                                                ValueChanged="@Select"/>;
+                                               @bind-Value="@agreementStatus"/>;
 
 }

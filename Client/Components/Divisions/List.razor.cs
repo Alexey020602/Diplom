@@ -2,6 +2,7 @@
 using Client.Shared.List;
 using Microsoft.AspNetCore.Components;
 using Model.Divisions;
+using Radzen;
 
 namespace Client.Components.Divisions;
 
@@ -21,10 +22,8 @@ public partial class List : SearchableStyledList<DivisionShort>
     {
         return $"divisions/{division.Id}";
     }
-
-    private async Task SelectFaculty(Faculty? newFaculty)
+    protected override void ClearFilterFields()
     {
-        facultyFilterValue = newFaculty;
-        await LoadItems();
+        facultyFilterValue = null;
     }
 }

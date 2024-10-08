@@ -7,18 +7,27 @@
 
 @code {
 
-    private RenderFragment Body => @<RadzenCard Style="min-width:30%; width: fit-content">
+    private RenderFragment Body => @<div>
         @FiltersContent
         @ButtonsContent
         @List
-    </RadzenCard>;
+    </div>;
 
     private RenderFragment FiltersContent => @<RadzenStack
-                                                  Orientation=@Orientation.Horizontal
+                                                  Orientation=@Orientation.Vertical
                                                   AlignItems=@AlignItems.Center>
         @Filters
         @Search
+        @FilterButtons
     </RadzenStack>;
+
+    private RenderFragment FilterButtons => @<RadzenStack
+                                                 Orientation="Orientation.Horizontal"
+                                                 JustifyContent="JustifyContent.SpaceBetween"
+                                                 AlignItems="AlignItems.Center">
+                                                <RadzenButton Click="@LoadItems" Text="Применить фильтр"/>
+                                                <RadzenButton Click="@ClearFilters" Text="Сбросить фильтр"/>
+                                            </RadzenStack>;
 
     private RenderFragment ButtonsContent => @<RadzenStack
                                                   Style="padding-top:10px"
@@ -33,7 +42,6 @@
                                                <NavigationButton Path=@CreateHref Text=@CreateText/>
                                            </AuthorizeView>;
 
-    protected virtual string CreateText => "Добавить";
 
     private RenderFragment List => @<RadzenDataList
                                         WrapItems=false
@@ -60,6 +68,6 @@
 
     @* private RenderFragment EmptyListButton => @<RadzenButton Icon="cached" Click=@(() => LoadItems()) ButtonStyle=@ButtonStyle.Primary/>; *@
 
-    private RenderFragment Search => @<SearchText @bind-Value=@namesFilter/>;
+    private RenderFragment Search => @<RadzenTextBox Placeholder=@NameFilterTitle @bind-Value=@namesFilter />;
 
 }

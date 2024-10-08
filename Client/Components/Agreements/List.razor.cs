@@ -1,6 +1,7 @@
 ﻿using Client.Services.Api;
 using Microsoft.AspNetCore.Components;
 using Model.Agreements;
+using Radzen;
 using AgreementStatus = Model.Agreements.Status;
 
 namespace Client.Components.Agreements;
@@ -22,15 +23,9 @@ public partial class List
         return $"/agreements/{item.Id}";
     }
 
-    private Task Select(AgreementType? agreementType)
+    protected override void ClearFilterFields()
     {
-        this.agreementType = agreementType;
-        return LoadItems();
-    }
-
-    private Task Select(AgreementStatus? agreementStatus)
-    {
-        this.agreementStatus = agreementStatus;
-        return LoadItems();
+        agreementStatus = null;
+        agreementType = null;
     }
 }

@@ -3,6 +3,7 @@ using Client.Shared.List;
 using Client.Shared.Select;
 using Microsoft.AspNetCore.Components;
 using Model.Partners;
+using Radzen;
 
 namespace Client.Components.Partners;
 
@@ -23,16 +24,8 @@ public partial class List : SearchableStyledList<PartnerShort>
     {
         return PartnersService.ReadAll(PartnerType?.Id);
     }
-
-    private Task SelectPartnerType(PartnerType? partnerType)
-    {
-        PartnerType = partnerType;
-        return LoadItems();
-    }
-
-    private Task ResetSelectedPartnerType()
+    protected override void ClearFilterFields()
     {
         PartnerType = null;
-        return LoadItems();
     }
 }
