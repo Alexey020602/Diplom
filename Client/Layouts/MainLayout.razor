@@ -32,7 +32,9 @@
     <RadzenBody Style="width:100%;justify-content:space-around;">
         @* <div style="width:100%;justify-content: center" class="rz-p-4"> *@
         <RadzenStack Orientation=@Orientation.Horizontal JustifyContent=@JustifyContent.Center>
-            @Body
+            <RadzenCard Style="min-width:50%">
+                @Body
+            </RadzenCard>
         </RadzenStack>
         @* </div> *@
     </RadzenBody>

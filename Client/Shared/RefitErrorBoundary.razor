@@ -9,7 +9,12 @@
 @ChildContent
 
 @code {
+    protected override void OnInitialized()
+    {
+        ErrorContent = Error;
+    }
 
+    private RenderFragment Error(Exception exception) => @<p>Исключение @exception.Message</p>;
     protected override async Task OnErrorAsync(Exception exception)
     {
         Console.WriteLine(exception);

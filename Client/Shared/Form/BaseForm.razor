@@ -1,8 +1,8 @@
 ﻿@using Client.Shared.Buttons
 @typeparam TItem where TItem : class
 
-<RadzenCard>
-    <RadzenTemplateForm TItem=@TItem Data="@Item" Submit=@((TItem item) => OnValueSubmit())>
+<div>
+    <RadzenTemplateForm TItem=@TItem Data="@Item" Submit=@(_ => OnValueSubmit())>
         <RadzenStack Orientation=@Orientation.Vertical>
             @Content
             <RadzenStack Orientation=@Orientation.Horizontal JustifyContent=@JustifyContent.SpaceBetween>
@@ -12,10 +12,9 @@
             </RadzenStack >
         </RadzenStack>
     </RadzenTemplateForm>
-</RadzenCard>
+</div>
 
 @code {
-
     protected RenderFragment FormRow(
         string labelText,
         string name,
@@ -29,5 +28,4 @@
                  <RadzenDataAnnotationValidator Component=@name/>
              </RadzenColumn>
          </RadzenRow>;
-
 }

@@ -1,7 +1,7 @@
 ﻿@using Client.Components
 @using Client.Features
 @using Client.Shared
-@using Client.Shared.Layouts
+@using Client.Layouts
 @using Microsoft.AspNetCore.Components.Authorization
 @rendermode RenderMode.InteractiveAuto
 @inject NavigationManager NavigationManager
@@ -33,6 +33,6 @@
                 </NotFound>
             </Router>
         </ChildContent>
-        <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent>
+        @* <ErrorContent Context="exception">Исключение: @exception.Message</ErrorContent> *@
     </RefitErrorBoundary>
 </CascadingAuthenticationState>
