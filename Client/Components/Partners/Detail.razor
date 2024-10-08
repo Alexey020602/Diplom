@@ -1,8 +1,8 @@
 ﻿@using Client.Services.Api
-@using Microsoft.AspNetCore.Components
 @using Client.Shared.List
 @using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components
 @using Model.Agreements
 @using Model.Interactions
 @using Model.Partners
@@ -20,21 +20,61 @@
     [Inject] private IPartnersService PartnersService { get; set; } = default!;
 
     protected override RenderFragment Content(Partner item) => @<RadzenStack>
-        <RadzenText TagName="TagName.H3" Text=@item.ShortName/>
-        <RadzenText TagName="TagName.H4" Text=@item.FullName/>
-        <TextWithTitle Title="Тип партнера" Text="@item.Type?.ToString()"/>
-        <TextWithTitle Title="Контактные данные" Text="@item.ContactData"/>
-        <TextWithTitle Title="Адрес" Text="@item.Address"/>
-        <TextWithTitle Title="Город" Text="@item.City"/>
-        <TextWithTitle Title="Сайт" Text="@item.Site"/>
-        <ListWithTitle Title="Направления" Items="@item.Directions"/>
-        <ListWithTitle Title="Соглашения" Items="@item.Agreements" Row=@AgreementRow/>
-        <ListWithTitle Title="Взаимодействия" Items="@item.Interactions"/>
+        <RadzenDataGrid Data=@rows(item) Style="width: 1024px">
+            <HeaderTemplate>
+                <RadzenText TagName="TagName.H3" Text=@item.ShortName/>
+                <RadzenText TagName="TagName.H4" Text=@item.FullName/>
+            </HeaderTemplate>
+            <Columns>
+                <RadzenDataGridColumn Width="200px">
+                    <Template>
+                        @context.Title
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn>
+                    <Template>
+                        @context.Content
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+        @* <TextWithTitle Title="Тип партнера" Text="@item.Type?.ToString()"/> *@
+        @* <TextWithTitle Title="Контактные данные" Text="@item.ContactData"/> *@
+        @* <TextWithTitle Title="Адрес" Text="@item.Address"/> *@
+        @* <TextWithTitle Title="Город" Text="@item.City"/> *@
+        @* <TextWithTitle Title="Сайт" Text="@item.Site"/> *@
+        @* <ListWithTitle Title="Направления" Items="@item.Directions"/> *@
+        @* <ListWithTitle Title="Соглашения" Items="@item.Agreements" Row=@AgreementRow/> *@
+        @* <ListWithTitle Title="Взаимодействия" Items="@item.Interactions" Row=@InteractionRow/> *@
     </RadzenStack>;
 
     protected override Task Delete() => PartnersService.Delete(Id);
     protected override Task<bool> CanDelete() => PartnersService.CanDelete(Id);
-
+    private IEnumerable<Row> rows(Partner item) => [
+        new("Тип партнера", @item.Type?.ToString() ),
+        new("Контактные данные", @item.ContactData),
+        new("Адрес", @item.Address),
+        new("Город", @item.City),
+        new("Сайт", @item.Site),
+        new("Направления", @<div>
+                        @foreach (var direction in @item.Directions)
+                        {
+                            @direction
+                        }
+                    </div>),
+        new("Соглашения", @<div>
+                              @foreach (var agreement in item.Agreements)
+                              {
+                                  @AgreementRow(agreement)
+                              }
+                          </div>),
+        new("Взаимодействия", @<div>
+                                  @foreach (var interaction in item.Interactions)
+                                  {
+                                      @InteractionRow(interaction)
+                                  }
+                              </div>),
+    ];
     protected override string EntitiesPath => "partners";
     protected override string? Title => Item?.ShortName;
 
@@ -43,7 +83,18 @@
         return PartnersService.ReadOne(Id);
     }
 
-    private RenderFragment AgreementRow(AgreementInPartner agreementInPartner) => @<NavLink href=@AgreementsPath(agreementInPartner)></NavLink>;
+    private RenderFragment AgreementRow(AgreementInPartner agreementInPartner) => @<NavLink href=@AgreementsPath(agreementInPartner)>@agreementInPartner</NavLink>;
 
     private string AgreementsPath(AgreementInPartner agreementInPartner) => $"/{NavigationConstants.AgreementsPath}/{agreementInPartner.Id}";
+
+    private RenderFragment InteractionRow(InteractionInPartner interaction) => @<NavLink href="@InteractionPath(interaction)">@interaction</NavLink>;
+
+    private string InteractionPath(InteractionInPartner interaction) => $"/{NavigationConstants.InteractionsPath}/{interaction.Id}";
+
+    private record Row(string Title, RenderFragment Content)
+    {
+        public Row(string title, string? text): this(title, @<RadzenText Text=@text/>) {}
+        
+    }
+
 }
