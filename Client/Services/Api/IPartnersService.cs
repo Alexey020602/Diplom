@@ -7,7 +7,7 @@ using Partner = Model.Partners.Partner;
 
 namespace Client.Services.Api;
 
-public interface IPartnersService : IReadApi<PartnerShort>, IReadOneApi<Partner, int>, ICanDeleteApi<int>, IDeleteApi<int>,
+public interface IPartnersService : IReadApi<PartnerShort>, IReadOneApi<Partner, int>, IDeleteApi<int>,
     IUpdateApi<Partner, int>, ICreateApi<Partner>
 {
     [Get("")]

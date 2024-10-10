@@ -16,9 +16,14 @@
         return InteractionsService.ReadOne(Id);
     }
 
-    protected override RenderFragment Content(Interaction item) => @<RadzenStack>
-                                                                       
-                                                                   </RadzenStack>;
+    protected override RenderFragment? Header(Interaction item) => @<div>
+        <RadzenText Text=@item.ContactCode TagName="TagName.H3"/>
+    </div>;
+
+    protected override IEnumerable<Row> Rows(Interaction item) =>
+    [
+        //todo сделать экран взаимодействий
+    ];
 
     protected override string? Title => Item?.ToString();
     protected override string EntitiesPath => "interactions";

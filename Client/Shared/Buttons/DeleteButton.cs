@@ -6,13 +6,17 @@ namespace Client.Shared.Buttons;
 
 public class DeleteButton: RadzenButton
 {
-    [Parameter] public Func<Task<bool>> CanDelete { get; set; } = default!;
+    [Parameter] public RenderFragment? CanNotDeleteContent { get; set; }
+    [Parameter] public RenderFragment? CanDeleteContent { get; set; }
+    [Parameter] public string? CanNotDeleteText { get; set; }
+    [Parameter] public string? CanDeleteText { get; set; }
+    [Parameter] public bool CanDelete { get; set; }
     [Parameter] public Func<Task> Delete { get; set; } = default!;
+    public override Task OnClick(MouseEventArgs args) => CanDelete ? Delete()  : Task.CompletedTask;
 
-    public override Task OnClick(MouseEventArgs args) => Delete();
-    
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        Visible = await CanDelete();
+        Text = CanDelete ? CanDeleteText : CanNotDeleteText;
+        ChildContent = CanDelete ? CanDeleteContent : CanNotDeleteContent;
     }
 }

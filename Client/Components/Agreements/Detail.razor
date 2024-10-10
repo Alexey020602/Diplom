@@ -20,17 +20,36 @@
         return AgreementService.ReadOne(Id);
     }
 
-    //TODO Доделать экраны деталей
-    protected override RenderFragment Content(Agreement item) =>
-        @<RadzenStack Orientation=@Orientation.Vertical>
-            <TextWithTitle Title="Номер" Text=@item.Number/>
-            <TextWithTitle Title="Тип" Text=@item.Type?.Name/>
-            <TextWithTitle Title="Статус" Text=@item.Status?.Name/>
-            <TextWithTitle Title="Начало" Text=@item.Start.ToShortDateString()/>
-            <TextWithTitle Title="Конец" Text=@item.End.ToLongDateString()/>
-            <ListWithTitle Title="Подразделения" Items=@item.Divisions/>
-            <ListWithTitle Title="Партнеры" Items=@item.Partners/>
-        </RadzenStack>;
+    protected override RenderFragment? Header(Agreement item) => @<RadzenText TagName="TagName.H3" Text=@item.Number/>
+
+    //todo Доделать детали соглашения
+    protected override IEnumerable<Row> Rows(Agreement item) =>
+    [
+        new("Тип", @item.Type?.Name),
+        new("Статус", @item.Status?.Name),
+        new("Начало", @item.Start.ToShortDateString()),
+        new("Конец", @item.End.ToShortDateString()),
+        new("Подразделения", Divisions(item)),
+        new("Партнеры", Partners(item)),
+    ];
+
+    private RenderFragment Divisions(Agreement item) => @<div>
+        @foreach (var division in item.Divisions)
+        {
+            DivisionRow(division);
+        }
+    </div>;
+
+    private RenderFragment Partners(Agreement item) => @<div>
+        @foreach (var partner in item.Partners)
+        {
+            @PartnerRow(partner)
+        }
+    </div>;
+
+    private RenderFragment DivisionRow(DivisionInAgreement division) => @<NavLink href=@($"/{NavigationConstants.DivisionsPath}/{division.Id}")>@division</NavLink>
+
+    private RenderFragment PartnerRow(PartnerInAgreement partner) => @<NavLink href=@($"/{NavigationConstants.PartnersPath}/{partner.Id}")>@partner</NavLink>;
 
     protected override string? Title => Item?.ToString();
     protected override string EntitiesPath => "agreements";

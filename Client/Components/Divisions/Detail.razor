@@ -5,6 +5,7 @@
 @using Client.Shared.Text
 @using Client.Shared
 @using Microsoft.AspNetCore.Authorization
+@using Model
 @using Model.Divisions
 @inherits DetailPage<Division>
 
@@ -14,21 +15,32 @@
 
 @code {
     [Inject] private IDivisionsService DivisionsService { get; set; } = null!;
+    
+    protected override RenderFragment? Header(Division item) => @<div>
+        <RadzenText TagName="TagName.H3" Text=@item.ShortName/>
+        <RadzenText TagName="TagName.H4" Text="@item.FullName"/>
+    </div>;
 
-    protected override RenderFragment Content(Division item) =>
-        @<RadzenStack>
-            <RadzenText TagName="TagName.H3" Text=@item.ShortName/>
-            <RadzenText TagName="TagName.H4" Text="@item.FullName"/>
-            <TextWithTitle Title="Факультет" Text=@item.Faculty?.ToString()/>
-            <TextWithTitle Title="Контактные данные" Text=@item.Contacts/>
-            <TextWithTitle Title="Сайт" Text=@item.Site/>
-            <ListWithTitle Title="Направления" Items=@item.Directions/>
-    </RadzenStack>;
+    protected override IEnumerable<Row> Rows(Division item) => 
+    [
+        new("Факультет",@item.Faculty?.ToString() ),
+        new("Контактные данные",@item.Contacts ),
+        new("Сайт",@item.Site ),
+        new("Направления", Directions(item)),
+    ];
+
+    private RenderFragment Directions(Division division) => @<div>
+        @foreach (var direction in division.Directions)
+        {
+            @DirectionRow(direction)
+        }
+    </div>;
+    private RenderFragment DirectionRow(Direction direction) => @<p>@direction</p>;
 
     protected override string? Title => Item?.ShortName;
     protected override string EntitiesPath => "divisions";
     protected override Task Delete() => DivisionsService.Delete(Id);
-    protected override Task<bool> CanDelete() => DivisionsService.CanDelete(Id);
+    protected override bool CanDelete => true;
 
     protected override Task<Division> LoadItem() => DivisionsService.ReadOne(Id);
 

@@ -11,7 +11,12 @@
                 <AuthorizeView Roles="Ctt">
                     <Authorized>
                         <NavigationButton Path=@EditPath Text="Редактировать"/>
-                        <DeleteButton ButtonStyle=@ButtonStyle.Danger CanDelete=@CanDelete Delete=@Delete Text="Удалить"/>
+                        <DeleteButton 
+                            ButtonStyle=@ButtonStyle.Danger 
+                            CanDelete=@CanDelete 
+                            Delete=@Delete 
+                            CanDeleteText="Удалить" 
+                            CanNotDeleteText=@CanNotDeleteMessage/>
                     </Authorized>
                     <NotAuthorized>
                         Недостаточно прав для редактирования или удаления 
@@ -25,3 +30,30 @@
     {
         <RadzenProgressBarCircular Value=100 ShowValue=false Mode=@ProgressBarMode.Indeterminate/>
     }
+
+    @code {
+        protected virtual RenderFragment Content(TItem item) => @<RadzenStack>
+            <RadzenDataGrid Data=@Rows(item) Style="width: 1024px" HeaderTemplate=@Header(item)>
+                @* <HeaderTemplate> *@
+
+                @* </HeaderTemplate> *@
+                <Columns>
+                    <RadzenDataGridColumn Width="200px">
+                        <Template>
+                            @context.Title
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn>
+                        <Template>
+                            @context.Content
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenStack>;
+    protected record Row(string Title, RenderFragment Content)
+    {
+        public Row(string title, string? text): this(title, @<RadzenText Text=@text/>) {}
+        
+    }
+}
