@@ -1,6 +1,7 @@
 using System.Text;
 using DataBase.Data;
 using Diploma;
+using Diploma.DataSeed;
 using Diploma.Repositories;
 using Diploma.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,9 +69,11 @@ builder.Services.AddTransient<IAgreementStatusRepository, AgreementStatusReposit
 builder.Services.AddTransient<IAgreementTypeRepository, AgreementTypeRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 
-builder.Services.AddLogging();
-
 builder.Services.AddTransient<IdentitySeed>();
+
+builder.Services.AddHostedService<Worker>();
+
+builder.Services.AddLogging();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
@@ -109,11 +112,6 @@ builder.Services.AddCors();
 builder.AddServiceDefaults();
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var identitySeed = scope.ServiceProvider.GetRequiredService<IdentitySeed>();
-    await identitySeed.Seed();
-}
 
 app.UseStaticFiles();
 app.UseBlazorFrameworkFiles();

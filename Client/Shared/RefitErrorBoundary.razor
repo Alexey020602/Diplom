@@ -23,7 +23,7 @@
         Console.WriteLine(apiException);
         if (apiException. StatusCode != HttpStatusCode.Unauthorized )
         {
-            Notify(exception);
+            Notify(apiException);
             return;
         }
 
@@ -32,13 +32,15 @@
         NavigationManager.NavigateTo("login");
     }
 
-    private void Notify(Exception exception)
+    private void Notify(ApiException exception)
     {
         NotificationService.Notify(new NotificationMessage
         {
             Severity = NotificationSeverity.Error,
-            SummaryContent = _ => @<RadzenText>Произошлаошибка</RadzenText>,
-            DetailContent = _ => @<RadzenText>@exception.Message</RadzenText>
+            Summary = "Произошла ошибка",
+            Detail = exception.Message + "\n" + exception.Content,
+            Duration = 10000,
+            
         });
     }
 

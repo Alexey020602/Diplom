@@ -1,4 +1,5 @@
 using DataBase.Data;
+using Microsoft.AspNetCore.Identity;
 using MigrationService;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
@@ -9,6 +10,7 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
     // .WithTracing(tracing => tracing.AddSource(Worker.ActivitySourceName))
     ;
+
 builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDB");
 builder.Services.AddHostedService<Worker>();
 

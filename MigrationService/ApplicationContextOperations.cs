@@ -1,4 +1,3 @@
-using DataBase.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -7,7 +6,7 @@ namespace MigrationService;
 
 public static class ApplicationContextOperations
 {
-    public static async Task EnsureDatabaseAsync(this ApplicationContext dbContext, CancellationToken cancellationToken)
+    public static async Task EnsureDatabaseAsync(this DbContext dbContext, CancellationToken cancellationToken)
     {
         var dbCreator = dbContext.GetService<IRelationalDatabaseCreator>();
 
@@ -22,7 +21,8 @@ public static class ApplicationContextOperations
             }
         });
     }
-    public static async Task RunMigrationAsync(this ApplicationContext dbContext, CancellationToken cancellationToken)
+
+    public static async Task RunMigrationAsync(this DbContext dbContext, CancellationToken cancellationToken)
     {
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
@@ -33,4 +33,9 @@ public static class ApplicationContextOperations
             await transaction.CommitAsync(cancellationToken);
         });
     }
+
+    public static Task  MigrateIfRelationalAsync(this DbContext dbContext, CancellationToken cancellationToken) =>
+        dbContext.Database.IsRelational()
+            ? dbContext.Database.MigrateAsync(cancellationToken)
+            : Task.CompletedTask;
 }

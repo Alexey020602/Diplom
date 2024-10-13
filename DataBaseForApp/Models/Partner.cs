@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using DataBase.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Models;
@@ -93,4 +94,14 @@ public class Partner
     {
         return PartnerType?.Id == partnerTypeId;
     }
+
+    public static Partner Default(int number) => new()
+    {
+        Id = number,
+        ShortName = $"Парнтер {number}",
+        FullName = $"Партнер {number.Name()}",
+        Site = $"https://site{number}.ru",
+        PartnerType = new() { Id = (number - 1) % 4 + 1 },
+        Address = $"Адрес {number}"
+    };
 }

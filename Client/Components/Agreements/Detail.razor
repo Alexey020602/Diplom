@@ -20,7 +20,7 @@
         return AgreementService.ReadOne(Id);
     }
 
-    protected override RenderFragment? Header(Agreement item) => @<RadzenText TagName="TagName.H3" Text=@item.Number/>
+    protected override RenderFragment? Header(Agreement item) => @<RadzenText TagName="TagName.H3" Text=@item.Number/>;
 
     //todo Доделать детали соглашения
     protected override IEnumerable<Row> Rows(Agreement item) =>
@@ -36,7 +36,7 @@
     private RenderFragment Divisions(Agreement item) => @<div>
         @foreach (var division in item.Divisions)
         {
-            DivisionRow(division);
+            @DivisionRow(division);
         }
     </div>;
 
@@ -47,7 +47,7 @@
         }
     </div>;
 
-    private RenderFragment DivisionRow(DivisionInAgreement division) => @<NavLink href=@($"/{NavigationConstants.DivisionsPath}/{division.Id}")>@division</NavLink>
+    private RenderFragment DivisionRow(DivisionInAgreement division) => @<NavLink href=@($"/{NavigationConstants.DivisionsPath}/{division.Id}")>@division</NavLink>;
 
     private RenderFragment PartnerRow(PartnerInAgreement partner) => @<NavLink href=@($"/{NavigationConstants.PartnersPath}/{partner.Id}")>@partner</NavLink>;
 

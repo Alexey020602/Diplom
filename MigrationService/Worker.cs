@@ -1,11 +1,15 @@
+using System.Diagnostics;
 using DataBase.Data;
+using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Trace;
 
 namespace MigrationService;
-using System.Diagnostics;
-using OpenTelemetry.Trace;
+
+
 public class Worker(
-    IServiceProvider serviceProvider,
-    IHostApplicationLifetime hostApplicationLifetime) : BackgroundService
+    IServiceProvider services,
+    IHostApplicationLifetime hostApplicationLifetime
+) : BackgroundService 
 {
     public const string ActivitySourceName = "Migrations";
     private static readonly ActivitySource s_activitySource = new(ActivitySourceName);
@@ -16,12 +20,12 @@ public class Worker(
 
         try
         {
-            using var scope = serviceProvider.CreateScope();
+            var scope = services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-            var seed = scope.ServiceProvider.GetRequiredService<ApplicationContextSeed>();
+            var applicationContextSeed = scope.ServiceProvider.GetRequiredService<ApplicationContextSeed>();
             await dbContext.EnsureDatabaseAsync(cancellationToken);
             await dbContext.RunMigrationAsync(cancellationToken);
-            await seed.Seed(cancellationToken);
+            await applicationContextSeed.Seed(cancellationToken);
         }
         catch (Exception ex)
         {

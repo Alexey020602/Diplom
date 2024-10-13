@@ -1,7 +1,9 @@
 ﻿using DataBase.Data;
+using DataBase.Extensions;
 using DataBase.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace MigrationService;
 
@@ -74,7 +76,7 @@ public class ApplicationContextSeed(
         };
 
         foreach (var agreementType in agreementTypes) await Add(agreementType, cancellationToken);
-        await  context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task AddAgreementStatuses(CancellationToken cancellationToken)
@@ -111,7 +113,7 @@ public class ApplicationContextSeed(
     private Task Add(AgreementStatus agreementStatus, CancellationToken cancellationToken)
     {
         var storedAgreementStatus = context.AgreementStatus.FirstOrDefault(status => status.Id == agreementStatus.Id);
-        if (storedAgreementStatus is not null) 
+        if (storedAgreementStatus is not null)
             return Task.CompletedTask;
         return context.AgreementStatus.AddAsync(agreementStatus, cancellationToken).AsTask();
     }
@@ -181,14 +183,39 @@ public class ApplicationContextSeed(
             { 8, "ГФ" }
         };
 
-        foreach (var faculty in dictionary)
+        foreach (
+            var faculty in
+            from faculty in
+                dictionary
+            let storedFaculty = context.Faculties.FirstOrDefault(f => f.Id == faculty.Key)
+            where storedFaculty is null
+            select faculty
+        )
         {
-            var storedFaculty = context.Faculties.FirstOrDefault(f => f.Id == faculty.Key);
-            if (storedFaculty is null)
-                await context.Faculties.AddAsync(new Faculty { Id = faculty.Key, Name = faculty.Value },
-                    cancellationToken);
+            await context.Faculties.AddAsync(new Faculty { Id = faculty.Key, Name = faculty.Value },
+                cancellationToken);
         }
 
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    private async Task AddPartners(CancellationToken cancellationToken)
+    {
+        var partners = 10.GetEnumerable().Select(Partner.Default);
+        
+        var partnersForSave = from partner in partners
+            let storedPartner = context.Partners.FirstOrDefault(p => p.Id == partner.Id)
+            where storedPartner is null
+            select partner;
+
+        foreach (var partner in partnersForSave)
+        {
+            context.Attach(partner.PartnerType);
+            context.Partners.Add(partner);
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+    
+
 }

@@ -1,12 +1,12 @@
 using DataBase.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 
-namespace Diploma;
+namespace Diploma.DataSeed;
 
 public class IdentitySeed(
     UserManager<IdentityUser<Guid>> userManager,
     RoleManager<IdentityRole<Guid>> roleManager,
-    IHostEnvironment hostEnvironment)
+    IHostEnvironment hostEnvironment): ISeed
 {
     private const string AdminName = "Admin";
     private const string AdminPassword = "123456";
@@ -16,7 +16,7 @@ public class IdentitySeed(
     private readonly UserManager<IdentityUser<Guid>> userManager = userManager;
     private readonly IHostEnvironment hostEnvironment = hostEnvironment;
 
-    public async Task Seed()
+    public async Task Seed(CancellationToken cancellationToken)
     {
         await SeedUsers();
         await SeedRoles();
@@ -61,7 +61,12 @@ public class IdentitySeed(
         if (result.Succeeded)
             return;
 
-        throw new InvalidOperationException(result.Errors.ToString());
+        throw new InvalidOperationException(CreateIdentityResultsMessage(result));
+    }
+
+    private static string CreateIdentityResultsMessage(IdentityResult result)
+    {
+        return string.Join("\n", result.Errors.Select(err => err.Description));
     }
 
     private async Task AddUserToRolesAsync(string name, IEnumerable<string> roles)
@@ -120,6 +125,7 @@ public class IdentitySeed(
         if (result.Succeeded)
             return;
 
-        throw new InvalidOperationException(result.Errors.ToString());
+        throw new InvalidOperationException(CreateIdentityResultsMessage(result));
     }
 }
+
