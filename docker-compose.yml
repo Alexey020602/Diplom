@@ -1,0 +1,59 @@
+﻿services:
+  diploma:
+    image: diploma
+    pull_policy: always
+    container_name: diploma
+    networks:
+      - diploma
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings_DefaultConnection=Host=postgres;Port=5432;Database=Diploma;Username=postgres;Password=11111111;
+    ports:
+      - "5080:8080"
+    depends_on:
+      postgres: 
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    build:
+      context: .
+      dockerfile: Diploma/Dockerfile
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    networks:
+      - diploma
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=11111111
+      - PGPORT=5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U pgadmin" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  migrations:
+    image: migrations_service
+    container_name: migrations
+    pull_policy: always
+    networks:
+      - diploma
+    build:
+      context: .
+      dockerfile: MigrationService/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ConnectionStrings_DefaultConnection=Host=postgres;Port=5432;Database=Diploma;Username=postgres;Password=11111111;
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  postgresdata:    
+     
+networks: 
+  diploma:
+    name: "diploma"

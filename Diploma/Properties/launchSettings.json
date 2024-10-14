@@ -4,7 +4,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://*:8080"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5242"
@@ -28,6 +29,18 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
+  },
+  "Container": {
+    "commandName": "Docker",
+    "environmentVariables": {
+      "ASPNETCORE_ENVIRONMENT": "Development",
+      "ASPNETCORE_HTTP_PORTS": "5000"
+    },
+    "launchBrowser": true,
+    "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+    "httpPort": 8001,
+    "publishAllPorts": true,
+    "useSSL": false
   },
   "iisSettings": {
     "windowsAuthentication": false,

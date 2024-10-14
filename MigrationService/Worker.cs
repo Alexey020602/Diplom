@@ -8,7 +8,8 @@ namespace MigrationService;
 
 public class Worker(
     IServiceProvider services,
-    IHostApplicationLifetime hostApplicationLifetime
+    IHostApplicationLifetime hostApplicationLifetime,
+    ILogger<Worker> logger
 ) : BackgroundService 
 {
     public const string ActivitySourceName = "Migrations";
@@ -26,9 +27,11 @@ public class Worker(
             await dbContext.EnsureDatabaseAsync(cancellationToken);
             await dbContext.RunMigrationAsync(cancellationToken);
             await applicationContextSeed.Seed(cancellationToken);
+            logger.LogInformation("Data added to database");
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "An error occurred while migrating the database");
             activity?.RecordException(ex);
             throw;
         }

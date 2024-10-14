@@ -6,6 +6,7 @@ using Diploma.Repositories;
 using Diploma.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -55,8 +56,8 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddAuthorization();
 
-builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDb");
-// builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDb");
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IPartnerTypesRepository, PartnerTypeRepository>();
 builder.Services.AddTransient<IPartnersRepository, PartnersRepository>();
 builder.Services.AddTransient<IDirectionsRepository, DirectionsRepository>();
@@ -115,6 +116,7 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 app.UseBlazorFrameworkFiles();
+
 app.UseCors(policyBuilder => policyBuilder.AllowAnyOrigin()
     .AllowAnyHeader()
     .AllowAnyMethod()
