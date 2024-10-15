@@ -50,9 +50,14 @@ public class DivisionsRepository(ApplicationContext context) : IDivisionReposito
         return division.Interactions.Count == 0 && division.DivisionsInAgreement.Count == 0;
     }
 
-    public async Task<IEnumerable<ModelDivision>> GetDivisions(int? facultyId)
+    public async Task<IEnumerable<ModelDivision>> GetDivisions(
+        string? shortName = null, 
+        string? fullName = null, 
+        int? facultyId = null)
     {
         return await GetDivisionWithFaculty()
+            .FilterByName(shortName, division => division.ShortName)
+            .FilterByName(fullName, division => division.FullName)
             .FilterByFaculty(facultyId)
             .Select(d => d.ToModel())
             .ToListAsync();

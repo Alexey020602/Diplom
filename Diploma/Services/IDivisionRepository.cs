@@ -6,7 +6,7 @@ namespace Diploma.Services;
 
 public interface IDivisionRepository
 {
-    public Task<IEnumerable<Division>> GetDivisions(int? facultyId = null);
+    public Task<IEnumerable<Division>> GetDivisions(string? shortName = null, string? fullName = null,  int? facultyId = null);
     public Task<Division> GetDivision(int id);
     public Task<bool> CanDeleteDivision(int id);
     public Task DeleteDivision(int id);

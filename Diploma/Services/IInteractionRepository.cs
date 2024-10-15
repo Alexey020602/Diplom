@@ -5,7 +5,7 @@ namespace Diploma.Services;
 
 public interface IInteractionRepository
 {
-    public Task<List<InteractionShort>> GetInteractions(int? interactionTypeId = null);
+    public Task<List<InteractionShort>> GetInteractions(string? code = null, int? interactionTypeId = null, DateOnly? sign = null, DateOnly? begin = null, DateOnly? end = null);
     public Task<ModelInteraction> GetInteractionById(int id);
     public Task DeleteInteractionById(int id);
     public Task UpdateInteraction(int id, ModelInteraction interaction);

@@ -11,6 +11,7 @@ using ModelAgreement = Agreement;
 
 public class AgreementRepository(ApplicationContext context) : IAgreementRepository
 {
+    
     public async Task AddAgreement(ModelAgreement newAgreement)
     {
         var agreement = newAgreement.ConvertToDatabaseModel();
@@ -40,9 +41,17 @@ public class AgreementRepository(ApplicationContext context) : IAgreementReposit
         ).ConvertToModel();
     }
 
-    public Task<List<AgreementShort>> GetAgreements(int? agreementTypeId, int? agreementStatusId)
+    public Task<List<AgreementShort>> GetAgreements(
+        string? number,
+        int? agreementTypeId,
+        int? agreementStatusId, 
+        DateOnly? startDate = null, 
+        DateOnly? endDate = null)
     {
         return GetAgreementWithTypeAndStatus()
+            .FilterByDate(startDate, a => a.StarDateTime)
+            .FilterByDate(endDate, a => a.EndDateTime)
+            .FilterByName(number, agreement => agreement.AgreementNumber)
             .FilterByType(agreementTypeId)
             .FilterBuStatus(agreementStatusId)
             // .AsEnumerable()

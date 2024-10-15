@@ -9,10 +9,10 @@ public class AgreementsController(IAgreementRepository repository) : ApiControll
 {
     [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> GetAll(int? agreementTypeId, int? agreementStatusId)
+    public async Task<IActionResult> GetAll(string? name = null, int? agreementTypeId = null, int? agreementStatusId = null)
     {
         return new JsonResult(
-            await repository.GetAgreements(agreementTypeId, agreementStatusId)
+            await repository.GetAgreements(name, agreementTypeId, agreementStatusId)
         );
     }
     
