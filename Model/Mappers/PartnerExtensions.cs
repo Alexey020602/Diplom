@@ -18,7 +18,7 @@ public static class PartnerExtensions
             Address = partner.Address ?? string.Empty,
             Site = partner.Site ?? string.Empty,
             ContactData = partner.ContactData ?? string.Empty,
-            Type = partner.PartnerType.ConvertToModel(),
+            Type = partner.PartnerType!.ConvertToModel(),
             Agreements = partner.PartnersInAgreement.Select(ConvertToModel).ToList(),
             Interactions = partner.Interactions.Select(ConvertToInteractionInPartner).ToList(),
             Directions = partner.Directions.Select(DirectionExtensions.ConvertToModel).ToList()

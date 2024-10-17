@@ -8,5 +8,12 @@ public interface IAgreementService : IReadOneApi<Agreement, int>, ICreateApi<Agr
     IDeleteApi<int>
 {
     [Get("")]
-    Task<List<AgreementShort>> ReadAll(int? agreementTypeId = null, int? agreementStatusId = null);
+    Task<List<AgreementShort>> ReadAll(
+        string? number = null, 
+        int? agreementTypeId = null, 
+        int? agreementStatusId = null,
+        DateOnly? startDate = null,
+        DateOnly? endDate = null,
+        int skip = 0,
+        int take = 10);
 }

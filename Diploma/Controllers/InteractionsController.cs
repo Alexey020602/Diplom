@@ -9,10 +9,24 @@ public class InteractionsController(IInteractionRepository interactionRepository
 {
     [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> Get(string? code = null, int? interactionTypeId = null, DateOnly? sign = null, DateOnly? start = null, DateOnly? end = null)
+    public async Task<IActionResult> Get(
+        string? code = null, 
+        int? interactionTypeId = null, 
+        DateOnly? sign = null, 
+        DateOnly? start = null,
+        DateOnly? end = null, 
+        int skip = 0,
+        int take = 10)
     {
         return new JsonResult(
-            (await interactionRepository.GetInteractions(code, interactionTypeId, sign, start, end))
+            (await interactionRepository.GetInteractions(
+                code, 
+                interactionTypeId, 
+                sign, 
+                start,
+                end,
+                skip,
+                take))
             .Select(i => new InteractionShort(i.Id, i.ToString()))
         );
     }

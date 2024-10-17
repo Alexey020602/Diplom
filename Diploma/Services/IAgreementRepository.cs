@@ -6,11 +6,13 @@ namespace Diploma.Services;
 public interface IAgreementRepository
 {
     public Task<List<AgreementShort>> GetAgreements(
-        string? number,
-        int? agreementTypeId,
-        int? agreementStatusId, 
+        string? number = null,
+        int? agreementTypeId = null,
+        int? agreementStatusId = null, 
         DateOnly? startDate = null, 
-        DateOnly? endDate = null);
+        DateOnly? endDate = null,
+        int skip = 0,
+        int take = 10);
     public Task<ModelAgreement> GetAgreementById(int id);
     public Task DeleteAgreement(int id);
     public Task UpdateAgreement(int id, ModelAgreement agreement);

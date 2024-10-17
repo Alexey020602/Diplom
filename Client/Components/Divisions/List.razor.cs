@@ -13,9 +13,11 @@ public partial class List : SearchableStyledList<DivisionShort>
     protected override string CreateHref => "divisions/create";
     protected override string CreateText => "Добавить подразделение";
 
-    protected override Task<List<DivisionShort>> Load()
+    protected override Task<List<DivisionShort>> Load(string? text, int? skip, int? take)
     {
-        return DivisionsService.ReadAll(facultyFilterValue?.Id);
+        return DivisionsService.ReadAll(
+            shortName: text,
+            facultyId: facultyFilterValue?.Id);
     }
 
     protected override string RowHref(DivisionShort division)

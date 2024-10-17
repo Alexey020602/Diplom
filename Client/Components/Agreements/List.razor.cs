@@ -13,9 +13,12 @@ public partial class List
     [Inject] private IAgreementService AgreementService { get; set; } = null!;
     protected override string CreateHref => "/agreements/create";
     protected override string CreateText => "Добавить соглашение";
-    protected override Task<List<AgreementShort>> Load()
+    protected override Task<List<AgreementShort>> Load(string? text, int? skip, int? take)
     {
-        return AgreementService.ReadAll(agreementType?.Id, agreementStatus?.Id);
+        return AgreementService.ReadAll(
+            number: text,
+            agreementTypeId: agreementType?.Id, 
+            agreementStatusId: agreementStatus?.Id);
     }
 
     protected override string RowHref(AgreementShort item)

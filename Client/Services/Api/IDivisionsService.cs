@@ -8,5 +8,10 @@ public interface IDivisionsService : IReadApi<DivisionShort>, IReadOneApi<Divisi
     ICreateApi<Division>, IUpdateApi<Division, int>
 {
     [Get("")]
-    Task<List<DivisionShort>> ReadAll(int? facultyId);
+    Task<List<DivisionShort>> ReadAll(
+        string? shortName = null, 
+        string? fullName = null, 
+        int? facultyId = null,
+        int skip = 0,
+        int take = 10);
 }

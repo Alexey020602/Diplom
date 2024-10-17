@@ -47,6 +47,7 @@ public class ApplicationContextSeed(
         await AddInteractionTypes(cancellationToken);
         await AddAgreementStatuses(cancellationToken);
         await AddAgreementTypes(cancellationToken);
+        await AddPartners(cancellationToken);
         // AddUsers();
     }
 
@@ -210,12 +211,12 @@ public class ApplicationContextSeed(
 
         foreach (var partner in partnersForSave)
         {
-            context.Attach(partner.PartnerType);
+            // context.Attach(partner.PartnerType);
             context.Partners.Add(partner);
         }
-
+        
         await context.SaveChangesAsync(cancellationToken);
     }
     
-
+    
 }

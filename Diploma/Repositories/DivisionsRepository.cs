@@ -53,12 +53,17 @@ public class DivisionsRepository(ApplicationContext context) : IDivisionReposito
     public async Task<IEnumerable<ModelDivision>> GetDivisions(
         string? shortName = null, 
         string? fullName = null, 
-        int? facultyId = null)
+        int? facultyId = null,
+        int skip = 0,
+        int take = 10)
     {
         return await GetDivisionWithFaculty()
             .FilterByName(shortName, division => division.ShortName)
             .FilterByName(fullName, division => division.FullName)
             .FilterByFaculty(facultyId)
+            .OrderBy(d => d.Id)
+            .Skip(skip)
+            .Take(take)
             .Select(d => d.ToModel())
             .ToListAsync();
     }

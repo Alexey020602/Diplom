@@ -13,9 +13,9 @@
 @code {
     [Inject] private IInteractionsService InteractionService { get; set; } = null!;
 
-    protected override Task<List<InteractionShort>> Load()
+    protected override Task<List<InteractionShort>> Load(string? text, int? skip, int? take)
     {
-        return InteractionService.ReadAll();
+        return InteractionService.ReadAll(text, skip: skip, take: take);
     }
 
     protected override string CreateHref => "/interactions/create";

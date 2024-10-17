@@ -35,9 +35,21 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .ToList();
     }
 
-    public async Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId, int? directionId)
+    public async Task<IEnumerable<Partner>> GetPartnersAsync(
+        string? shortName = null,
+        string? fullName = null,
+        int? partnerTypeId = null, 
+        int? directionId = null,
+        int skip = 0,
+        int take = 10
+        )
     {
         return await GetPartners(partnerTypeId, directionId)
+            .WhereWithNullable(shortName, shortName => p => p.ShortName.Contains(shortName))
+            .WhereWithNullable(fullName, fullName => p => p.FullName.Contains(fullName))
+            .OrderBy(p => p.Id)
+            .Skip(skip)
+            .Take(take)
             .Select(p => p.ConvertToModel())
             .ToListAsync();
     }
@@ -64,7 +76,8 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
     {
         var partner = newPartner.ConvertToDao();
         AttachDirections(partner.Directions);
-        context.PartnerTypes.Attach(partner.PartnerType);
+        if (partner.PartnerType is not null) 
+            context.PartnerTypes.Attach(partner.PartnerType);
         context.Partners.Add(partner);
         Console.WriteLine(partner);
         await context.SaveChangesAsync();

@@ -30,7 +30,14 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         return (await context.Interactions.AsNoTracking().FirstAsync(i => i.Id == id)).ConvertToModel();
     }
 
-    public Task<List<InteractionShort>> GetInteractions(string? code = null, int? interactionTypeId = null, DateOnly? sign = null, DateOnly? begin = null, DateOnly? end = null)
+    public Task<List<InteractionShort>> GetInteractions(
+        string? code = null, 
+        int? interactionTypeId = null, 
+        DateOnly? sign = null, 
+        DateOnly? begin = null, 
+        DateOnly? end = null,
+        int skip = 0,
+        int take = 10)
     {
         return context
             .Interactions
@@ -40,6 +47,9 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
             .FilterByDate(begin, i => i.BeginigDateTime)
             .FilterByDate(end, i => i.EndingDateTime)
             .FilterByType(interactionTypeId)
+            .OrderBy(i => i.Id)
+            .Skip(skip)
+            .Take(take)
             .Select(i => new InteractionShort(i.Id, i.ToString()))
             .ToListAsync();
     }

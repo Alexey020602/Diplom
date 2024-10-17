@@ -12,7 +12,14 @@ public interface IPartnersRepository
     Task UpdatePartnerAsync(int id, Partner partner);
 
     // Task<IEnumerable<Partner>> GetPartnersAsync();
-    Task<IEnumerable<Partner>> GetPartnersAsync(int? partnerTypeId = null, int? directionId = null);
+    Task<IEnumerable<Partner>> GetPartnersAsync(
+        string? shortName = null, 
+        string? fullName = null, 
+        int? partnerTypeId = null, 
+        int? directionId = null,
+        int skip = 0,
+        int take = 0
+        );
     Task<Partner> GetPartnerByIdAsync(int id);
     Task<bool> CanDeletePartner(int id);
     Task<List<AgreementInPartner>> GetAgreementsForPartnerWithId(int id);

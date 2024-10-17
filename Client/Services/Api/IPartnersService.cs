@@ -11,7 +11,13 @@ public interface IPartnersService : IReadApi<PartnerShort>, IReadOneApi<Partner,
     IUpdateApi<Partner, int>, ICreateApi<Partner>
 {
     [Get("")]
-    Task<List<PartnerShort>> ReadAll(int? partnerTypeId = null);
+    Task<List<PartnerShort>> ReadAll(
+        string? shortName = null,
+        string? fullName = null,
+        int? partnerTypeId = null, 
+        int? directionId = null,
+        int? skip = null,
+        int? take = null);
 
     [Get("/{id}/agreements")]
     Task<List<AgreementShort>> ReadAllAgreements(int id);

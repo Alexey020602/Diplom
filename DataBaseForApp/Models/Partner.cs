@@ -56,7 +56,8 @@ public class Partner
     /// <summary>
     ///     Тип партнера
     /// </summary>
-    public PartnerType PartnerType { get; set; } = null!;
+    public PartnerType? PartnerType { get; set; }
+    public int PartnerTypeId { get; set; }
 
     [JsonIgnore] public List<PartnerInAgreement> PartnersInAgreement { get; set; } = [];
 
@@ -101,7 +102,7 @@ public class Partner
         ShortName = $"Парнтер {number}",
         FullName = $"Партнер {number.Name()}",
         Site = $"https://site{number}.ru",
-        PartnerType = new() { Id = (number - 1) % 4 + 1 },
+        PartnerTypeId = (number - 1) % 4 + 1,
         Address = $"Адрес {number}"
     };
 }

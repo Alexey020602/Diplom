@@ -13,44 +13,36 @@ public abstract partial class SearchableStyledList<TItem> : ComponentBase
     //[Parameter]
     //public ISearchableListDelegate<TItem> ListDelegate { get; set; } = null!;
     protected List<TItem> Items = [];
-    private string message = string.Empty;
-    private string namesFilter = string.Empty;
+    protected string? NamesFilter = null;
 
-    private IEnumerable<TItem> ShowedItems => from item in Items
-        where item.ToString()?.Contains(namesFilter) ?? false
-        orderby item.ToString()
-        select item;
-
-    private bool IsShowList => ShowedItems.Any();
+    private bool IsShowList => Items.Any();
     protected abstract string CreateHref { get; }
     protected abstract RenderFragment Filters { get; }
 
     protected override Task OnInitializedAsync()
     {
-        return LoadItems();
+        return LoadItems(new ());
     }
 
-    protected async Task LoadItems()
+    protected async Task LoadItems(LoadDataArgs args)
     {
         isLoading = true;
         Items = [];
-        message = LoadMessage;
-        Items = await Load();
-        message = EmptyListMessage;
+        Items = await Load(NamesFilter, args.Skip, args.Top);
         isLoading = false;
     }
-    protected abstract Task<List<TItem>> Load();
+    protected abstract Task<List<TItem>> Load(string? text, int? skip, int? take);
 
     private void ClearNameFilter()
     {
-        namesFilter = string.Empty;
+        NamesFilter = string.Empty;
     }
 
     private Task ClearFilters()
     {
         ClearNameFilter();
         ClearFilterFields();
-        return LoadItems();
+        return LoadItems(new ());
     }
     protected abstract void ClearFilterFields();
     protected abstract string RowHref(TItem item);

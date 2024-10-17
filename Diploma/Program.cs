@@ -56,8 +56,8 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddAuthorization();
 
-// builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDb");
-builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDb");
+// builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IPartnerTypesRepository, PartnerTypeRepository>();
 builder.Services.AddTransient<IPartnersRepository, PartnersRepository>();
 builder.Services.AddTransient<IDirectionsRepository, DirectionsRepository>();

@@ -20,9 +20,9 @@ public partial class List : SearchableStyledList<PartnerShort>
 
     protected override string CreateText => "Добавить нового партнера";
 
-    protected override Task<List<PartnerShort>> Load()
+    protected override Task<List<PartnerShort>> Load(string? text, int? skip, int? take)
     {
-        return PartnersService.ReadAll(PartnerType?.Id);
+        return PartnersService.ReadAll(shortName: text, partnerTypeId: PartnerType?.Id, skip:skip, take: take);
     }
     protected override void ClearFilterFields()
     {

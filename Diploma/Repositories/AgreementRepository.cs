@@ -46,7 +46,9 @@ public class AgreementRepository(ApplicationContext context) : IAgreementReposit
         int? agreementTypeId,
         int? agreementStatusId, 
         DateOnly? startDate = null, 
-        DateOnly? endDate = null)
+        DateOnly? endDate = null,
+        int skip = 0,
+        int take = 10)
     {
         return GetAgreementWithTypeAndStatus()
             .FilterByDate(startDate, a => a.StarDateTime)
@@ -54,6 +56,9 @@ public class AgreementRepository(ApplicationContext context) : IAgreementReposit
             .FilterByName(number, agreement => agreement.AgreementNumber)
             .FilterByType(agreementTypeId)
             .FilterBuStatus(agreementStatusId)
+            .OrderBy(a => a.Id)
+            .Skip(skip)
+            .Take(take)
             // .AsEnumerable()
             .Select(a => a.ConvertToShortModel())
             .ToListAsync();

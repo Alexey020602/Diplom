@@ -9,10 +9,21 @@ public class DivisionsController(IDivisionRepository repository) : ApiController
 {
     [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> GetDivisions(string? shortName, string? fullName, int? facultyId)
+    public async Task<IActionResult> GetDivisions(
+        string? shortName, 
+        string? fullName, 
+        int? facultyId,
+        int skip = 0,
+        int take = 10)
     {
         return new JsonResult(
-            (await repository.GetDivisions(shortName, fullName, facultyId)).Select(d => new DivisionShort(d.Id, d.ShortName)));
+            (await repository.GetDivisions(
+                shortName, 
+                fullName, 
+                facultyId,
+                skip,
+                take)
+            ).Select(d => new DivisionShort(d.Id, d.ShortName)));
     }
 
     [Authorize(Roles = "Cip")]

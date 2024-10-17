@@ -25,7 +25,7 @@
                                                  Orientation="Orientation.Horizontal"
                                                  JustifyContent="JustifyContent.SpaceBetween"
                                                  AlignItems="AlignItems.Center">
-                                                <RadzenButton Click="@LoadItems" Text="Применить фильтр"/>
+                                                <RadzenButton Click="@(_ => LoadItems(new ()))" Text="Применить фильтр"/>
                                                 <RadzenButton Click="@ClearFilters" Text="Сбросить фильтр"/>
                                             </RadzenStack>;
 
@@ -47,10 +47,11 @@
                                         WrapItems=false
                                         AllowVirtualization=false
                                         TItem=@TItem
-                                        Data=@ShowedItems
+                                        Data=@Items
                                         IsLoading=@isLoading
-                                        Count=@ShowedItems.Count()
-                                        PageSize="5"
+                                        Count=@Items.Count()
+                                        PageSize=5
+                                        AllowPaging=true
                                         LoadData=@LoadItems
                                         ShowEmptyMessage=true>
                                        <Template>
@@ -68,5 +69,5 @@
 
     @* private RenderFragment EmptyListButton => @<RadzenButton Icon="cached" Click=@(() => LoadItems()) ButtonStyle=@ButtonStyle.Primary/>; *@
 
-    private RenderFragment Search => @<RadzenTextBox Placeholder=@NameFilterTitle @bind-Value=@namesFilter />;
+    private RenderFragment Search => @<RadzenTextBox Placeholder=@NameFilterTitle @bind-Value=@NamesFilter />;
 }

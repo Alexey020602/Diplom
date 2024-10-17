@@ -10,9 +10,22 @@ public class PartnersController(IPartnersRepository partnersRepository) : ApiCon
 {
     [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> ShowPartners([FromQuery] int? partnerTypeId, [FromQuery] int? directionId)
+    public async Task<IActionResult> ShowPartners(
+        string? shortName,
+        string? fullName,
+        int? partnerTypeId, 
+        int? directionId,
+        int skip = 0,
+        int take = 10)
     {
-        var partners = (await partnersRepository.GetPartnersAsync(partnerTypeId, directionId)).Select(p => new
+        var partners = (await partnersRepository.GetPartnersAsync(
+            shortName,
+            fullName,
+            partnerTypeId, 
+            directionId,
+            skip,
+            take)
+            ).Select(p => new
         {
             Name = p.ShortName,
             p.Id

@@ -8,5 +8,11 @@ public interface IInteractionsService : IReadOneApi<Interaction, int>, IUpdateAp
     ICreateApi<Interaction>
 {
     [Get("")]
-    Task<List<InteractionShort>> ReadAll(int? interactionTypeId = null);
+    Task<List<InteractionShort>> ReadAll(string? code = null, 
+        int? interactionTypeId = null, 
+        DateOnly? sign = null, 
+        DateOnly? start = null,
+        DateOnly? end = null, 
+        int? skip = null,
+        int? take = null);
 }
