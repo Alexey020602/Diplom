@@ -1,12 +1,13 @@
 ﻿using DataBase.Data;
 using DataBase.Extensions;
-using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model;
 using Model.Extensions;
 using Model.Mappers;
 using Model.Partners;
 using DBPartner = DataBase.Models.Partner;
+using Direction = DataBase.Models.Direction;
 using Partner = Model.Partners.Partner;
 
 namespace Diploma.Repositories;
@@ -35,23 +36,27 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .ToList();
     }
 
-    public async Task<IEnumerable<Partner>> GetPartnersAsync(
-        string? shortName = null,
-        string? fullName = null,
-        int? partnerTypeId = null, 
-        int? directionId = null,
-        int skip = 0,
-        int take = 10
-        )
+    public Task<int> PartnersCountAsync() => context.Partners.CountAsync();
+    public async Task<Paging<PartnerShort>> GetPartnersAsync(PartnersFilter filter)
     {
-        return await GetPartners(partnerTypeId, directionId)
-            .WhereWithNullable(shortName, shortName => p => p.ShortName.Contains(shortName))
-            .WhereWithNullable(fullName, fullName => p => p.FullName.Contains(fullName))
-            .OrderBy(p => p.Id)
-            .Skip(skip)
-            .Take(take)
-            .Select(p => p.ConvertToModel())
-            .ToListAsync();
+        var partnersWithoutPaging = GetPartners(
+                filter.PartnerTypeId, 
+                filter.DirectionId)
+            .WhereWithNullable(filter.ShortName, shortName => p => p.ShortName.Contains(shortName))
+            .WhereWithNullable(filter.FullName, fullName => p => p.FullName.Contains(fullName))
+            .OrderBy(p => p.Id);
+        var skip = filter.Skip ?? 0;
+        var take = filter.Take ?? 10;
+        return new(
+            await partnersWithoutPaging.CountAsync(),
+            skip,
+            take,
+            await partnersWithoutPaging.Skip(skip)
+                .Take(take)
+                .Select(p => p.ConvertToPartnerShort())
+                .ToListAsync()
+        );
+
     }
 
     public async Task<Partner> GetPartnerByIdAsync(int id)

@@ -2,6 +2,7 @@
 using Client.Shared.List;
 using Client.Shared.Select;
 using Microsoft.AspNetCore.Components;
+using Model;
 using Model.Partners;
 using Radzen;
 
@@ -20,9 +21,14 @@ public partial class List : SearchableStyledList<PartnerShort>
 
     protected override string CreateText => "Добавить нового партнера";
 
-    protected override Task<List<PartnerShort>> Load(string? text, int? skip, int? take)
+    protected override  Task<Paging<PartnerShort>> Load(string? text, int? skip, int? take)
     {
-        return PartnersService.ReadAll(shortName: text, partnerTypeId: PartnerType?.Id, skip:skip, take: take);
+        return PartnersService.ReadAll(new PartnersFilter(
+            ShortName: text,
+            PartnerTypeId: PartnerType?.Id,
+            Skip: skip ?? 0,
+            Take: take ?? pageSize
+        ));
     }
     protected override void ClearFilterFields()
     {

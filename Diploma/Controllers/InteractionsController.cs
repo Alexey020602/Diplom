@@ -8,27 +8,15 @@ namespace Diploma.Controllers;
 public class InteractionsController(IInteractionRepository interactionRepository) : ApiControllerBase
 {
     [Authorize(Roles = "Cip")]
+    [HttpGet("count")]
+    public Task<int> GetCount() => interactionRepository.InteractionsCountAsync();
+    
+    [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> Get(
-        string? code = null, 
-        int? interactionTypeId = null, 
-        DateOnly? sign = null, 
-        DateOnly? start = null,
-        DateOnly? end = null, 
-        int skip = 0,
-        int take = 10)
+    public async Task<IActionResult> Get([FromQuery] InteractionsFilter filter)
     {
         return new JsonResult(
-            (await interactionRepository.GetInteractions(
-                code, 
-                interactionTypeId, 
-                sign, 
-                start,
-                end,
-                skip,
-                take))
-            .Select(i => new InteractionShort(i.Id, i.ToString()))
-        );
+            (await interactionRepository.GetInteractions(filter)));
     }
 
     [Authorize(Roles = "Cip")]

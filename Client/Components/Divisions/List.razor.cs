@@ -1,6 +1,7 @@
 ﻿using Client.Services.Api;
 using Client.Shared.List;
 using Microsoft.AspNetCore.Components;
+using Model;
 using Model.Divisions;
 using Radzen;
 
@@ -13,11 +14,13 @@ public partial class List : SearchableStyledList<DivisionShort>
     protected override string CreateHref => "divisions/create";
     protected override string CreateText => "Добавить подразделение";
 
-    protected override Task<List<DivisionShort>> Load(string? text, int? skip, int? take)
+    protected override Task<Paging<DivisionShort>> Load(string? text, int? skip, int? take)
     {
-        return DivisionsService.ReadAll(
-            shortName: text,
-            facultyId: facultyFilterValue?.Id);
+        return DivisionsService.ReadAll(new DivisionsFilter(
+            ShortName: text, 
+            FacultyId: facultyFilterValue?.Id,
+            Skip: skip, 
+            Take: take));
     }
 
     protected override string RowHref(DivisionShort division)

@@ -2,6 +2,7 @@
 using DataBase.Extensions;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model;
 using Model.Interactions;
 using Model.Mappers;
 using Interaction = DataBase.Models.Interaction;
@@ -30,28 +31,37 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         return (await context.Interactions.AsNoTracking().FirstAsync(i => i.Id == id)).ConvertToModel();
     }
 
-    public Task<List<InteractionShort>> GetInteractions(
-        string? code = null, 
-        int? interactionTypeId = null, 
-        DateOnly? sign = null, 
-        DateOnly? begin = null, 
-        DateOnly? end = null,
-        int skip = 0,
-        int take = 10)
+    public Task<int> InteractionsCountAsync() => context.Interactions.CountAsync();
+
+    public async Task<Paging<InteractionShort>> GetInteractions(InteractionsFilter filter)
     {
-        return context
+        var sign = filter.Sign?.ToDateTime(new());
+        var begin = filter.Start?.ToDateTime(new());
+        var end = filter.End?.ToDateTime(new());
+        var interactionsWithoutPaging = context
             .Interactions
             .AsNoTracking()
             .Include(i => i.InteractionType)
-            .FilterByDate(sign, i => i.SigningDateTime)
-            .FilterByDate(begin, i => i.BeginigDateTime)
-            .FilterByDate(end, i => i.EndingDateTime)
-            .FilterByType(interactionTypeId)
-            .OrderBy(i => i.Id)
-            .Skip(skip)
-            .Take(take)
-            .Select(i => new InteractionShort(i.Id, i.ToString()))
-            .ToListAsync();
+            .WhereWithNullable(sign, sign => (i => i.SigningDateTime.Date == sign))
+            .WhereWithNullable(begin, begin => (i => i.SigningDateTime.Date == begin))
+            .WhereWithNullable(end, end => (i => i.SigningDateTime.Date == end))
+            .WhereWithNullable(filter.Code, code => (i => i.ContactCode.Contains(code)))
+            .FilterByType(filter.InteractionTypeId)
+            .OrderBy(i => i.Id);
+        
+        var take = filter.Take ?? 10;
+        var skip = filter.Skip ?? 0;
+        
+        return new Paging<InteractionShort>(
+            await interactionsWithoutPaging.CountAsync(),
+            skip,
+            take,
+            await interactionsWithoutPaging
+                .Skip(skip)
+                .Take(take)
+                .Select(i => new InteractionShort(i.Id, i.ToString()))
+                .ToListAsync()
+            );
     }
 
     public async Task UpdateInteraction(int id, ModelInteraction interaction)

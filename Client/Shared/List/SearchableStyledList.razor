@@ -49,9 +49,10 @@
                                         TItem=@TItem
                                         Data=@Items
                                         IsLoading=@isLoading
-                                        Count=@Items.Count()
-                                        PageSize=5
+                                        Count=@count
+                                        PageSize=@pageSize
                                         AllowPaging=true
+                                        Page=@PageChanged
                                         LoadData=@LoadItems
                                         ShowEmptyMessage=true>
                                        <Template>

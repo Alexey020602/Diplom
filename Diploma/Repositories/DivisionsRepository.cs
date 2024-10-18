@@ -1,11 +1,12 @@
 ﻿using DataBase.Data;
 using DataBase.Extensions;
-using DataBase.Models;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model;
 using Model.Divisions;
 using Model.Extensions;
 using Model.Mappers;
+using Direction = DataBase.Models.Direction;
 using Division = DataBase.Models.Division;
 using ModelDivision = Model.Divisions.Division;
 
@@ -50,22 +51,28 @@ public class DivisionsRepository(ApplicationContext context) : IDivisionReposito
         return division.Interactions.Count == 0 && division.DivisionsInAgreement.Count == 0;
     }
 
-    public async Task<IEnumerable<ModelDivision>> GetDivisions(
-        string? shortName = null, 
-        string? fullName = null, 
-        int? facultyId = null,
-        int skip = 0,
-        int take = 10)
+    public Task<int> DivisionsCountAsync() => context.Divisions.CountAsync();
+
+    public async Task<Paging<DivisionShort>> GetDivisions(DivisionsFilter filter)
     {
-        return await GetDivisionWithFaculty()
-            .FilterByName(shortName, division => division.ShortName)
-            .FilterByName(fullName, division => division.FullName)
-            .FilterByFaculty(facultyId)
-            .OrderBy(d => d.Id)
-            .Skip(skip)
-            .Take(take)
-            .Select(d => d.ToModel())
-            .ToListAsync();
+        var divisionsWithoutPaging = GetDivisionWithFaculty()
+            .WhereWithNullable(filter.ShortName, shortName => (d => d.ShortName.Contains(shortName)))
+            .WhereWithNullable(filter.FullName, fullName => (d => d.FullName.Contains(fullName)))
+            .FilterByFaculty(filter.FacultyId)
+            .OrderBy(d => d.Id);
+        
+        var take = filter.Take ?? 10;
+        var skip = filter.Skip ?? 0;
+        
+        return new Paging<DivisionShort>(
+                await divisionsWithoutPaging.CountAsync(),
+                skip, take,
+                await divisionsWithoutPaging
+                    .Skip(skip)
+                    .Take(take)
+                    .Select(d => d.ConvertToDivisionShort())
+                    .ToListAsync()
+                );
     }
 
     public async Task UpdateDivision(int id, ModelDivision newDivision)

@@ -5,10 +5,11 @@ using Refit;
 namespace Client.Services.Api;
 
 public interface IInteractionsService : IReadOneApi<Interaction, int>, IUpdateApi<Interaction, int>, IDeleteApi<int>,
-    ICreateApi<Interaction>
+    ICreateApi<Interaction>, ICountApi, IReadApi<InteractionShort>
 {
     [Get("")]
-    Task<List<InteractionShort>> ReadAll(string? code = null, 
+    Task<List<InteractionShort>> ReadAll(
+        string? code = null, 
         int? interactionTypeId = null, 
         DateOnly? sign = null, 
         DateOnly? start = null,

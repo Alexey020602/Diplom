@@ -1,4 +1,5 @@
 ﻿using Client.Services.Api.BaseApi;
+using Model;
 using Model.Agreements;
 using Model.Interactions;
 using Model.Partners;
@@ -8,16 +9,18 @@ using Partner = Model.Partners.Partner;
 namespace Client.Services.Api;
 
 public interface IPartnersService : IReadApi<PartnerShort>, IReadOneApi<Partner, int>, IDeleteApi<int>,
-    IUpdateApi<Partner, int>, ICreateApi<Partner>
+    IUpdateApi<Partner, int>, ICreateApi<Partner>, ICountApi
 {
     [Get("")]
-    Task<List<PartnerShort>> ReadAll(
-        string? shortName = null,
-        string? fullName = null,
-        int? partnerTypeId = null, 
-        int? directionId = null,
-        int? skip = null,
-        int? take = null);
+    Task<Paging<PartnerShort>> ReadAll(
+        PartnersFilter partnersFilter
+        // string? shortName = null,
+        // string? fullName = null,
+        // int? partnerTypeId = null, 
+        // int? directionId = null,
+        // int? skip = null,
+        // int? take = null
+        );
 
     [Get("/{id}/agreements")]
     Task<List<AgreementShort>> ReadAllAgreements(int id);

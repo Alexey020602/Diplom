@@ -5,7 +5,7 @@ using Refit;
 namespace Client.Services.Api;
 
 public interface IDivisionsService : IReadApi<DivisionShort>, IReadOneApi<Division, int>, ICanDeleteApi<int>, IDeleteApi<int>,
-    ICreateApi<Division>, IUpdateApi<Division, int>
+    ICreateApi<Division>, IUpdateApi<Division, int>, ICountApi
 {
     [Get("")]
     Task<List<DivisionShort>> ReadAll(

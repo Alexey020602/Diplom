@@ -1,6 +1,7 @@
 ﻿@attribute [Authorize(Roles = "Cip")]
 @using Client.Services.Api
 @using Microsoft.AspNetCore.Authorization
+@using Model
 @using Model.Interactions
 @inherits Client.Shared.List.SearchableStyledList<InteractionShort>
 
@@ -13,9 +14,9 @@
 @code {
     [Inject] private IInteractionsService InteractionService { get; set; } = null!;
 
-    protected override Task<List<InteractionShort>> Load(string? text, int? skip, int? take)
+    protected override Task<Paging<InteractionShort>> Load(string? text, int? skip, int? take)
     {
-        return InteractionService.ReadAll(text, skip: skip, take: take);
+        return InteractionService.ReadAll(new InteractionsFilter(Code: text, Skip: skip, Take: take));
     }
 
     protected override string CreateHref => "/interactions/create";

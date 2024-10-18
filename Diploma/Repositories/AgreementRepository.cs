@@ -2,6 +2,7 @@
 using DataBase.Extensions;
 using Diploma.Services;
 using Microsoft.EntityFrameworkCore;
+using Model;
 using Model.Agreements;
 using Model.Mappers;
 
@@ -11,7 +12,6 @@ using ModelAgreement = Agreement;
 
 public class AgreementRepository(ApplicationContext context) : IAgreementRepository
 {
-    
     public async Task AddAgreement(ModelAgreement newAgreement)
     {
         var agreement = newAgreement.ConvertToDatabaseModel();
@@ -41,27 +41,33 @@ public class AgreementRepository(ApplicationContext context) : IAgreementReposit
         ).ConvertToModel();
     }
 
-    public Task<List<AgreementShort>> GetAgreements(
-        string? number,
-        int? agreementTypeId,
-        int? agreementStatusId, 
-        DateOnly? startDate = null, 
-        DateOnly? endDate = null,
-        int skip = 0,
-        int take = 10)
+    public Task<int> CountAgreements() => context.Agreements.CountAsync();
+
+    public async Task<Paging<AgreementShort>> GetAgreements(AgreementsFilter filter)
     {
-        return GetAgreementWithTypeAndStatus()
-            .FilterByDate(startDate, a => a.StarDateTime)
-            .FilterByDate(endDate, a => a.EndDateTime)
-            .FilterByName(number, agreement => agreement.AgreementNumber)
-            .FilterByType(agreementTypeId)
-            .FilterBuStatus(agreementStatusId)
-            .OrderBy(a => a.Id)
-            .Skip(skip)
-            .Take(take)
-            // .AsEnumerable()
-            .Select(a => a.ConvertToShortModel())
-            .ToListAsync();
+        var startDate = filter.StartDate?.ToDateTime(new());
+        var endDate = filter.EndDate?.ToDateTime(new());
+        var agreementsWithoutPagging = GetAgreementWithTypeAndStatus()
+            .WhereWithNullable(startDate, startDate => (a => a.StarDateTime.Date == startDate))
+            .WhereWithNullable(endDate, endDate => (a => a.EndDateTime.Date == endDate))
+            .WhereWithNullable(filter.Number, number => (a => a.AgreementNumber.Contains(number)))
+            .FilterByType(filter.AgreementTypeId)
+            .FilterBuStatus(filter.AgreementStatusId)
+            .OrderBy(a => a.Id);
+        var take = filter.Take ?? 10;
+        var skip = filter.Skip ?? 0;
+        
+        return new Paging<AgreementShort>(
+                await agreementsWithoutPagging.CountAsync(),
+                skip,
+                take,
+                await agreementsWithoutPagging
+                    .Skip(skip)
+                    .Take(take)
+                    .Select(a => a.ConvertToShortModel())
+                    .ToListAsync()
+                )
+            ;
     }
 
     public async Task UpdateAgreement(int id, ModelAgreement newAgreement)

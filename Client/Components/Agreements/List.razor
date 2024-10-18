@@ -12,10 +12,21 @@
 
 @code {
 
-    protected override RenderFragment Filters => @<RadzenStack Orientation="@Orientation.Horizontal">
-                                                     @TypeFilter
-                                                     @StatusFilter
-                                                 </RadzenStack>;
+    protected override RenderFragment Filters => @<div>
+                                                     <RadzenRow>
+                                                         <RadzenColumn ChildContent=@TypeFilter/>
+                                                         <RadzenColumn ChildContent=@StatusFilter/>
+                                                     </RadzenRow>
+                                                     <RadzenRow>
+                                                         <RadzenColumn ChildContent=@StartFilter/>
+                                                         <RadzenColumn ChildContent=@EndFilter/>
+                                                     </RadzenRow>
+                                                 </div>;
+        @* @<RadzenStack Orientation="@Orientation.Horizontal"> *@
+        @*                                              @TypeFilter *@
+        @*                                              @StatusFilter *@
+        @*                                              @BeginFilter *@
+        @*                                          </RadzenStack>; *@
 
     private RenderFragment TypeFilter => @<UniversalCustomSelect
                                               Placeholder="Тип соглашения"
@@ -27,4 +38,16 @@
                                                 Placeholder="Статус соглашения"
                                                @bind-Value="@agreementStatus"/>;
 
+    private RenderFragment StartFilter => @<RadzenDatePicker
+                                               TValue="DateTime?"
+                                               @bind-Value=@startDate
+                                               Max=@endDate
+                                               ShowTime="false"
+                                               Placeholder="Дата начала соглашения"/>;
+    private RenderFragment EndFilter => @<RadzenDatePicker
+                                             TValue="DateTime?"
+                                             @bind-Value=@endDate
+                                             Min=@startDate
+                                             ShowTime="false"
+                                             Placeholder="Дата окончания соглашения"/>;
 }

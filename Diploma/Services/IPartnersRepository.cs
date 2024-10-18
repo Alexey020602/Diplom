@@ -1,5 +1,6 @@
 ﻿// using DataBase.Models;
 
+using Model;
 using Model.Partners;
 
 namespace Diploma.Services;
@@ -12,16 +13,10 @@ public interface IPartnersRepository
     Task UpdatePartnerAsync(int id, Partner partner);
 
     // Task<IEnumerable<Partner>> GetPartnersAsync();
-    Task<IEnumerable<Partner>> GetPartnersAsync(
-        string? shortName = null, 
-        string? fullName = null, 
-        int? partnerTypeId = null, 
-        int? directionId = null,
-        int skip = 0,
-        int take = 0
-        );
+    Task<Paging<PartnerShort>> GetPartnersAsync(PartnersFilter filter);
     Task<Partner> GetPartnerByIdAsync(int id);
     Task<bool> CanDeletePartner(int id);
     Task<List<AgreementInPartner>> GetAgreementsForPartnerWithId(int id);
     Task<List<InteractionInPartner>> GetInteractionsForPartnerWithId(int id);
+    Task<int> PartnersCountAsync();
 }

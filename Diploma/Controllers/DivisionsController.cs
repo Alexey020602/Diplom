@@ -8,22 +8,14 @@ namespace Diploma.Controllers;
 public class DivisionsController(IDivisionRepository repository) : ApiControllerBase
 {
     [Authorize(Roles = "Cip")]
+    [HttpGet("count")]
+    public Task<int> GetCount() => repository.DivisionsCountAsync();
+    
+    [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> GetDivisions(
-        string? shortName, 
-        string? fullName, 
-        int? facultyId,
-        int skip = 0,
-        int take = 10)
+    public async Task<IActionResult> GetDivisions([FromQuery] DivisionsFilter filter)
     {
-        return new JsonResult(
-            (await repository.GetDivisions(
-                shortName, 
-                fullName, 
-                facultyId,
-                skip,
-                take)
-            ).Select(d => new DivisionShort(d.Id, d.ShortName)));
+        return new JsonResult(await repository.GetDivisions(filter));
     }
 
     [Authorize(Roles = "Cip")]

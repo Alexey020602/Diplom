@@ -9,26 +9,14 @@ public class AgreementsController(IAgreementRepository repository) : ApiControll
 {
     [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> GetAll(
-        string? number = null, 
-        int? agreementTypeId = null, 
-        int? agreementStatusId = null,
-        DateOnly? startDate = null,
-        DateOnly? endDate = null,
-        int skip = 0,
-        int take = 10)
+    public async Task<IActionResult> GetAll([FromQuery] AgreementsFilter filter)
     {
-        return new JsonResult(
-            await repository.GetAgreements(
-                number, 
-                agreementTypeId, 
-                agreementStatusId,
-                startDate,
-                endDate,
-                skip,
-                take)
-        );
+        return new JsonResult(await repository.GetAgreements(filter));
     }
+
+    [Authorize(Roles = "Cip")]
+    [HttpGet("count")]
+    public Task<int> GetCount() => repository.CountAgreements();
     
     [Authorize(Roles = "Cip")]
     [HttpGet("{id:int}")]

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Model;
 using Radzen;
 
 namespace Client.Shared.List;
@@ -12,27 +13,39 @@ public abstract partial class SearchableStyledList<TItem> : ComponentBase
     private bool isLoading = false;
     //[Parameter]
     //public ISearchableListDelegate<TItem> ListDelegate { get; set; } = null!;
-    protected List<TItem> Items = [];
+    protected IReadOnlyList<TItem> Items = [];
     protected string? NamesFilter = null;
-
-    private bool IsShowList => Items.Any();
+    protected int pageSize = 5;
+    protected int count = 0;
+    private int page = 1;
     protected abstract string CreateHref { get; }
     protected abstract RenderFragment Filters { get; }
 
     protected override Task OnInitializedAsync()
     {
-        return LoadItems(new ());
+        return LoadItems(new LoadDataArgs
+        {
+            Top = pageSize,
+        }) ;
     }
 
+    private Task PageChanged(PagerEventArgs args)
+    {
+        page = args.PageIndex;
+        return Task.CompletedTask;
+    }
+     
     protected async Task LoadItems(LoadDataArgs args)
     {
         isLoading = true;
+        // Items.AddRange(await Load(NamesFilter, args.Skip, args.Top));
         Items = [];
-        Items = await Load(NamesFilter, args.Skip, args.Top);
+        var paging = await Load(NamesFilter, args.Skip, args.Top);
+        count = paging.Count;
+        Items = paging.Data;
         isLoading = false;
     }
-    protected abstract Task<List<TItem>> Load(string? text, int? skip, int? take);
-
+    protected abstract Task<Paging<TItem>> Load(string? text, int? skip, int? take);
     private void ClearNameFilter()
     {
         NamesFilter = string.Empty;

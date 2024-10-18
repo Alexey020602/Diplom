@@ -1,6 +1,7 @@
 using Diploma.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 using Model.Interactions;
 using Model.Partners;
 
@@ -8,30 +9,14 @@ namespace Diploma.Controllers;
 
 public class PartnersController(IPartnersRepository partnersRepository) : ApiControllerBase
 {
+    // [Authorize(Roles = "Cip")]
+    // [HttpGet("count")]
+    // public Task<int> GetCount() => partnersRepository.PartnersCountAsync();
     [Authorize(Roles = "Cip")]
     [HttpGet]
-    public async Task<IActionResult> ShowPartners(
-        string? shortName,
-        string? fullName,
-        int? partnerTypeId, 
-        int? directionId,
-        int skip = 0,
-        int take = 10)
+    public async Task<IActionResult> ShowPartners([FromQuery] PartnersFilter partnersFilter)
     {
-        var partners = (await partnersRepository.GetPartnersAsync(
-            shortName,
-            fullName,
-            partnerTypeId, 
-            directionId,
-            skip,
-            take)
-            ).Select(p => new
-        {
-            Name = p.ShortName,
-            p.Id
-        });
-
-        return new JsonResult(partners);
+        return new JsonResult(await partnersRepository.GetPartnersAsync(partnersFilter));
     }
 
     [Authorize(Roles = "Cip")]
