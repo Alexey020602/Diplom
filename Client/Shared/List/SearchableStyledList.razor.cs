@@ -9,7 +9,7 @@ public abstract partial class SearchableStyledList<TItem> : ComponentBase
     private const string EmptyListMessage = "Список подразделений пуст";
     private const string LoadMessage = "Загрузка...";   
     protected virtual string CreateText => "Добавить";
-    protected string NameFilterTitle { get; set; } = "Введите полное название";
+    protected virtual string NameFilterTitle => "Введите полное название";
     private bool isLoading = false;
     //[Parameter]
     //public ISearchableListDelegate<TItem> ListDelegate { get; set; } = null!;
