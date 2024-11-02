@@ -8,6 +8,8 @@
 @code {
 
     private RenderFragment Body => @<div>
+        <PageTitle>@Title</PageTitle>
+        <RadzenText Text=@Title TextStyle="TextStyle.H2"/>
         @FiltersContent
         @ButtonsContent
         @List

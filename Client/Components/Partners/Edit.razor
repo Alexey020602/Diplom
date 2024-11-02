@@ -6,8 +6,7 @@
 <div>
     @if (partner is not null)
     {
-        <PageTitle>@partner.ShortName</PageTitle>
-        <Form Item=@partner OnSubmit=@UpdatePartner></Form>
+        <Form Item=@partner OnSubmit=@UpdatePartner Title=@partner.ShortName></Form>
     }
 </div>
 

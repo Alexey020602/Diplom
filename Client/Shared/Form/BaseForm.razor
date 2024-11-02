@@ -2,6 +2,8 @@
 @typeparam TItem where TItem : class
 
 <div>
+    <PageTitle>@Title</PageTitle>
+    <RadzenText Text=@Title TextStyle="TextStyle.H2"/>
     <RadzenTemplateForm TItem=@TItem Data="@Item" Submit=@(_ => OnValueSubmit())>
         <RadzenStack Orientation=@Orientation.Vertical>
             @Content
@@ -15,6 +17,7 @@
 </div>
 
 @code {
+    [Parameter] public required string Title { get; set; }
     protected RenderFragment FormRow(
         string labelText,
         string name,

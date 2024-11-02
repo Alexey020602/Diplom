@@ -14,6 +14,7 @@
 
 @code {
     protected override RenderFragment Filters =>
-        @<UniversalCustomSelect TItem=@PartnerType @bind-Value=@PartnerType/>;
+        @<UniversalCustomSelect TItem=@PartnerType @bind-Value=@PartnerType Placeholder="Тип партнера"/>;
 
+    protected override string Title => "Партнеры";
 }

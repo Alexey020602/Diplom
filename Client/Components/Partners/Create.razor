@@ -5,8 +5,7 @@
 @using Model.Partners
 @inject IPartnersService PartnersService
 
-<PageTitle>Добавление партнера</PageTitle>
-<Form Item="@partner" OnSubmit="@CreatePartner"></Form>
+<Form Item="@partner" OnSubmit="@CreatePartner" Title="Добавление партнера"></Form>
 
 @code {
     private readonly Partner partner = new();

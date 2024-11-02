@@ -1,8 +1,11 @@
 ﻿@attribute [Authorize(Roles = "Cip")]
+@using System.Net
 @using Client.Services.Api
+@using Client.Shared.Select
 @using Microsoft.AspNetCore.Authorization
 @using Model
 @using Model.Interactions
+@using Npgsql.Replication.PgOutput.Messages
 @inherits Client.Shared.List.SearchableStyledList<InteractionShort>
 
 @page "/interactions"
@@ -13,24 +16,80 @@
 
 @code {
     [Inject] private IInteractionsService InteractionService { get; set; } = null!;
+    private InteractionType? InteractionType { get; set; }
+    private DateTime? sign;
+    private DateTime? start;
+    private DateTime? end;
+    private DateOnly? SignDateOnly => sign.HasValue ? DateOnly.FromDateTime(sign.Value) : null;
+    private DateOnly? BeginDateOnly => start.HasValue ? DateOnly.FromDateTime(start.Value) : null;
+    private DateOnly? EndDateOnly => end.HasValue ? DateOnly.FromDateTime(end.Value) : null;
 
     protected override Task<Paging<InteractionShort>> Load(string? text, int? skip, int? take)
     {
-        return InteractionService.ReadAll(new InteractionsFilter(Code: text, Skip: skip, Take: take));
+        return InteractionService.ReadAll(new InteractionsFilter(
+            Code: text,
+            InteractionTypeId: InteractionType?.Id,
+            Sign: SignDateOnly,
+            Start: BeginDateOnly,
+            End: EndDateOnly,
+            Skip: skip,
+            Take: take));
     }
 
     protected override string CreateHref => "/interactions/create";
     protected override string CreateText => "Добавить взаимодействие";
+    protected override string NameFilterTitle => "Введите код договора";
 
     protected override string RowHref(InteractionShort item)
     {
         return $"/interactions/{item.Id}";
     }
 
-    protected override RenderFragment Filters => @<div></div>;
+    protected override RenderFragment Filters => @<div>
+        <RadzenRow>
+            <RadzenColumn ChildContent=@TypeFilter/>
+            <RadzenColumn ChildContent=@SignDateFilter/>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenColumn ChildContent=@StartDateFilter/>
+            <RadzenColumn ChildContent=@EndDateFilter/>
+        </RadzenRow>
+    </div>;
+
+    private RenderFragment TypeFilter => @<UniversalCustomSelect
+                                              TItem="InteractionType"
+                                              @bind-Value="InteractionType"
+                                              Placeholder="Тип соглашения"/>;
+
+    private RenderFragment SignDateFilter => @<RadzenDatePicker
+                                                  TValue="DateTime?"
+                                                  @bind-Value=@sign
+                                                  Max=@start
+                                                  ShowTime="false"
+                                                  Placeholder="Дата подписания договора взаимодействия"/>;
+
+    private RenderFragment StartDateFilter => @<RadzenDatePicker
+                                                   TValue="DateTime?"
+                                                   @bind-Value=@start
+                                                   Min="sign"
+                                                   Max=@end
+                                                   ShowTime="false"
+                                                   Placeholder="Дата начала взаимодействия"/>;
+
+    private RenderFragment EndDateFilter => @<RadzenDatePicker
+                                                 TValue="DateTime?"
+                                                 @bind-Value=@end
+                                                 Min=@start
+                                                 ShowTime="false"
+                                                 Placeholder="Дата окончания взаимодействия"/>;
 
     protected override void ClearFilterFields()
     {
-
+        InteractionType = null;
+        sign = null;
+        start = null;
+        end = null;
     }
+
+    protected override string Title => "Взаимодействия";
 }

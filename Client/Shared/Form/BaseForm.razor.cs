@@ -9,7 +9,6 @@ public abstract partial class BaseForm<TItem> where TItem : class
     [Parameter] public TItem Item { get; set; } = null!;
     [Parameter] public EventCallback OnSubmit { get; set; }
     protected abstract RenderFragment Content { get; }
-
     private async Task OnValueSubmit()
     {
         await OnSubmit.InvokeAsync();

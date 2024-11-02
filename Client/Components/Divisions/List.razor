@@ -16,6 +16,8 @@
 @code {
     protected override RenderFragment Filters => @<UniversalCustomSelect
                                                       TItem="Faculty"
-                                                      @bind-Value=@facultyFilterValue />;
+                                                      @bind-Value=@facultyFilterValue 
+                                                      Placeholder="Факультет"/>;
 
+    protected override string Title => "Подразделения";
 }

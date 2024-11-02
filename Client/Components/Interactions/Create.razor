@@ -4,8 +4,8 @@
 @using Model.Interactions
 @inject IInteractionsService InteractionService
 @attribute [Authorize(Roles = "Ctt")]
-<PageTitle>Создание взаимодействия</PageTitle>
-<Form Item="@interaction" OnSubmit="@OnSubmit"></Form>
+
+<Form Item="@interaction" OnSubmit="@OnSubmit" Title="Создание взаимодействия"></Form>
 
 @code {
     private readonly Interaction interaction = new ();

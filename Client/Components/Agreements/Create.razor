@@ -5,8 +5,7 @@
 @inject IAgreementService AgreementsService
 @attribute [Authorize(Roles = "Ctt")] 
 
-<PageTitle>Добавление соглашения</PageTitle>
-<Form Item="@_agreement" OnSubmit="@OnSubmit"></Form>
+<Form Item="@_agreement" OnSubmit="@OnSubmit" Title="Добавление соглашения"></Form>
 
 @code {
     private readonly Agreement _agreement = new();
