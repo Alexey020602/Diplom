@@ -1,11 +1,9 @@
 ﻿@attribute [Authorize(Roles = "Cip")]
-@using System.Net
 @using Client.Services.Api
-@using Client.Shared.Select
 @using Microsoft.AspNetCore.Authorization
 @using Model
 @using Model.Interactions
-@using Npgsql.Replication.PgOutput.Messages
+@using Client.Shared.Select
 @inherits Client.Shared.List.SearchableStyledList<InteractionShort>
 
 @page "/interactions"
@@ -38,7 +36,6 @@
 
     protected override string CreateHref => "/interactions/create";
     protected override string CreateText => "Добавить взаимодействие";
-    protected override string NameFilterTitle => "Введите код договора";
 
     protected override string RowHref(InteractionShort item)
     {

@@ -18,8 +18,7 @@
     private RenderFragment FiltersContent => @<RadzenStack
                                                   Orientation=@Orientation.Vertical
                                                   AlignItems=@AlignItems.Center>
-        @Filters
-        @Search
+        @FiltersFragment
         @FilterButtons
     </RadzenStack>;
 
@@ -27,9 +26,17 @@
                                                  Orientation="Orientation.Horizontal"
                                                  JustifyContent="JustifyContent.SpaceBetween"
                                                  AlignItems="AlignItems.Center">
-                                                <RadzenButton Click="@(_ => LoadItems(new ()))" Text="Применить фильтр"/>
+                                                <RadzenButton Click="@(_ => LoadItems(new()))" Text="Применить фильтр"/>
                                                 <RadzenButton Click="@ClearFilters" Text="Сбросить фильтр"/>
                                             </RadzenStack>;
+
+    private RenderFragment FiltersFragment => @<RadzenStack
+                                                   Orientation="Orientation.Horizontal"
+                                                   JustifyContent="JustifyContent.SpaceBetween"
+                                                   AlignItems="AlignItems.Center">
+                                                  @Search
+                                                  @Filters
+                                              </RadzenStack>;
 
     private RenderFragment ButtonsContent => @<RadzenStack
                                                   Style="padding-top:10px"
@@ -37,7 +44,6 @@
                                                   AlignItems=@AlignItems.Center
                                                   JustifyContent=@JustifyContent.SpaceBetween>
                                                  @LinkToCreate
-                                                 @* @EmptyListButton *@
                                              </RadzenStack>;
 
     private RenderFragment LinkToCreate => @<AuthorizeView Roles="Ctt">
@@ -72,5 +78,6 @@
 
     @* private RenderFragment EmptyListButton => @<RadzenButton Icon="cached" Click=@(() => LoadItems()) ButtonStyle=@ButtonStyle.Primary/>; *@
 
-    private RenderFragment Search => @<RadzenTextBox Placeholder=@NameFilterTitle @bind-Value=@NamesFilter />;
+    private RenderFragment Search => @<RadzenTextBox Placeholder=@NameFilterTitle   @bind-Value=@NamesFilter/>;
+
 }

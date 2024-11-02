@@ -6,6 +6,8 @@ namespace Client.Shared.List;
 
 public abstract partial class SearchableStyledList<TItem> : ComponentBase
 {
+    private const string EmptyListMessage = "Список подразделений пуст";
+    private const string LoadMessage = "Загрузка...";   
     protected virtual string CreateText => "Добавить";
     protected virtual string NameFilterTitle => "Введите полное название";
     private bool isLoading;
