@@ -4,13 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Models;
 
-[Index("Name", IsUnique = true)]
+/// <summary>
+/// Класс модели для сущности "Тип соглашения"
+/// </summary>
+[Index(nameof(Name), IsUnique = true)]
 public class AgreementType
 {
+    /// <summary>
+    /// Идентификатор типа соглашения
+    /// </summary>
     public int Id { get; set; }
-    [MaxLength(100)] public string Name { get; set; } = null!;
-
-    [JsonIgnore] public ICollection<Agreement> Agreements { get; set; } = null!;
+    /// <summary>
+    /// Название типа соглашения
+    /// </summary>
+    [StringLength(100)] public string Name { get; set; } = null!;
+    /// <summary>
+    /// Навигационное свойство с сущностью "Соглашение"
+    /// </summary>
+    public ICollection<Agreement> Agreements { get; set; } = null!;
 
     public override string ToString()
     {

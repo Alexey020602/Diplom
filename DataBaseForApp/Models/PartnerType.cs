@@ -11,20 +11,18 @@ namespace DataBase.Models;
 public class PartnerType
 {
     /// <summary>
-    ///     Идентификатор типа партнера
+    /// Идентификатор типа партнера
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    ///     Название типа партнера
+    /// Название типа партнера
     /// </summary>
-    [StringLength(50)]
-    public string Name { get; set; } = string.Empty;
+    [StringLength(50)] public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Список партнеров соответсвующего типа
+    /// Список партнеров соответсвующего типа
     /// </summary>
-    [JsonIgnore]
     public ICollection<Partner> Partners { get; set; } = [];
 
     public override string ToString()
