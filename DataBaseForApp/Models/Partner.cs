@@ -76,10 +76,10 @@ public class Partner
     public static Partner Default(int number) => new()
     {
         Id = number,
-        ShortName = $"Парнтер {number}",
+        ShortName = $"Партнер {number}",
         FullName = $"Партнер {number.Name()}",
         Site = $"https://site{number}.ru",
-        PartnerTypeId = (number - 1) % 4 + 1,
-        Address = $"Адрес {number}"
+        PartnerTypeId = number.GetId(4),
+        Address = $"Адрес {number}",
     };
 }

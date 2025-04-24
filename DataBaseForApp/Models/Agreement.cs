@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DataBase.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Models;
@@ -46,4 +47,12 @@ public class Agreement
         return
             $"{AgreementNumber} {AgreementType} {StarDateTime.ToShortDateString()} - {EndDateTime.ToShortDateString()}";
     }
+
+    public static Agreement Default(int  number) => new()
+    {
+        Id = number,
+        AgreementNumber = number.ToString().Repeating(15),
+        StarDateTime = DateTime.Now.AddMonths(-number),
+        EndDateTime = DateTime.Now.AddDays(number),
+    };
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DataBase.Extensions;
 
 namespace DataBase.Models;
 
@@ -52,4 +53,33 @@ public class Interaction
     {
         return $"{ContactCode} {InteractionType} от {SigningDateTime.ToShortDateString()}, {BeginigDateTime.ToShortDateString()} - {EndingDateTime.ToShortDateString()}";
     }
+
+    public static Interaction Default(int number) => new()
+    {
+        Id = number,
+        Partner = new()
+        {
+            Id = number,
+        },
+        Division = new()
+        {
+            Id = number,
+        },
+        InteractionType = new ()
+        {
+            Id = number.GetId(4),
+        },
+        Theme = $"Тема взаимодействия {number}",
+        ContactCode = number.ToString().Repeating(9),
+        SigningDateTime = DateTime.Now.AddMonths(-2 * number),
+        BeginigDateTime = DateTime.Now.AddMonths(-number),
+        EndingDateTime = DateTime.Now.AddMonths(number),
+        Directions = 
+        [
+            new()
+            {
+                Id = number,
+            }
+        ]
+    };
 }

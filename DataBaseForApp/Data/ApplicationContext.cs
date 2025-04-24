@@ -4,70 +4,57 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Data;
-
 /// <summary>
 ///     Контекст приложения для подключения к БД
 /// </summary>
 public class ApplicationContext(DbContextOptions<ApplicationContext> options)
     : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>(
-        options) //IdentityUserContext<IdentityUser<Guid>, Guid, IdentityRole<Guid>, Guid>(options)
+        options)
 {
     /// <summary>
     ///     DbSet партнеров в база данных
     /// </summary>
     public DbSet<Partner> Partners { get; set; }
-
     /// <summary>
     ///     DbSet типов партнеров
     /// </summary>
     public DbSet<PartnerType> PartnerTypes { get; set; }
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>
     public DbSet<Faculty> Faculties { get; set; }
-
     /// <summary>
     ///     DbSet подразделений университета
     /// </summary>
     public DbSet<Division> Divisions { get; set; }
-
     /// <summary>
     ///     DbSet взаимодействий между подразделениями и партнерами
     /// </summary>
     public DbSet<Interaction> Interactions { get; set; }
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>
     public DbSet<InteractionType> InteractionTypes { get; set; }
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>
     public DbSet<Direction> Directions { get; set; }
-
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>
     public DbSet<Agreement> Agreements { get; set; }
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>
     public DbSet<DivisionInAgreement> DivisionsInAgreement { get; set; }
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>
     public DbSet<PartnerInAgreement> PartnersInAgreement { get; set; }
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>
     public DbSet<AgreementType> AgreementType { get; set; }
-
     /// <summary>
     ///     DbSet факультета университета
     /// </summary>

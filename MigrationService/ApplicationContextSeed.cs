@@ -48,7 +48,11 @@ public class ApplicationContextSeed(
         await AddAgreementStatuses(cancellationToken);
         await AddAgreementTypes(cancellationToken);
         await AddPartners(cancellationToken);
-        // AddUsers();
+        await AddDivisions(cancellationToken);
+        await AddAgreements(cancellationToken);
+        await AddInteractions(cancellationToken);
+        
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task AddInteractionTypes(CancellationToken cancellationToken)
@@ -61,9 +65,9 @@ public class ApplicationContextSeed(
             new() { Id = 4, Name = "Четвертый" }
         };
 
-        foreach (var interactionType in interactionTypes) await Add(interactionType, cancellationToken);
+        foreach (var interactionType in interactionTypes) Add(interactionType, cancellationToken);
 
-        await context.SaveChangesAsync(cancellationToken);
+        // await context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task AddAgreementTypes(CancellationToken cancellationToken)
@@ -76,8 +80,8 @@ public class ApplicationContextSeed(
             new() { Id = 4, Name = "Четвертый" }
         };
 
-        foreach (var agreementType in agreementTypes) await Add(agreementType, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        foreach (var agreementType in agreementTypes) Add(agreementType);
+        // await context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task AddAgreementStatuses(CancellationToken cancellationToken)
@@ -90,33 +94,33 @@ public class ApplicationContextSeed(
             new() { Id = 4, Name = "Завершено" }
         };
 
-        foreach (var agreementStatus in agreementsStatuses) await Add(agreementStatus, cancellationToken);
+        foreach (var agreementStatus in agreementsStatuses) Add(agreementStatus);
 
-        await context.SaveChangesAsync(cancellationToken);
+        // await context.SaveChangesAsync(cancellationToken);
     }
 
-    private Task Add(InteractionType interactionType, CancellationToken cancellationToken)
+    private void Add(InteractionType interactionType, CancellationToken cancellationToken)
     {
         var storedInteractionType = context.InteractionTypes.FirstOrDefault(type => type.Id == interactionType.Id);
         if (storedInteractionType is not null)
-            return Task.CompletedTask;
-        return context.InteractionTypes.AddAsync(interactionType, cancellationToken).AsTask();
+            return;
+        context.InteractionTypes.Add(interactionType);
     }
 
-    private Task Add(AgreementType agreementType, CancellationToken cancellationToken)
+    private void Add(AgreementType agreementType)
     {
         var storedAgreementType = context.AgreementType.FirstOrDefault(type => type.Id == agreementType.Id);
         if (storedAgreementType is not null)
-            return Task.CompletedTask;
-        return context.AgreementType.AddAsync(agreementType, cancellationToken).AsTask();
+            return;
+        context.AgreementType.Add(agreementType);
     }
 
-    private Task Add(AgreementStatus agreementStatus, CancellationToken cancellationToken)
+    private void Add(AgreementStatus agreementStatus)
     {
         var storedAgreementStatus = context.AgreementStatus.FirstOrDefault(status => status.Id == agreementStatus.Id);
         if (storedAgreementStatus is not null)
-            return Task.CompletedTask;
-        return context.AgreementStatus.AddAsync(agreementStatus, cancellationToken).AsTask();
+            return;
+        context.AgreementStatus.Add(agreementStatus);
     }
 
     private async Task AddPartnerTypes(CancellationToken cancellationToken)
@@ -129,19 +133,19 @@ public class ApplicationContextSeed(
             { 4, "ЦНИИ" }
         };
 
-        foreach (var pair in dictionary) await AddPartnerType(pair.Key, pair.Value, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        foreach (var pair in dictionary) AddPartnerType(pair.Key, pair.Value, cancellationToken);
+        // await context.SaveChangesAsync(cancellationToken);
     }
 
-    private Task AddPartnerType(int id, string name, CancellationToken cancellationToken)
+    private void AddPartnerType(int id, string name, CancellationToken cancellationToken)
     {
         var storedPartnerType = context.PartnerTypes.FirstOrDefault(t => t.Id == id);
-        if (storedPartnerType is not null) return Task.CompletedTask;
-        return context.PartnerTypes.AddAsync(new PartnerType
+        if (storedPartnerType is not null) return;
+        context.PartnerTypes.Add(new PartnerType
         {
             Id = id,
             Name = name
-        }, cancellationToken).AsTask();
+        });
     }
 
     private async Task AddDirections(CancellationToken cancellationToken)
@@ -154,20 +158,20 @@ public class ApplicationContextSeed(
             { 4, "ЭТПТ" }
         };
 
-        foreach (var pair in dictionary) await AddDirection(pair.Key, pair.Value, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        foreach (var pair in dictionary) AddDirection(pair.Key, pair.Value, cancellationToken);
+        // await context.SaveChangesAsync(cancellationToken);
     }
 
-    private Task AddDirection(int id, string name, CancellationToken cancellationToken)
+    private void AddDirection(int id, string name, CancellationToken cancellationToken)
     {
         var storedDirection = context.Directions.FirstOrDefault(d => d.Id == id);
         if (storedDirection is not null)
-            return Task.CompletedTask;
-        return context.Directions.AddAsync(new Direction
+            return;
+        context.Directions.Add(new Direction
         {
             Id = id,
             Name = name
-        }, cancellationToken).AsTask();
+        });
     }
 
     private async Task AddFaculties(CancellationToken cancellationToken)
@@ -193,30 +197,111 @@ public class ApplicationContextSeed(
             select faculty
         )
         {
-            await context.Faculties.AddAsync(new Faculty { Id = faculty.Key, Name = faculty.Value },
-                cancellationToken);
+            context.Faculties.Add(new Faculty { Id = faculty.Key, Name = faculty.Value });
         }
 
-        await context.SaveChangesAsync(cancellationToken);
+        // await context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task AddPartners(CancellationToken cancellationToken)
     {
-        var partners = 10.GetEnumerable().Select(Partner.Default);
-        
-        var partnersForSave = from partner in partners
-            let storedPartner = context.Partners.FirstOrDefault(p => p.Id == partner.Id)
-            where storedPartner is null
-            select partner;
-
-        foreach (var partner in partnersForSave)
+        foreach (var number in 10.GetEnumerable())
         {
-            // context.Attach(partner.PartnerType);
-            context.Partners.Add(partner);
+            AddPartner(number);
         }
-        
-        await context.SaveChangesAsync(cancellationToken);
+
+        // await context.SaveChangesAsync(cancellationToken);
     }
-    
-    
+
+    private void AddPartner(int number)
+    {
+        if (context.Partners.Any(p => p.Id == number)) return;
+        
+        var partner = Partner.Default(number);
+        partner.Directions = context.Directions.Local.Where(d => d.Id == number.GetId(4, 1)).ToList();
+        context.Partners.Add(partner);
+    }
+
+    private async Task AddDivisions(CancellationToken cancellationToken)
+    {
+        foreach (var number in 10.GetEnumerable())
+        {
+            AddDivision(number);
+        }
+
+        // await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private void AddDivision(int number)
+    {
+        if (context.Divisions.Any(d => d.Id == number)) return;
+        var division = Division.Default(number);
+        division.Directions = context.Directions.Local.Where(d => d.Id == number.GetId(4, 1)).ToList();
+        division.Faculty = context.Faculties.Local.First(f => f.Id == number.GetId(8, 1));
+        
+        context.Divisions.Add(division);
+    }
+
+    private async Task AddAgreements(CancellationToken cancellationToken)
+    {
+        foreach (var number in 10.GetEnumerable())
+        {
+            AddAgreement(number);
+        }
+
+        // await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private void AddAgreement(int number)
+    {
+        if (context.Agreements.Any(a => a.Id == number)) return;
+        
+        var agreement = Agreement.Default(number);
+        
+        agreement.AgreementType = context.AgreementType.Local.First(type => type.Id == number.GetId(4, 1));
+        agreement.AgreementStatus = context.AgreementStatus.Local.First(type => type.Id == number.GetId(4, 1));
+        agreement.PartnerInAgreements =
+        [
+            new()
+            {
+                AgreementId = number,
+                PartnerId = number,
+                ContactPersons = $"Контактные данные лица от партнера {number}"
+            },
+        ];
+        agreement.DivisionInAgreements =
+        [
+            new()
+            {
+                AgreementId = number,
+                DivisionId = number,
+                ContactPersons = $"Контактные данные лица от подразделения {number}",
+            }
+        ];
+        
+        context.Agreements.Add(agreement);
+    }
+
+    private async Task AddInteractions(CancellationToken cancellationToken)
+    {
+        foreach (var number in 10.GetEnumerable())
+        {
+            AddInteraction(number);
+        }
+
+        // await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private void AddInteraction(int number)
+    {
+        if (context.Interactions.Any(i => i.Id == number)) return;
+        
+        var interaction = Interaction.Default(number);
+        
+        interaction.Directions = context.Directions.Local.Where(d => d.Id == number.GetId(4, 1)).ToList();
+        interaction.InteractionType = context.InteractionTypes.Local.First(type => type.Id == number.GetId(4, 1));
+        interaction.Partner = context.Partners.Local.First(p => p.Id == number);
+        interaction.Division = context.Divisions.Local.First(d => d.Id == number);
+        context.Interactions.Add(interaction);
+    }
 }

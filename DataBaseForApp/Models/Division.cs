@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using DataBase.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Models;
@@ -46,4 +47,13 @@ public class Division
     /// Навигационное свойство с сущностью "Направление"
     /// </summary>
     public List<Direction> Directions { get; set; } = [];
+
+    public static Division Default(int number) => new()
+    {
+        Id = number,
+        FullName = $"Подразделение {number.Name()}",
+        ShortName = $"Подразделение {number}",
+        Contacts = $"Контактные данные лица от подразделения {number}",
+        Site = $"https://sitedivision{number}.ru",
+    };
 }
