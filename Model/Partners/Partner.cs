@@ -21,8 +21,8 @@ public class Partner
     [MinLength(1, ErrorMessage = "Необходимо указать как минимум одно направление деятельности партнера")]
     public List<Direction> Directions { get; set; } = [];
 
-    public List<AgreementInPartner> Agreements { get; set; } = [];
-    public List<InteractionInPartner> Interactions { get; set; } = [];
+    public List<AgreementInRelationship> Agreements { get; set; } = [];
+    public List<InteractionInRelationship> Interactions { get; set; } = [];
     public bool CanBeDeleted => !(AgreementsContained || InteractionsContained);
     private bool AgreementsContained => Agreements.Any();
     private bool InteractionsContained => Interactions.Any();

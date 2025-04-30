@@ -9,9 +9,9 @@ namespace Model.Mappers;
 
 public static class InteractionExtensions
 {
-    public static InteractionInPartner ConvertToPartnerModel(this DataBaseInteraction interaction)
+    public static InteractionInRelationship ConvertToPartnerModel(this DataBaseInteraction interaction)
     {
-        return new InteractionInPartner
+        return new InteractionInRelationship
         {
             Id = interaction.Id,
             Description = interaction.ToString()
@@ -106,5 +106,14 @@ public static class InteractionExtensions
     public static PartnerShort ConvertToPartnerShort(this Partner partner)
     {
         return new PartnerShort(partner.Id, partner.ShortName);
+    }
+
+    public static InteractionInRelationship ConvertToInteractionInPartner(this DataBaseInteraction interaction)
+    {
+        return new InteractionInRelationship
+        {
+            Id = interaction.Id,
+            Description = interaction.ToString()
+        };
     }
 }

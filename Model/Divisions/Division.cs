@@ -22,4 +22,9 @@ public class Division
 
     [MinLength(1, ErrorMessage = "Необходимо выбрать хотя бы одно направление")]
     public List<Direction> Directions { get; set; } = [];
+
+    public List<AgreementInRelationship> Agreements { get; set; } = [];
+    public List<InteractionInRelationship> Interactions { get; set; } = [];
+    
+    public bool CanBeDeleted => !(Agreements.Any() || Interactions.Any());
 }

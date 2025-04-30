@@ -1,0 +1,10 @@
+@using Model
+
+@foreach (var interaction in Interactions)
+{
+    <NavLink href="@($"/{NavigationConstants.InteractionsPath}/{interaction.Id}")">@interaction</NavLink>;
+}
+
+@code {
+    [Parameter] public IReadOnlyList<InteractionInRelationship> Interactions { get; set; } = [];
+}

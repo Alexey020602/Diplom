@@ -10,8 +10,8 @@ public abstract partial class DetailPage<TItem> : ComponentBase
     protected abstract string? Title { get; }
     protected abstract string EntitiesPath { get; }
     protected abstract Task Delete();
-    protected virtual bool CanDelete => true;
-    protected virtual string CanNotDeleteMessage => "Нельзя удалить";
+    protected virtual bool CanDelete(TItem item) => true;
+    protected virtual string CanNotDeleteMessage => "Нельзя удалить, имеет связанные данные";
     private string EditPath => $"{EntitiesPath}/{Id}/edit";
     protected abstract Task<TItem> LoadItem();
     protected override async Task OnParametersSetAsync()

@@ -1,5 +1,6 @@
 ﻿@attribute [Authorize(Roles = "Cip")]
 @using Client.Services.Api
+@using Client.Services.Api.BaseApi
 @using Microsoft.AspNetCore.Authorization
 @using Model
 @using Model.Interactions
@@ -53,8 +54,9 @@
         </RadzenRow>
     </div>;
 
-    private RenderFragment TypeFilter => @<UniversalCustomSelect
+    private RenderFragment TypeFilter => @<UniversalSelect
                                               TItem="InteractionType"
+                                              TApi="IReadApi<InteractionType>"
                                               @bind-Value="InteractionType"
                                               Placeholder="Тип соглашения"/>;
 

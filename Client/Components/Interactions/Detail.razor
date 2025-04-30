@@ -1,6 +1,9 @@
 @using Client.Services.Api
 @using Microsoft.AspNetCore.Authorization
+@using Model
+@using Model.Divisions
 @using Model.Interactions
+@using Model.Partners
 @inherits Client.Shared.DetailPage<Interaction>
 @page "/interactions/{id:int}"
 @attribute [Authorize(Roles = "Cip")]
@@ -22,8 +25,37 @@
 
     protected override IEnumerable<Row> Rows(Interaction item) =>
     [
-        //todo сделать экран взаимодействий
+        new("Тип", item.Type?.Name),
+        new("Код", item.ContactCode),
+        new("Тема", item.Theme),
+        new("Дата подписания", item.SigningDate.ToShortDateString()),
+        new("Дата начала", item.Begin.ToShortDateString()),
+        new("Дата окончания", item.End.ToShortDateString()),
+        new("Партнер", Partner(item.Partner)),
+        new("Подразделение университета", Division(item.Division)),
+        new("Направления", Directions(item)),
     ];
+
+    private RenderFragment Partner(PartnerShort? partner) => @<div>
+        @if (partner != null)
+        {
+            <NavLink href=@($"/{NavigationConstants.PartnersPath}/{partner.Id}")>@partner.Name</NavLink>
+        }
+    </div>;
+
+    private RenderFragment Division(DivisionShort? division) => @<div>
+        @if (division != null)
+        {
+            <NavLink href=@($"/{NavigationConstants.DivisionsPath}/{division.Id}")>@division</NavLink>
+        }
+    </div>;
+
+    private RenderFragment Directions(Interaction interaction) => @<div>
+        @foreach (var direction in interaction.Directions)
+        {
+            @direction
+        }
+    </div>;
 
     protected override string? Title => Item?.ToString();
     protected override string EntitiesPath => "interactions";

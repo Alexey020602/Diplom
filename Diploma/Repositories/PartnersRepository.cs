@@ -14,7 +14,7 @@ namespace Diploma.Repositories;
 
 public class PartnersRepository(ApplicationContext context) : IPartnersRepository
 {
-    public async Task<List<AgreementInPartner>> GetAgreementsForPartnerWithId(int id)
+    public async Task<List<AgreementInRelationship>> GetAgreementsForPartnerWithId(int id)
     {
         return (
                 await GetPartnersWithAgreements()
@@ -24,7 +24,7 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .Select(p => p.Agreement.ConvertToPartnerModel())
             .ToList();
     }
-    public async Task<List<InteractionInPartner>> GetInteractionsForPartnerWithId(int id)
+    public async Task<List<InteractionInRelationship>> GetInteractionsForPartnerWithId(int id)
     {
         return (
                 await GetPartnersWithInteractions()
@@ -45,14 +45,13 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
             .WhereWithNullable(filter.ShortName, shortName => p => p.ShortName.Contains(shortName))
             .WhereWithNullable(filter.FullName, fullName => p => p.FullName.Contains(fullName))
             .OrderBy(p => p.Id);
-        var skip = filter.Skip ?? 0;
-        var take = filter.Take ?? 10;
         return new(
             await partnersWithoutPaging.CountAsync(),
-            skip,
-            take,
-            await partnersWithoutPaging.Skip(skip)
-                .Take(take)
+            filter.Skip,
+            filter.Take,
+            await partnersWithoutPaging
+                .SkipNullable(filter.Skip)
+                .TakeNullable(filter.Take)
                 .Select(p => p.ConvertToPartnerShort())
                 .ToListAsync()
         );

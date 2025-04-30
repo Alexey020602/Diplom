@@ -19,30 +19,12 @@ public static class PartnerExtensions
             Site = partner.Site ?? string.Empty,
             ContactData = partner.ContactData ?? string.Empty,
             Type = partner.PartnerType!.ConvertToModel(),
-            Agreements = partner.PartnersInAgreement.Select(ConvertToModel).ToList(),
-            Interactions = partner.Interactions.Select(ConvertToInteractionInPartner).ToList(),
+            Agreements = partner.PartnersInAgreement.Select(AgreementsConvertExtension.ConvertToAgreementInRelationship).ToList(),
+            Interactions = partner.Interactions.Select(InteractionExtensions.ConvertToInteractionInPartner).ToList(),
             Directions = partner.Directions.Select(DirectionExtensions.ConvertToModel).ToList()
         };
     }
 
-    private static AgreementInPartner ConvertToModel(this PartnerInAgreement partnerInAgreement)
-    {
-        return new AgreementInPartner
-        {
-            Id = partnerInAgreement.AgreementId,
-            Description = partnerInAgreement.Agreement.ToString(),
-            ContactPerson = partnerInAgreement.ContactPersons
-        };
-    }
-
-    private static InteractionInPartner ConvertToInteractionInPartner(this Interaction interaction)
-    {
-        return new InteractionInPartner
-        {
-            Id = interaction.Id,
-            Description = interaction.ToString()
-        };
-    }
 
     public static Partner ConvertToDao(this Partners.Partner partner)
     {

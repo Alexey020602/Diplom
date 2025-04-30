@@ -4,14 +4,7 @@ using Refit;
 
 namespace Client.Services.Api;
 
-public interface IDivisionsService : IReadApi<DivisionShort>, IReadOneApi<Division, int>, ICanDeleteApi<int>, IDeleteApi<int>,
+public interface IDivisionsService : IPagingReadApi<DivisionShort>, IReadOneApi<Division, int>, ICanDeleteApi<int>, IDeleteApi<int>,
     ICreateApi<Division>, IUpdateApi<Division, int>, ICountApi
 {
-    [Get("")]
-    Task<List<DivisionShort>> ReadAll(
-        string? shortName = null, 
-        string? fullName = null, 
-        int? facultyId = null,
-        int skip = 0,
-        int take = 10);
 }

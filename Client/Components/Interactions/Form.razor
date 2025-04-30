@@ -1,4 +1,5 @@
 @using Client.Services.Api
+@using Client.Services.Api.BaseApi
 @using Client.Shared.Select
 @using Client.Shared.Text
 @using Microsoft.AspNetCore.Authorization
@@ -10,6 +11,10 @@
 @attribute [Authorize(Roles = "Ctt")]
 @inherits Client.Shared.Form.BaseForm<Model.Interactions.Interaction>
 
+@inject IPartnersService PartnersService
+@inject  IDirectionsService DirectionsService
+@inject IDivisionsService DivisionsService
+
 @{
     base.BuildRenderTree(__builder);
 }
@@ -18,32 +23,6 @@
 
     protected override RenderFragment Content =>
         @<RadzenStack>
-            @* <UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction Selected=@Item.Directions/> *@
-            @* <ValidationMessage For=@(() => Item.Directions)/> *@
-            @* <InputWithFloatTitle Title="Код" @bind-Value=@Item.ContactCode/> *@
-            @* <ValidationMessage For=@(() => Item.ContactCode)/> *@
-            @* <InputWithFloatTitle Title="Тема" @bind-Value=@Item.Theme/> *@
-            @* *@
-            @* <ValidationMessage For="@(() => Item.Theme)"/> *@
-            @* <UniversalCustomSelect *@
-            @*     TItem=@PartnerShort @bind-Value=@Item.Partner/> *@
-            @* <ValidationMessage For="@(() => Item.Partner)"/> *@
-            @* <UniversalCustomSelect *@
-            @*     TItem=@DivisionShort @bind-Value=@Item.Division/> *@
-            @* *@
-            @* <ValidationMessage For="@(() => Item.Division)"/> *@
-            @* *@
-            @* *@
-            @* <ValidationMessage For="@(() => Item.Type)"/> *@
-            @* <InputDate @bind-Value="@Item.Begin">Начало</InputDate> *@
-            @* *@
-            @* <ValidationMessage For="@(() => Item.Begin)"/> *@
-            @* <InputDate @bind-Value="@Item.End">Конец</InputDate> *@
-            @* *@
-            @* <ValidationMessage For="@(() => Item.End)"/> *@
-            @* <InputDate @bind-Value="@Item.SigningDate">Дата подписания</InputDate> *@
-            @* <ValidationMessage For="@(() => Item.SigningDate)"/> *@
-            @* <ValidationMessage For="@(() => Item.SigningDate)"/> *@
             @Directions
             @ContactCode
             @Theme
@@ -76,19 +55,33 @@
     private RenderFragment Partner => FormRow(
         "Партнер",
         "Partner",
-        @<UniversalCustomSelect Name="Partner" @bind-Value=@Item.Partner/>
+        @<UniversalCustomSelect 
+             TItem="@PartnerShort"
+             Name="Partner" 
+             @bind-Value=@Item.Partner 
+             LoadItems="@( async () => (await PartnersService.ReadAll(new PartnersFilter())).Data.ToList())"/>
     );
 
     private RenderFragment Division => FormRow(
         "Подразделение",
         "Division",
-        @<UniversalCustomSelect Name="Division" @bind-Value=@Item.Division/>
+        @<UniversalCustomSelect 
+             TItem="@DivisionShort"
+             Name="Division" 
+             @bind-Value=@Item.Division
+             LoadItems="@(async () => (await DivisionsService.ReadAll(new DivisionsFilter())).Data.ToList())"
+             />
     );
 
     private RenderFragment Type => FormRow(
         "Тип",
         "Type",
-        @<UniversalCustomSelect @bind-Value=@Item.Type Name="Type"/>
+        @<UniversalSelect 
+             TItem="@InteractionType"
+             @bind-Value=@Item.Type
+             Name="Type"
+             TApi="IReadApi<InteractionType>"
+             />
     );
 
     private RenderFragment Begin => FormRow(

@@ -1,5 +1,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using Client.Shared.Buttons
+@using Microsoft.JSInterop
+@inject IJSRuntime JsRuntime
 @typeparam TItem
 
     @if (Item != null)
@@ -14,8 +16,8 @@
                         <NavigationButton Path=@EditPath Text="Редактировать"/>
                         <DeleteButton 
                             ButtonStyle=@ButtonStyle.Danger 
-                            CanDelete=@CanDelete 
-                            Delete=@Delete 
+                            CanDelete=@CanDelete(Item) 
+                            Delete=@OnPressDelete 
                             CanDeleteText="Удалить" 
                             CanNotDeleteText=@CanNotDeleteMessage/>
                     </Authorized>
@@ -56,5 +58,11 @@
     {
         public Row(string title, string? text): this(title, @<RadzenText Text=@text/>) {}
         
+    }
+
+    private async Task OnPressDelete()
+    {
+        await Delete();
+        await JsRuntime.InvokeVoidAsync("history.back");
     }
 }

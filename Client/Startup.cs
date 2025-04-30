@@ -38,7 +38,7 @@ public class  Startup(string baseAddress)
         services.AddRefitClient<IPartnersService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("partners"))
             .AddHttpMessageHandler<DelegatingHandler>();
-        services.AddTransient<IReadApi<PartnerShort>>(p => p.GetRequiredService<IPartnersService>());
+        services.AddTransient<IPagingReadApi<PartnerShort>>(p => p.GetRequiredService<IPartnersService>());
 
 
         services.AddRefitClient<IPartnerTypesService>(settings)
@@ -54,7 +54,7 @@ public class  Startup(string baseAddress)
         services.AddRefitClient<IDivisionsService>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("divisions"))
             .AddHttpMessageHandler<DelegatingHandler>();
-        services.AddTransient<IReadApi<DivisionShort>>(p => p.GetRequiredService<IDivisionsService>());
+        services.AddTransient<IPagingReadApi<DivisionShort>>(p => p.GetRequiredService<IDivisionsService>());
 
         services.AddRefitClient<IReadApi<Faculty>>(settings)
             .ConfigureHttpClient(ConfigureHttpClientForPath("faculties"))

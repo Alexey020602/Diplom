@@ -20,4 +20,6 @@ public class InteractionType
     /// Навигационное свойство с сущностью "Взаимодействие"
     /// </summary>
     public ICollection<Interaction> Interactions { get; set; } = [];
+
+    public override string ToString() => Name;
 }

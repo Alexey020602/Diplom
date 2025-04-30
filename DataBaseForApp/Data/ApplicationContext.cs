@@ -95,18 +95,18 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
             .HasOne(d => d.Division)
             .WithMany(d => d.DivisionsInAgreement)
             .OnDelete(deleteBehavior);
-        modelBuilder.Entity<DivisionInAgreement>()
-            .HasOne(d => d.Agreement)
-            .WithMany(a => a.DivisionInAgreements)
-            .OnDelete(deleteBehavior);
+        // modelBuilder.Entity<DivisionInAgreement>()
+        //     .HasOne(d => d.Agreement)
+        //     .WithMany(a => a.DivisionInAgreements)
+        //     .OnDelete(deleteBehavior);
         modelBuilder.Entity<PartnerInAgreement>()
             .HasOne(p => p.Partner)
             .WithMany(p => p.PartnersInAgreement)
             .OnDelete(deleteBehavior);
-        modelBuilder.Entity<PartnerInAgreement>()
-            .HasOne(p => p.Agreement)
-            .WithMany(a => a.PartnerInAgreements)
-            .OnDelete(deleteBehavior);
+        // modelBuilder.Entity<PartnerInAgreement>()
+        //     .HasOne(p => p.Agreement)
+        //     .WithMany(a => a.PartnerInAgreements)
+        //     .OnDelete(deleteBehavior);
 
         base.OnModelCreating(modelBuilder);
     }

@@ -2,13 +2,13 @@
 @using Client.Shared.Select
 @using Client.Shared.Text
 @using Microsoft.AspNetCore.Components.Forms
+@using Model
 @using Model.Agreements
 @using Model.Divisions
 @using Model.Partners
-@using Type = Model.Agreements.AgreementType
 @inherits Client.Shared.Form.BaseForm<Agreement>
-@inject IDivisionsForAgreementService DivisionsService
-@inject IPartnersForAgreementService PartnersService
+@inject IDivisionsForAgreementService DivisionsForAgreementService
+@inject IPartnersForAgreementService PartnersForAgreementService
 
 @{
     base.BuildRenderTree(__builder);
@@ -17,6 +17,8 @@
 @code {
     private List<DivisionInAgreement> divisions = [];
     private List<PartnerInAgreement> partners = [];
+    [Inject] private IPartnersService PartnersService { get; set; } = null!;
+    [Inject] private IDivisionsService DivisionsService { get; set; } = null!;
 
     protected override RenderFragment Content => @<RadzenStack Orientation=@Orientation.Vertical>
         @Number
@@ -75,36 +77,36 @@
     private RenderFragment Divisions => @<UniversalCustomMultipleSelectWithText 
                                              TBaseItem=@PartnerShort
                                              TItem=@PartnerInAgreement
-                                             TApi=@IPartnersService
                                              Convert=@ConvertPartner
                                              Selected=@Item.Partners
+                                             LoadItems="@(() => PartnersForAgreementService.GetPartners() )"
                                              />;
     private RenderFragment Partners => @<UniversalCustomMultipleSelectWithText 
-                                            TApi=@IDivisionsService
                                             TBaseItem=@DivisionShort
                                             TItem=@DivisionInAgreement
                                             Convert=@ConvertDivision
                                             Selected=@Item.Divisions
+                                            LoadItems="@(() => DivisionsForAgreementService.GetDivisions())"
                                         />;
 
     protected override async Task OnParametersSetAsync()
     {
-        await Task.WhenAll(
-            LoadDivisions(),
-            LoadPartners()
-        );
+            await Task.WhenAll(
+                LoadDivisions(),
+                LoadPartners()
+            );
 
         await base.OnParametersSetAsync();
     }
 
     private async Task LoadDivisions()
     {
-        divisions = await DivisionsService.GetDivisions();
+        divisions = await DivisionsForAgreementService.GetDivisions();
     }
 
     private async Task LoadPartners()
     {
-        partners = await PartnersService.GetPartners();
+        partners = await PartnersForAgreementService.GetPartners();
     }
 
     private static PartnerInAgreement ConvertPartner(PartnerShort partner) => new()

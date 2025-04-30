@@ -23,9 +23,9 @@ public static class AgreementsConvertExtension
         );
     }
 
-    public static AgreementInPartner ConvertToPartnerModel(this Agreement agreement)
+    public static AgreementInRelationship ConvertToPartnerModel(this Agreement agreement)
     {
-        return new AgreementInPartner()
+        return new AgreementInRelationship()
         {
             Id = agreement.Id,
             Description = agreement.ToString()
@@ -160,6 +160,23 @@ public static class AgreementsConvertExtension
             Id = divisionInAgreement.DivisionId,
             Description = divisionInAgreement.Division.ShortName,
             ContactPersons = divisionInAgreement.ContactPersons
+        };
+    }
+
+    public static AgreementInRelationship
+        ConvertToAgreementInRelationship(this DivisionInAgreement divisionInAgreement) => new AgreementInRelationship
+    {
+        Id = divisionInAgreement.AgreementId,
+        Description = divisionInAgreement.Agreement.ToString(),
+        ContactPerson = divisionInAgreement.ContactPersons,
+    };
+    public static AgreementInRelationship ConvertToAgreementInRelationship(this PartnerInAgreement partnerInAgreement)
+    {
+        return new AgreementInRelationship
+        {
+            Id = partnerInAgreement.AgreementId,
+            Description = partnerInAgreement.Agreement.ToString(),
+            ContactPerson = partnerInAgreement.ContactPersons
         };
     }
 }

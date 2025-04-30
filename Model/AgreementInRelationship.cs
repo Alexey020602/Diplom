@@ -1,6 +1,6 @@
-namespace Model.Partners;
+namespace Model;
 
-public class AgreementInPartner
+public class AgreementInRelationship
 {
     public int Id { get; init; }
     public string Description { get; set; } = string.Empty;

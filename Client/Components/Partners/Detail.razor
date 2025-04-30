@@ -1,11 +1,6 @@
 ﻿@using Client.Services.Api
-@using Client.Shared.List
-@using Client.Shared.Text
+@using Client.Shared
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components
-@using Model.Agreements
-@using Model.Interactions
-@using Model.Partners
 @using Partner = Model.Partners.Partner
 @attribute [Authorize(Roles = "Cip")]
 @inherits Client.Shared.DetailPage<Partner>
@@ -18,10 +13,8 @@
 
 @code {
     [Inject] private IPartnersService PartnersService { get; set; } = default!;
-    private List<InteractionInPartner> interactions = [];
-    private List<AgreementInPartner> agreements = [];
     protected override Task Delete() => PartnersService.Delete(Id);
-    protected override bool CanDelete => !(interactions.Any() || agreements.Any());
+    protected override bool CanDelete(Partner partner) => partner.CanBeDeleted;
 
     protected override IEnumerable<Row> Rows(Partner item) =>
     [
@@ -31,23 +24,13 @@
         new("Город", @item.City),
         new("Сайт", @item.Site),
         new("Направления", @<div>
-            @foreach (var direction in @item.Directions)
+            @foreach (var direction in item.Directions)
             {
                 @direction
             }
         </div>),
-        new("Соглашения", @<div>
-            @foreach (var agreement in item.Agreements)
-            {
-                @AgreementRow(agreement)
-            }
-        </div>),
-        new("Взаимодействия", @<div>
-            @foreach (var interaction in item.Interactions)
-            {
-                @InteractionRow(interaction)
-            }
-        </div>),
+        new("Соглашения", @<AgreementLinks Agreements="item.Agreements"/>),
+        new("Взаимодействия", @<InteractionLinks Interactions="item.Interactions"/>),
     ];
 
     protected override RenderFragment? Header(Partner item) => @<div>
@@ -61,16 +44,6 @@
     protected override Task<Partner> LoadItem()
     {
         return PartnersService.ReadOne(Id);
-        
     }
-
-    private RenderFragment AgreementRow(AgreementInPartner agreementInPartner) => @<NavLink href=@AgreementsPath(agreementInPartner)>@agreementInPartner</NavLink>;
-
-    private string AgreementsPath(AgreementInPartner agreementInPartner) => $"/{NavigationConstants.AgreementsPath}/{agreementInPartner.Id}";
-
-    private RenderFragment InteractionRow(InteractionInPartner interaction) => @<NavLink href="@InteractionPath(interaction)">@interaction</NavLink>;
-
-    private string InteractionPath(InteractionInPartner interaction) => $"/{NavigationConstants.InteractionsPath}/{interaction.Id}";
-
 
 }

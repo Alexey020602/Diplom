@@ -1,7 +1,9 @@
 ﻿@attribute [Authorize(Roles = "Cip")]
+@using Client.Services.Api.BaseApi
 @using Client.Shared.Select
 @using Microsoft.AspNetCore.Authorization
 @using Model.Divisions
+@using Model.Interactions
 @inherits Client.Shared.List.SearchableStyledList<Model.Divisions.DivisionShort>
 
 @page "/divisions"
@@ -14,8 +16,9 @@
 @* <SearchableStyledList ListDelegate=@this /> *@
 
 @code {
-    protected override RenderFragment Filters => @<UniversalCustomSelect
+    protected override RenderFragment Filters => @<UniversalSelect
                                                       TItem="Faculty"
+                                                      TApi="IReadApi<Faculty>"
                                                       @bind-Value=@facultyFilterValue 
                                                       Placeholder="Факультет"/>;
 

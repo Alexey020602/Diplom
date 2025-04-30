@@ -1,4 +1,5 @@
 ﻿@attribute [Authorize(Roles = "Cip")]
+@using Client.Services.Api.BaseApi
 @using Microsoft.AspNetCore.Authorization
 @using Client.Shared.Select
 @using Model.Partners
@@ -14,9 +15,10 @@
 
 @code {
     protected override RenderFragment Filters =>
-        @<UniversalCustomSelect
+        @<UniversalSelect
              Placeholder="Выберите тип партнера"
              TItem=@PartnerType
+             TApi="IReadApi<PartnerType>"
               @bind-Value=@PartnerType/>;
 
     protected override string Title => "Партнеры";

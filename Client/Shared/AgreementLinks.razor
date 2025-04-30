@@ -1,0 +1,9 @@
+@using Model
+@foreach (var agreementInRelationship in Agreements)
+{
+    <NavLink href=@($"/{NavigationConstants.AgreementsPath}/{agreementInRelationship.Id}")>@agreementInRelationship</NavLink>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<AgreementInRelationship> Agreements { get; set; } = [];
+}

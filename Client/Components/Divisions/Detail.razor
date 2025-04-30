@@ -27,6 +27,8 @@
         new("Контактные данные",@item.Contacts ),
         new("Сайт",@item.Site ),
         new("Направления", Directions(item)),
+        new("Соглашения", @<AgreementLinks Agreements="item.Agreements"/>),
+        new("Взаимодействия", @<InteractionLinks Interactions="item.Interactions"/>),
     ];
 
     private RenderFragment Directions(Division division) => @<div>
@@ -40,8 +42,7 @@
     protected override string? Title => Item?.ShortName;
     protected override string EntitiesPath => "divisions";
     protected override Task Delete() => DivisionsService.Delete(Id);
-    protected override bool CanDelete => true;
+    protected override bool CanDelete(Division division) => division.CanBeDeleted;
 
     protected override Task<Division> LoadItem() => DivisionsService.ReadOne(Id);
-
 }

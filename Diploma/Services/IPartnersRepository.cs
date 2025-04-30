@@ -16,7 +16,7 @@ public interface IPartnersRepository
     Task<Paging<PartnerShort>> GetPartnersAsync(PartnersFilter filter);
     Task<Partner> GetPartnerByIdAsync(int id);
     Task<bool> CanDeletePartner(int id);
-    Task<List<AgreementInPartner>> GetAgreementsForPartnerWithId(int id);
-    Task<List<InteractionInPartner>> GetInteractionsForPartnerWithId(int id);
+    Task<List<AgreementInRelationship>> GetAgreementsForPartnerWithId(int id);
+    Task<List<InteractionInRelationship>> GetInteractionsForPartnerWithId(int id);
     Task<int> PartnersCountAsync();
 }

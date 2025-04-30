@@ -37,6 +37,9 @@ public class DivisionsRepository(ApplicationContext context) : IDivisionReposito
         return (await context.Divisions
             .Include(d => d.Faculty)
             .Include(d => d.Directions)
+            .Include(d => d.Interactions)
+            .Include(d => d.DivisionsInAgreement)
+            .ThenInclude(division => division.Agreement)
             .FirstAsync(d => d.Id == id)).ToModel();
     }
 
@@ -55,21 +58,18 @@ public class DivisionsRepository(ApplicationContext context) : IDivisionReposito
 
     public async Task<Paging<DivisionShort>> GetDivisions(DivisionsFilter filter)
     {
-        var divisionsWithoutPaging = GetDivisionWithFaculty()
+        IQueryable<Division> divisionsWithoutPaging = GetDivisionWithFaculty()
             .WhereWithNullable(filter.ShortName, shortName => (d => d.ShortName.Contains(shortName)))
             .WhereWithNullable(filter.FullName, fullName => (d => d.FullName.Contains(fullName)))
             .FilterByFaculty(filter.FacultyId)
             .OrderBy(d => d.Id);
         
-        var take = filter.Take ?? 10;
-        var skip = filter.Skip ?? 0;
-        
         return new Paging<DivisionShort>(
                 await divisionsWithoutPaging.CountAsync(),
-                skip, take,
+                filter.Skip, filter.Take,
                 await divisionsWithoutPaging
-                    .Skip(skip)
-                    .Take(take)
+                    .SkipNullable(filter.Skip)
+                    .TakeNullable(filter.Take)
                     .Select(d => d.ConvertToDivisionShort())
                     .ToListAsync()
                 );

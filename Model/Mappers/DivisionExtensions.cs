@@ -1,5 +1,4 @@
 using Model.Divisions;
-using Model.Extensions;
 
 namespace Model.Mappers;
 
@@ -15,7 +14,9 @@ public static class DivisionExtensions
             Faculty = division.Faculty.ToModel(),
             Contacts = division.Contacts,
             Site = division.Site,
-            Directions = division.Directions.Select(DirectionExtensions.ConvertToModel).ToList()
+            Directions = division.Directions.Select(DirectionExtensions.ConvertToModel).ToList(),
+            Agreements = division.DivisionsInAgreement.Select(AgreementsConvertExtension.ConvertToAgreementInRelationship).ToList(),
+            Interactions = division.Interactions.Select(InteractionExtensions.ConvertToInteractionInPartner).ToList(),
         };
     }
 

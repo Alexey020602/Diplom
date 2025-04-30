@@ -26,10 +26,15 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
         await context.SaveChangesAsync();
     }
 
-    public async Task<ModelInteraction> GetInteractionById(int id)
-    {
-        return (await context.Interactions.AsNoTracking().FirstAsync(i => i.Id == id)).ConvertToModel();
-    }
+    public async Task<ModelInteraction> GetInteractionById(int id) => (await context
+        .Interactions
+        .AsNoTracking()
+        .Include(i => i.InteractionType).
+        Include(i => i.Partner)
+        .Include(i => i.Division)
+        .Include(i => i.Directions)
+        .FirstAsync(i => i.Id == id))
+    .ConvertToModel();
 
     public Task<int> InteractionsCountAsync() => context.Interactions.CountAsync();
 

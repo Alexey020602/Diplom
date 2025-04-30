@@ -17,7 +17,7 @@ namespace DataBase.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -624,7 +624,7 @@ namespace DataBase.Migrations
                     b.HasOne("DataBase.Models.Agreement", "Agreement")
                         .WithMany("DivisionInAgreements")
                         .HasForeignKey("AgreementId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DataBase.Models.Division", "Division")
@@ -681,7 +681,7 @@ namespace DataBase.Migrations
                     b.HasOne("DataBase.Models.Agreement", "Agreement")
                         .WithMany("PartnerInAgreements")
                         .HasForeignKey("AgreementId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DataBase.Models.Partner", "Partner")

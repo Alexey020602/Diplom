@@ -5,11 +5,12 @@ using Model.Divisions;
 
 namespace Client.Network;
 
-public class DivisionsForAgreementService(IReadApi<DivisionShort> api) : IDivisionsForAgreementService
+public class DivisionsForAgreementService(IPagingReadApi<DivisionShort> api) : IDivisionsForAgreementService
 {
     public async Task<List<DivisionInAgreement>> GetDivisions()
     {
-        return (await api.ReadAll()).Select(ConvertFromShort).ToList();
+        var divisionShorts = await api.ReadAll(new DivisionsFilter());
+        return divisionShorts.Data.Select(ConvertFromShort).ToList();
     }
 
     private DivisionInAgreement ConvertFromShort(DivisionShort divisionShort)

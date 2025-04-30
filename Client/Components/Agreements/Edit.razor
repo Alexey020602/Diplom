@@ -20,8 +20,11 @@ else
     private Agreement? agreement;
     private string message = LoadingMessage;
 
-    protected override Task OnParametersSetAsync() => LoadAgreement();
-    
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadAgreement();
+    }
+
 
     private async Task LoadAgreement() => agreement = await AgreementService.ReadOne(Id);
     

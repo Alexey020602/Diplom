@@ -1,0 +1,30 @@
+@if (CanDelete)
+{
+    <RadzenButton ButtonStyle="ButtonStyle" Click="OnClick" Text="@CanDeleteText" ChildContent="CanDeleteContent" />
+}
+else
+{
+    @CanNotDeleteContent
+}
+
+@code {
+    [Parameter] public ButtonStyle ButtonStyle { get; set; } = ButtonStyle.Danger;
+    [Parameter] public RenderFragment? CanNotDeleteContent { get; set; }
+    [Parameter] public RenderFragment? CanDeleteContent { get; set; }
+
+    [Parameter]
+    public string? CanNotDeleteText
+    {
+        set
+        {
+            CanNotDeleteContent = @<RadzenText Text="@value"/>;
+        }
+    }
+
+    [Parameter]
+    public string? CanDeleteText { get; set; }
+
+    [Parameter] public bool CanDelete { get; set; }
+    [Parameter] public Func<Task> Delete { get; set; } = () => Task.CompletedTask;
+    Task OnClick(MouseEventArgs args) => CanDelete ? Delete()  : Task.CompletedTask;
+}

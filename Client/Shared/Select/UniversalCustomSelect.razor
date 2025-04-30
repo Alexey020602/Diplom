@@ -1,7 +1,17 @@
-﻿@using Client.Services.Api.BaseApi
-@typeparam TItem where TItem: class
-@inherits UniversalSelect<TItem, IReadApi<TItem>>
+﻿@typeparam TItem where TItem : class
+@inherits RadzenDropDown<TItem>
 
 @{
     base.BuildRenderTree(__builder);
+}
+
+@code {
+    [Parameter] public Func<Task<List<TItem>>> LoadItems { get; set; } = null!;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        AllowClear = true;
+        AllowFiltering = true;
+        Data = await LoadItems();
+    }
 }

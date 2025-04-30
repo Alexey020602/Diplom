@@ -352,7 +352,7 @@ namespace DataBase.Migrations
                         column: x => x.AgreementId,
                         principalTable: "Agreements",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DivisionsInAgreement_Divisions_DivisionId",
                         column: x => x.DivisionId,
@@ -439,7 +439,7 @@ namespace DataBase.Migrations
                         column: x => x.AgreementId,
                         principalTable: "Agreements",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PartnersInAgreement_Partners_PartnerId",
                         column: x => x.PartnerId,

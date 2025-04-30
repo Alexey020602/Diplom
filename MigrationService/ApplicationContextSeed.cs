@@ -1,9 +1,7 @@
 ﻿using DataBase.Data;
 using DataBase.Extensions;
 using DataBase.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace MigrationService;
 
@@ -25,37 +23,25 @@ public class ApplicationContextSeed(
             throw;
         }
     }
-
-    private void Migrate()
-    {
-        if (!context.Database.IsRelational()) return;
-        context.Database.Migrate();
-    }
-
-    private Task SeedThrows(CancellationToken cancellationToken)
-    {
-        // Migrate();
-        if (!environment.IsDevelopment()) return Task.CompletedTask;
-        return SeedData(cancellationToken);
-    }
+    private Task SeedThrows(CancellationToken cancellationToken) => !environment.IsDevelopment() ? Task.CompletedTask : SeedData(cancellationToken);
 
     private async Task SeedData(CancellationToken cancellationToken)
     {
-        await AddFaculties(cancellationToken);
-        await AddPartnerTypes(cancellationToken);
-        await AddDirections(cancellationToken);
-        await AddInteractionTypes(cancellationToken);
-        await AddAgreementStatuses(cancellationToken);
-        await AddAgreementTypes(cancellationToken);
-        await AddPartners(cancellationToken);
-        await AddDivisions(cancellationToken);
-        await AddAgreements(cancellationToken);
-        await AddInteractions(cancellationToken);
+        AddFaculties();
+        AddPartnerTypes();
+        AddDirections();
+        AddInteractionTypes();
+        AddAgreementStatuses();
+        AddAgreementTypes();
+        AddPartners();
+        AddDivisions();
+        AddAgreements();
+        AddInteractions();
         
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task AddInteractionTypes(CancellationToken cancellationToken)
+    private void AddInteractionTypes()
     {
         var interactionTypes = new List<InteractionType>
         {
@@ -65,12 +51,10 @@ public class ApplicationContextSeed(
             new() { Id = 4, Name = "Четвертый" }
         };
 
-        foreach (var interactionType in interactionTypes) Add(interactionType, cancellationToken);
-
-        // await context.SaveChangesAsync(cancellationToken);
+        foreach (var interactionType in interactionTypes) Add(interactionType);
     }
 
-    private async Task AddAgreementTypes(CancellationToken cancellationToken)
+    private void AddAgreementTypes()
     {
         var agreementTypes = new List<AgreementType>
         {
@@ -81,10 +65,9 @@ public class ApplicationContextSeed(
         };
 
         foreach (var agreementType in agreementTypes) Add(agreementType);
-        // await context.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task AddAgreementStatuses(CancellationToken cancellationToken)
+    private void AddAgreementStatuses()
     {
         var agreementsStatuses = new List<AgreementStatus>
         {
@@ -95,11 +78,9 @@ public class ApplicationContextSeed(
         };
 
         foreach (var agreementStatus in agreementsStatuses) Add(agreementStatus);
-
-        // await context.SaveChangesAsync(cancellationToken);
     }
 
-    private void Add(InteractionType interactionType, CancellationToken cancellationToken)
+    private void Add(InteractionType interactionType)
     {
         var storedInteractionType = context.InteractionTypes.FirstOrDefault(type => type.Id == interactionType.Id);
         if (storedInteractionType is not null)
@@ -123,7 +104,7 @@ public class ApplicationContextSeed(
         context.AgreementStatus.Add(agreementStatus);
     }
 
-    private async Task AddPartnerTypes(CancellationToken cancellationToken)
+    private void AddPartnerTypes()
     {
         var dictionary = new Dictionary<int, string>
         {
@@ -133,11 +114,10 @@ public class ApplicationContextSeed(
             { 4, "ЦНИИ" }
         };
 
-        foreach (var pair in dictionary) AddPartnerType(pair.Key, pair.Value, cancellationToken);
-        // await context.SaveChangesAsync(cancellationToken);
+        foreach (var pair in dictionary) AddPartnerType(pair.Key, pair.Value);
     }
 
-    private void AddPartnerType(int id, string name, CancellationToken cancellationToken)
+    private void AddPartnerType(int id, string name)
     {
         var storedPartnerType = context.PartnerTypes.FirstOrDefault(t => t.Id == id);
         if (storedPartnerType is not null) return;
@@ -148,7 +128,7 @@ public class ApplicationContextSeed(
         });
     }
 
-    private async Task AddDirections(CancellationToken cancellationToken)
+    private void AddDirections()
     {
         var dictionary = new Dictionary<int, string>
         {
@@ -158,11 +138,10 @@ public class ApplicationContextSeed(
             { 4, "ЭТПТ" }
         };
 
-        foreach (var pair in dictionary) AddDirection(pair.Key, pair.Value, cancellationToken);
-        // await context.SaveChangesAsync(cancellationToken);
+        foreach (var pair in dictionary) AddDirection(pair.Key, pair.Value);
     }
 
-    private void AddDirection(int id, string name, CancellationToken cancellationToken)
+    private void AddDirection(int id, string name)
     {
         var storedDirection = context.Directions.FirstOrDefault(d => d.Id == id);
         if (storedDirection is not null)
@@ -174,7 +153,7 @@ public class ApplicationContextSeed(
         });
     }
 
-    private async Task AddFaculties(CancellationToken cancellationToken)
+    private void AddFaculties()
     {
         var dictionary = new Dictionary<int, string>
         {
@@ -199,18 +178,14 @@ public class ApplicationContextSeed(
         {
             context.Faculties.Add(new Faculty { Id = faculty.Key, Name = faculty.Value });
         }
-
-        // await context.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task AddPartners(CancellationToken cancellationToken)
+    private void AddPartners()
     {
         foreach (var number in 10.GetEnumerable())
         {
             AddPartner(number);
         }
-
-        // await context.SaveChangesAsync(cancellationToken);
     }
 
     private void AddPartner(int number)
@@ -222,14 +197,12 @@ public class ApplicationContextSeed(
         context.Partners.Add(partner);
     }
 
-    private async Task AddDivisions(CancellationToken cancellationToken)
+    private void AddDivisions()
     {
         foreach (var number in 10.GetEnumerable())
         {
             AddDivision(number);
         }
-
-        // await context.SaveChangesAsync(cancellationToken);
     }
 
     private void AddDivision(int number)
@@ -242,14 +215,12 @@ public class ApplicationContextSeed(
         context.Divisions.Add(division);
     }
 
-    private async Task AddAgreements(CancellationToken cancellationToken)
+    private void AddAgreements()
     {
         foreach (var number in 10.GetEnumerable())
         {
             AddAgreement(number);
         }
-
-        // await context.SaveChangesAsync(cancellationToken);
     }
 
     private void AddAgreement(int number)
@@ -282,14 +253,12 @@ public class ApplicationContextSeed(
         context.Agreements.Add(agreement);
     }
 
-    private async Task AddInteractions(CancellationToken cancellationToken)
+    private void AddInteractions()
     {
         foreach (var number in 10.GetEnumerable())
         {
             AddInteraction(number);
         }
-
-        // await context.SaveChangesAsync(cancellationToken);
     }
 
     private void AddInteraction(int number)
