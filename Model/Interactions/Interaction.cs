@@ -6,7 +6,7 @@ namespace Model.Interactions;
 
 public class Interaction
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     [Required(ErrorMessage = "Необходимо выбрать пратнера, участвующего во взаимодействии")]
     public PartnerShort? Partner { get; set; }

@@ -11,7 +11,7 @@ public class Direction
     /// <summary>
     /// Идентификатор направления
     /// </summary>
-    public int Id { get; set; }
+    public int Id { get; init; }
     /// <summary>
     /// Название направления
     /// </summary>
@@ -28,4 +28,16 @@ public class Direction
     /// Навигационное свойство с сущностью "Взаимодействие"
     /// </summary>
     public ICollection<Interaction> Interactions { get; set; } = [];
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Direction other) return false;
+        
+        return Id.Equals(other.Id);
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }

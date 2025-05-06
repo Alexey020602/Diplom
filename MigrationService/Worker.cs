@@ -24,15 +24,14 @@ public class Worker(
             var scope = services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             var applicationContextSeed = scope.ServiceProvider.GetRequiredService<ApplicationContextSeed>();
-            await dbContext.EnsureDatabaseAsync(cancellationToken);
-            await dbContext.RunMigrationAsync(cancellationToken);
+            await dbContext.MigrateIfRelationalAsync(cancellationToken);
             await applicationContextSeed.Seed(cancellationToken);
             logger.LogInformation("Data added to database");
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while migrating the database");
-            activity?.RecordException(ex);
+            activity?.AddException(ex);
             throw;
         }
 

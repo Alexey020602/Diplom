@@ -62,8 +62,11 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
     {
         return (await GetPartnersWithTypesAndDirections()
             .Include(p => p.Interactions)
-            .Include(P => P.PartnersInAgreement)
+            .ThenInclude(i => i.InteractionType)
+            .Include(i => i.PartnerType)
+            .Include(partner => partner.PartnersInAgreement)
             .ThenInclude(p => p.Agreement)
+            .ThenInclude(a => a.AgreementType)
             // .Select(p => p.ConvertToModel())
             .FirstAsync(partner => partner.Id == id)).ConvertToModel();
     }
@@ -99,12 +102,13 @@ public class PartnersRepository(ApplicationContext context) : IPartnersRepositor
 
     public async Task UpdatePartnerAsync(int id, Partner newPartner)
     {
-        var partner = newPartner.ConvertToDao();
         var existingPartner = await context.Partners
                                   .Include(p => p.Directions)
                                   .FirstAsync(p => p.Id == id) ??
-                              throw new KeyNotFoundException($"{partner.Id} не найден");
+                              throw new KeyNotFoundException($"{id} не найден");
 
+        var partner = newPartner.ConvertToDao();
+        
         context.Entry(existingPartner).CurrentValues.SetValues(partner);
         existingPartner.PartnerType = partner.PartnerType;
         existingPartner.Directions.UpdateByEnumerable(partner.Directions);

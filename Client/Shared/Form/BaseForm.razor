@@ -23,10 +23,10 @@
         string name,
         RenderFragment formComponent
     ) => @<RadzenRow AlignItems="AlignItems.Center">
-             <RadzenColumn>
+             <RadzenColumn Size="3">
                  <RadzenLabel Component=@name Text=@labelText/>
              </RadzenColumn>
-             <RadzenColumn>
+             <RadzenColumn Size="9">
                  @formComponent
                  <RadzenDataAnnotationValidator Component=@name/>
              </RadzenColumn>

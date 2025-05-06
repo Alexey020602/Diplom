@@ -38,8 +38,10 @@ public class DivisionsRepository(ApplicationContext context) : IDivisionReposito
             .Include(d => d.Faculty)
             .Include(d => d.Directions)
             .Include(d => d.Interactions)
+            .ThenInclude(i => i.InteractionType)
             .Include(d => d.DivisionsInAgreement)
             .ThenInclude(division => division.Agreement)
+            .ThenInclude(a => a.AgreementType)
             .FirstAsync(d => d.Id == id)).ToModel();
     }
 

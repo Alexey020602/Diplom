@@ -39,7 +39,7 @@
     </div>;
     private RenderFragment DirectionRow(Direction direction) => @<p>@direction</p>;
 
-    protected override string? Title => Item?.ShortName;
+    protected override string? Title => "Информация о подразделении";
     protected override string EntitiesPath => "divisions";
     protected override Task Delete() => DivisionsService.Delete(Id);
     protected override bool CanDelete(Division division) => division.CanBeDeleted;

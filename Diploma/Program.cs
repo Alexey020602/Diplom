@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     })
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o => //Íàñòðîéêè ïðîâåðêè òîêåíà
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
     {
         o.RequireHttpsMetadata = false;
         o.IncludeErrorDetails = true;
@@ -54,6 +54,7 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(symmetricSecurityKey!))
         };
     });
+
 builder.Services.AddAuthorization();
 
 builder.AddNpgsqlDbContext<ApplicationContext>("DiplomaDb");

@@ -8,6 +8,7 @@
 @using Model
 @using Model.Divisions
 @inherits Client.Shared.Form.BaseForm<Model.Divisions.Division>
+@inject IReadApi<Faculty> FacultiesApi
 
 @{
     base.BuildRenderTree(__builder);
@@ -28,37 +29,39 @@
     private RenderFragment ShortName => FormRow(
         "Краткое название",
         "ShortName",
-        @<RadzenTextBox Name="ShortName" @bind-Value=@Item.ShortName />
+        @<RadzenTextBox Style="width: 100%" Name="ShortName" @bind-Value=@Item.ShortName />
         );
 
     private RenderFragment FullName => FormRow(
         "Полное название",
         "FullName",
-        @<RadzenTextBox Name="FullName" @bind-Value=@Item.FullName/>
+        @<RadzenTextBox Style="width: 100%" Name="FullName" @bind-Value=@Item.FullName/>
     );
 
     private RenderFragment Site => FormRow(
         "Сайт",
         "Site",
-        @<RadzenTextBox Name="Site" @bind-Value=@Item.Site/>
+        @<RadzenTextBox Style="width: 100%" Name="Site" @bind-Value=@Item.Site/>
     );
 
     private RenderFragment Contacts => FormRow(
         "Контактные данные",
         "Contacts",
-        @<RadzenTextArea Name="Contacts" @bind-Value=@Item.Contacts/>
+        @<RadzenTextArea Style="width: 100%" Name="Contacts" @bind-Value=@Item.Contacts/>
     );
 
     private RenderFragment Faculty => FormRow(
         "Факультет",
         "Faculty",
-        @<UniversalCustomSelect TItem=@Faculty Name="Faculty" @bind-Value=@Item.Faculty/>
+        @<UniversalCustomSelect 
+             Style="width: 100%" TItem=@Faculty Name="Faculty" LoadItems="() => FacultiesApi.ReadAll()" @bind-Value=@Item.Faculty/>
     );
 
     private RenderFragment Directions => FormRow(
         "Направление",
         "Directions",
-        @<UniversalMultipleSelect Name="Directions" TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions/>
+        @<UniversalMultipleSelect  
+             Style="width: 100%" Name="Directions" TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions/>
     );
 
 }

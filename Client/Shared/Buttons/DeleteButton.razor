@@ -4,7 +4,15 @@
 }
 else
 {
+    @if (CanNotDeleteText != null)
+    {
+        <RadzenText Text="@CanNotDeleteText"/>
+    } 
+    else 
+    {
+
     @CanNotDeleteContent
+    }
 }
 
 @code {
@@ -13,13 +21,7 @@ else
     [Parameter] public RenderFragment? CanDeleteContent { get; set; }
 
     [Parameter]
-    public string? CanNotDeleteText
-    {
-        set
-        {
-            CanNotDeleteContent = @<RadzenText Text="@value"/>;
-        }
-    }
+    public string? CanNotDeleteText { get; set; }
 
     [Parameter]
     public string? CanDeleteText { get; set; }

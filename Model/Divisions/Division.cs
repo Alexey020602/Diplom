@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Model.Divisions;
 
-public class Division
+public class Division: IEquatable<Division>
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     [StringLength(200, ErrorMessage = "Краткое название не может содержать больше 200 символов")]
     [Required(ErrorMessage = "Необходимо ввести краткое название подразделения")]
@@ -27,4 +27,19 @@ public class Division
     public List<InteractionInRelationship> Interactions { get; set; } = [];
     
     public bool CanBeDeleted => !(Agreements.Any() || Interactions.Any());
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Division other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+
+    public bool Equals(Division? other)
+    {
+        return other != null && other.Id == Id;
+    }
 }

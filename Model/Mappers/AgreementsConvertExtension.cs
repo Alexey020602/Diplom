@@ -11,24 +11,28 @@ namespace Model.Mappers;
 
 public static class AgreementsConvertExtension
 {
-    public static AgreementShort ConvertToShortModel(this Agreement agreement)
-    {
-        return new AgreementShort(
+    public static AgreementShort ConvertToShortModel(this Agreement agreement) =>
+        new AgreementShort(
             agreement.Id,
-            agreement.AgreementNumber,
-            ConvertToModel(agreement.AgreementType),
-            ConvertToModel(agreement.AgreementStatus),
-            agreement.StarDateTime,
-            agreement.EndDateTime
+            agreement.Description()
         );
-    }
+
+    // new AgreementShort(
+    //     agreement.Id,
+    //     agreement.AgreementNumber,
+    //     ConvertToModel(agreement.AgreementType),
+    //     ConvertToModel(agreement.AgreementStatus),
+    //     agreement.StarDateTime,
+    //     agreement.EndDateTime
+    // );
+
 
     public static AgreementInRelationship ConvertToPartnerModel(this Agreement agreement)
     {
         return new AgreementInRelationship()
         {
             Id = agreement.Id,
-            Description = agreement.ToString()
+            Description = agreement.Description()
         };
     }
 
@@ -75,9 +79,9 @@ public static class AgreementsConvertExtension
     }
 
     private static DivisionInAgreement ConvertToDatabaseModel(
-        this Model.Agreements.DivisionInAgreement newDivisionInAgreement, 
+        this Model.Agreements.DivisionInAgreement newDivisionInAgreement,
         int agreementId
-        )
+    )
     {
         return new DivisionInAgreement()
         {
@@ -88,9 +92,9 @@ public static class AgreementsConvertExtension
     }
 
     private static List<PartnerInAgreement> ConvertToDatabaseModel(
-        this IEnumerable<Model.Agreements.PartnerInAgreement> partners, 
+        this IEnumerable<Model.Agreements.PartnerInAgreement> partners,
         int agreementId
-        )
+    )
     {
         return partners
             .Select(p => ConvertToDatabaseModel(p, agreementId))
@@ -98,9 +102,9 @@ public static class AgreementsConvertExtension
     }
 
     private static PartnerInAgreement ConvertToDatabaseModel(
-        this Model.Agreements.PartnerInAgreement newPartnerInAgreement, int 
+        this Model.Agreements.PartnerInAgreement newPartnerInAgreement, int
             agreementId
-        )
+    )
     {
         return new PartnerInAgreement
         {
@@ -118,7 +122,7 @@ public static class AgreementsConvertExtension
             Number = agreement.AgreementNumber,
             Type = ConvertToModel(agreement.AgreementType),
             Status = ConvertToModel(agreement.AgreementStatus),
-            Start = DateOnly.FromDateTime( agreement.StarDateTime),
+            Start = DateOnly.FromDateTime(agreement.StarDateTime),
             End = DateOnly.FromDateTime(agreement.EndDateTime),
             Divisions = agreement.DivisionInAgreements.Select(ConvertToModel).ToList(),
             Partners = agreement.PartnerInAgreements.Select(ConvertToModel).ToList()
@@ -167,16 +171,20 @@ public static class AgreementsConvertExtension
         ConvertToAgreementInRelationship(this DivisionInAgreement divisionInAgreement) => new AgreementInRelationship
     {
         Id = divisionInAgreement.AgreementId,
-        Description = divisionInAgreement.Agreement.ToString(),
+        Description = divisionInAgreement.Agreement.Description(),
         ContactPerson = divisionInAgreement.ContactPersons,
     };
+
     public static AgreementInRelationship ConvertToAgreementInRelationship(this PartnerInAgreement partnerInAgreement)
     {
         return new AgreementInRelationship
         {
             Id = partnerInAgreement.AgreementId,
-            Description = partnerInAgreement.Agreement.ToString(),
+            Description = partnerInAgreement.Agreement.Description(),
             ContactPerson = partnerInAgreement.ContactPersons
         };
     }
+
+    public static string Description(this Agreement agreement) =>
+        $"{agreement.AgreementType.Name} {agreement.AgreementNumber} ({agreement.StarDateTime.ToShortDateString()})";
 }

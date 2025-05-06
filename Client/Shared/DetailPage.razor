@@ -48,15 +48,19 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn>
                         <Template>
+                            <RadzenStack AlignItems="AlignItems.Start" Orientation="Orientation.Vertical">
                             @context.Content
-                        </Template>
+                            </RadzenStack>
+                        </Template> 
                     </RadzenDataGridColumn>
                 </Columns>
             </RadzenDataGrid>
         </RadzenStack>;
     protected record Row(string Title, RenderFragment Content)
     {
-        public Row(string title, string? text): this(title, @<RadzenText Text=@text/>) {}
+        public Row(string title, string? text): this(
+            title, @<RadzenText TextStyle="TextStyle.Body1">@text</RadzenText>
+            ) {}
         
     }
 

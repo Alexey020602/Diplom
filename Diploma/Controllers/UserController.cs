@@ -11,8 +11,32 @@ namespace Diploma.Controllers;
 [ApiController]
 public class UserController(
     UserManager<IdentityUser<Guid>> userManager,
-    ITokenService tokenService) : ControllerBase
+    ITokenService tokenService
+) : ControllerBase
 {
+    [HttpPost]
+    [Route("login")]
+    public async Task<IActionResult> Authenticate([FromBody] AuthRequest request)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        if (
+            await userManager.FindByNameAsync(request.Login!) is not { } managedUser ||
+            !await userManager.CheckPasswordAsync(managedUser, request.Password!)
+        )
+            return BadRequest("Bad credentials");
+
+        return Ok(
+            new AuthResponse
+            {
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                Login = managedUser.UserName!,
+                Token = tokenService.CreateToken(managedUser, await userManager.GetRolesAsync(managedUser)),
+                Roles = (await userManager.GetRolesAsync(managedUser)).Select(role => new Role(role)).ToList()
+            }
+        );
+    }
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("register")]
@@ -50,32 +74,5 @@ public class UserController(
             Login = request.Login,
             Roles = request.Roles
         });
-    }
-
-    [HttpPost]
-    [Route("login")]
-    public async Task<IActionResult> Authenticate([FromBody] AuthRequest request)
-    {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        var managedUser = await userManager.FindByNameAsync(request.Login!);
-
-        if (managedUser == null) return BadRequest("Bad credentials");
-
-        var roles = await userManager.GetRolesAsync(managedUser);
-
-        var isPasswordValid = await userManager.CheckPasswordAsync(managedUser, request.Password!);
-
-        if (!isPasswordValid) return BadRequest("Bad credentials");
-
-        return Ok(
-            new AuthResponse
-            {
-                Scheme = JwtBearerDefaults.AuthenticationScheme,
-                Login = managedUser.UserName!,
-                Token = tokenService.CreateToken(managedUser, roles),
-                Roles = roles.Select(role => new Role(role)).ToList()
-            }
-        );
     }
 }

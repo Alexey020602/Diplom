@@ -15,6 +15,7 @@ public static class PartnerExtensions
             Id = partner.Id,
             FullName = partner.FullName,
             ShortName = partner.ShortName,
+            City = partner.City ?? string.Empty,
             Address = partner.Address ?? string.Empty,
             Site = partner.Site ?? string.Empty,
             ContactData = partner.ContactData ?? string.Empty,
@@ -25,6 +26,10 @@ public static class PartnerExtensions
         };
     }
 
+    public static PartnerShort ConvertToPartnerShort(this Partner partner)
+    {
+        return new PartnerShort(partner.Id, partner.ShortName);
+    }
 
     public static Partner ConvertToDao(this Partners.Partner partner)
     {
@@ -35,6 +40,7 @@ public static class PartnerExtensions
             ShortName = partner.ShortName,
             Address = partner.Address,
             Site = partner.Site,
+            City = partner.City,
             ContactData = partner.ContactData,
             PartnerType = (partner.Type ?? throw new ArgumentNullException(nameof(Partners.Partner.Type), "Тип партнера не задан"))
                 .ConvertToDao(),

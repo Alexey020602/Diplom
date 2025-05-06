@@ -64,7 +64,7 @@ public class InteractionRepository(ApplicationContext context) : IInteractionRep
             await interactionsWithoutPaging
                 .Skip(skip)
                 .Take(take)
-                .Select(i => new InteractionShort(i.Id, i.ToString()))
+                .Select(i => i.ConvertToInteractionShort())
                 .ToListAsync()
             );
     }

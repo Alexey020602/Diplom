@@ -19,27 +19,22 @@
     protected override IEnumerable<Row> Rows(Partner item) =>
     [
         new("Тип партнера", @item.Type?.ToString()),
-        new("Контактные данные", @item.ContactData),
+        new("Контактные данные", item.ContactData),
         new("Адрес", @item.Address),
         new("Город", @item.City),
         new("Сайт", @item.Site),
-        new("Направления", @<div>
-            @foreach (var direction in item.Directions)
-            {
-                @direction
-            }
-        </div>),
+        new("Направления", @<DirectionsList Directions="item.Directions"/>),
         new("Соглашения", @<AgreementLinks Agreements="item.Agreements"/>),
         new("Взаимодействия", @<InteractionLinks Interactions="item.Interactions"/>),
     ];
 
-    protected override RenderFragment? Header(Partner item) => @<div>
+    protected override RenderFragment Header(Partner item) => @<div>
         <RadzenText TagName="TagName.H3" Text=@item.ShortName/>
         <RadzenText TagName="TagName.H4" Text=@item.FullName/>
     </div>;
 
     protected override string EntitiesPath => "partners";
-    protected override string? Title => Item?.ShortName;
+    protected override string? Title => "Информация о партнере";
 
     protected override Task<Partner> LoadItem()
     {

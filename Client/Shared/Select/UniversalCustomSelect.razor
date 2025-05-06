@@ -1,4 +1,4 @@
-﻿@typeparam TItem where TItem : class
+﻿@typeparam TItem where TItem : class, IEquatable<TItem>
 @inherits RadzenDropDown<TItem>
 
 @{
@@ -6,12 +6,15 @@
 }
 
 @code {
-    [Parameter] public Func<Task<List<TItem>>> LoadItems { get; set; } = null!;
+    [Parameter] public Func<Task<IReadOnlyList<TItem>>> LoadItems { get; set; } = null!;
 
     protected override async Task OnParametersSetAsync()
     {
+        if (LoadItems == null) throw new Exception("Не задан делегат для загрузки элементов");
         AllowClear = true;
         AllowFiltering = true;
         Data = await LoadItems();
+        ItemComparer = new RadzenDropDownEqualityComparer<TItem>();
+        await base.OnParametersSetAsync();
     }
 }

@@ -48,12 +48,6 @@ public class Interaction
     /// Навигационное свойство с сущностью "Направление"
     /// </summary>
     public List<Direction> Directions { get; set; } = [];
-
-    public override string ToString()
-    {
-        return $"{ContactCode} {InteractionType} от {SigningDateTime.ToShortDateString()}, {BeginigDateTime.ToShortDateString()} - {EndingDateTime.ToShortDateString()}";
-    }
-
     public static Interaction Default(int number) => new()
     {
         Id = number,

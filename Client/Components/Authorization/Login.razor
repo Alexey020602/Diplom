@@ -17,15 +17,6 @@
 @code {
     [Parameter] public string Action { get; set; } = string.Empty;
     [SupplyParameterFromQuery] private string? ReturnUrl { get; set; } = "/";
-    private AuthRequest AuthRequest { get; } = new();
-    private bool ShowAuthError { get; set; }
-    private string Error { get; set; } = default!;
-
-    private Task ExecuteLogin()
-    {
-        ShowAuthError = false;
-        return ExecuteLoginAction(AuthRequest);
-    }
 
     private Task LoginAction(LoginArgs login) => ExecuteLoginAction(new()
     {

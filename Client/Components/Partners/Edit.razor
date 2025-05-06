@@ -11,7 +11,7 @@
 </div>
 
 @code {
-    [Inject] private IPartnersService PartnersService { get; set; } = default!;
+    [Inject] public required IPartnersService PartnersService { get; set; }
     [Parameter] public int Id { get; set; }
     private Partner? partner;
 

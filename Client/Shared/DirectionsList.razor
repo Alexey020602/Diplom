@@ -1,0 +1,9 @@
+@using Model
+@foreach (var direction in Directions)
+{
+    <div>@direction</div>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<Direction> Directions { get; set; } = [];
+}

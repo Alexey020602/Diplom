@@ -23,51 +23,34 @@ public class TokenService(ILogger<TokenService> logger, IConfiguration configura
 
     public string CreateToken(IdentityUser<Guid> user, IEnumerable<string> roles)
     {
-        var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
-        var token = CreateJwtSecurityToken(CreateClaims(user, roles), CreateSigningCredentials(), expiration);
+        var token = new JwtSecurityToken(
+            configuration.GetSection(SectionName)[ValidIssuer],
+            configuration.GetSection(SectionName)[ValidAudience],
+            CreateClaims(user, roles),
+            expires: DateTime.UtcNow.AddMinutes(ExpirationMinutes),
+            signingCredentials: CreateSigningCredentials());
+
         var tokenHandler = new JwtSecurityTokenHandler();
         logger.LogInformation("JWT Token created");
         return tokenHandler.WriteToken(token);
     }
 
-    private JwtSecurityToken CreateJwtSecurityToken(IEnumerable<Claim> claims, SigningCredentials signingCredentials,
-        DateTime expiration)
+    private static IEnumerable<Claim> CreateClaims(IdentityUser<Guid> user, IEnumerable<string> roles)
     {
-        return new JwtSecurityToken(
-            configuration.GetSection(SectionName)[ValidIssuer],
-            configuration.GetSection(SectionName)[ValidAudience],
-            claims,
-            expires: expiration,
-            signingCredentials: signingCredentials);
+        return roles.Select(role => new Claim(ClaimTypes.Role, role))
+            .Concat(
+                [
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName!)
+                ]
+            );
     }
 
-    private IEnumerable<Claim> CreateClaims(IdentityUser<Guid> user, IEnumerable<string> roles)
-    {
-        return CreateUserClaims(user).Concat(CreateRoleClaims(roles)
-        );
-    }
-
-    private IEnumerable<Claim> CreateUserClaims(IdentityUser<Guid> user)
-    {
-        return new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.UserName!)
-        };
-    }
-
-    private IEnumerable<Claim> CreateRoleClaims(IEnumerable<string> roles)
-    {
-        return roles.Select(role => new Claim(ClaimTypes.Role, role));
-    }
-
-    private SigningCredentials CreateSigningCredentials()
-    {
-        return new SigningCredentials(
+    private SigningCredentials CreateSigningCredentials() =>
+        new(
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(configuration.GetSection(SectionName)[SymmetricSecurityKey]!)
             ),
             SecurityAlgorithms.HmacSha256
         );
-    }
 }

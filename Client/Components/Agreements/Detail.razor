@@ -51,7 +51,7 @@
 
     private RenderFragment PartnerRow(PartnerInAgreement partner) => @<NavLink href=@($"/{NavigationConstants.PartnersPath}/{partner.Id}")>@partner</NavLink>;
 
-    protected override string? Title => Item?.ToString();
+    protected override string? Title => "Информация о соглашении";
     protected override string EntitiesPath => "agreements";
     protected override Task Delete() => AgreementService.Delete(Id);
 

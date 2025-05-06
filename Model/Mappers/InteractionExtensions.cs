@@ -1,4 +1,5 @@
 using Model.Extensions;
+using Model.Interactions;
 using Model.Partners;
 using Interaction = Model.Interactions.Interaction;
 using DataBaseInteraction = DataBase.Models.Interaction;
@@ -9,12 +10,14 @@ namespace Model.Mappers;
 
 public static class InteractionExtensions
 {
+    public static InteractionShort ConvertToInteractionShort(this DataBaseInteraction interaction) => 
+        new InteractionShort(interaction.Id, interaction.Description());
     public static InteractionInRelationship ConvertToPartnerModel(this DataBaseInteraction interaction)
     {
         return new InteractionInRelationship
         {
             Id = interaction.Id,
-            Description = interaction.ToString()
+            Description = interaction.Description()
         };
     }
     public static DataBaseInteraction ConvertToDatabaseModel(this Interaction interaction)
@@ -103,17 +106,15 @@ public static class InteractionExtensions
         };
     }
 
-    public static PartnerShort ConvertToPartnerShort(this Partner partner)
-    {
-        return new PartnerShort(partner.Id, partner.ShortName);
-    }
 
     public static InteractionInRelationship ConvertToInteractionInPartner(this DataBaseInteraction interaction)
     {
         return new InteractionInRelationship
         {
             Id = interaction.Id,
-            Description = interaction.ToString()
+            Description = interaction.Description()
         };
     }
+    
+    private static string Description(this DataBase.Models.Interaction interaction) => $"{interaction.InteractionType.Name} {interaction.Theme} ({interaction.SigningDateTime.ToShortDateString()})";
 }

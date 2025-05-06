@@ -2,16 +2,12 @@
 
 public record AgreementShort(
     int Id,
-    string Number,
-    AgreementType AgreementType,
-    Status Status,
-    DateTime Start,
-    DateTime End
+    string Description
 )
 {
-    public override string ToString()
-    {
-        return
-            $"Номер: {Number}, Тип: {AgreementType}, Статус: {Status}. {Start.ToShortDateString()} - {End.ToShortDateString()}";
-    }
+    public override string ToString() => Description;
+    // {
+    //     return
+    //         $"Номер: {Number}, Тип: {AgreementType}, Статус: {Status}. {Start.ToShortDateString()} - {End.ToShortDateString()}";
+    // }
 }

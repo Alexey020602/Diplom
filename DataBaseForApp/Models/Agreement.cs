@@ -42,12 +42,6 @@ public class Agreement
     /// </summary>
     public AgreementStatus AgreementStatus { get; set; } = null!;
 
-    public override string ToString()
-    {
-        return
-            $"{AgreementNumber} {AgreementType} {StarDateTime.ToShortDateString()} - {EndDateTime.ToShortDateString()}";
-    }
-
     public static Agreement Default(int  number) => new()
     {
         Id = number,

@@ -4,6 +4,7 @@
 @using Model.Divisions
 @using Model.Interactions
 @using Model.Partners
+@using Client.Shared
 @inherits Client.Shared.DetailPage<Interaction>
 @page "/interactions/{id:int}"
 @attribute [Authorize(Roles = "Cip")]
@@ -19,9 +20,7 @@
         return InteractionsService.ReadOne(Id);
     }
 
-    protected override RenderFragment? Header(Interaction item) => @<div>
-        <RadzenText Text=@item.ContactCode TagName="TagName.H3"/>
-    </div>;
+    protected override RenderFragment? Header(Interaction item) => null;
 
     protected override IEnumerable<Row> Rows(Interaction item) =>
     [
@@ -50,14 +49,9 @@
         }
     </div>;
 
-    private RenderFragment Directions(Interaction interaction) => @<div>
-        @foreach (var direction in interaction.Directions)
-        {
-            @direction
-        }
-    </div>;
+    private RenderFragment Directions(Interaction interaction) => @<DirectionsList Directions="interaction.Directions"/>;
 
-    protected override string? Title => Item?.ToString();
+    protected override string? Title => "Информация о взаимодействии";
     protected override string EntitiesPath => "interactions";
     protected override Task Delete() => InteractionsService.Delete(Id);
 

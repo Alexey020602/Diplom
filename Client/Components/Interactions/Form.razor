@@ -37,19 +37,22 @@
     private RenderFragment Directions => FormRow(
         "Направления",
         "Directions",
-        @<UniversalMultipleSelect TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions Name="Directions"/>
+        @<UniversalMultipleSelect 
+             Style="width: 100%" TApi=@IDirectionsService TItem=@Direction @bind-Value=@Item.Directions Name="Directions"/>
         );
 
     private RenderFragment ContactCode => FormRow(
         "Код",
         "Code",
-        @<RadzenTextBox @bind-Value=@Item.ContactCode Name="Code"/>
+        @<RadzenTextBox
+             Style="width: 100%" @bind-Value=@Item.ContactCode Name="Code"/>
         );
 
     private RenderFragment Theme => FormRow(
         "Тема",
         "Theme",
-        @<RadzenTextArea @bind-Value=@Item.Theme Name="Theme"/>
+        @<RadzenTextArea
+             Style="width: 100%" @bind-Value=@Item.Theme Name="Theme"/>
     );
 
     private RenderFragment Partner => FormRow(
@@ -57,6 +60,7 @@
         "Partner",
         @<UniversalCustomSelect 
              TItem="@PartnerShort"
+             Style="width: 100%"
              Name="Partner" 
              @bind-Value=@Item.Partner 
              LoadItems="@( async () => (await PartnersService.ReadAll(new PartnersFilter())).Data.ToList())"/>
@@ -67,6 +71,7 @@
         "Division",
         @<UniversalCustomSelect 
              TItem="@DivisionShort"
+             Style="width: 100%"
              Name="Division" 
              @bind-Value=@Item.Division
              LoadItems="@(async () => (await DivisionsService.ReadAll(new DivisionsFilter())).Data.ToList())"
@@ -78,6 +83,7 @@
         "Type",
         @<UniversalSelect 
              TItem="@InteractionType"
+             Style="width: 100%"
              @bind-Value=@Item.Type
              Name="Type"
              TApi="IReadApi<InteractionType>"
@@ -87,16 +93,19 @@
     private RenderFragment Begin => FormRow(
         "Начало",
         "Begin",
-        @<RadzenDatePicker TValue=@DateOnly Name="Begin" Value=@Item.Begin Change=@(begin => Item.Begin = DateOnly.FromDateTime(begin ?? DateTime.Today))/>
+        @<RadzenDatePicker
+             Style="width: 100%" TValue=@DateOnly Name="Begin" Value=@Item.Begin Change=@(begin => Item.Begin = DateOnly.FromDateTime(begin ?? DateTime.Today))/>
         );
     private RenderFragment End => FormRow(
         "Конец",
         "End",
-        @<RadzenDatePicker TValue=@DateOnly Name="End" Value=@Item.End Change=@(end => Item.End = DateOnly.FromDateTime(end ?? DateTime.Today))/>
+        @<RadzenDatePicker
+             Style="width: 100%" TValue=@DateOnly Name="End" Value=@Item.End Change=@(end => Item.End = DateOnly.FromDateTime(end ?? DateTime.Today))/>
     );
     private RenderFragment SigningDate => FormRow(
         "Начало",
         "SigningDate",
-        @<RadzenDatePicker TValue=@DateOnly Name="SigningDate" Value=@Item.SigningDate Change=@(signingDate => Item.SigningDate = DateOnly.FromDateTime(signingDate ?? DateTime.Today))/>
+        @<RadzenDatePicker
+             Style="width: 100%" TValue=@DateOnly Name="SigningDate" Value=@Item.SigningDate Change=@(signingDate => Item.SigningDate = DateOnly.FromDateTime(signingDate ?? DateTime.Today))/>
     );
 }

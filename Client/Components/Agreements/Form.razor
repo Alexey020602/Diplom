@@ -1,14 +1,17 @@
 @using Client.Services.Api
+@using Client.Services.Api.BaseApi
 @using Client.Shared.Select
-@using Client.Shared.Text
-@using Microsoft.AspNetCore.Components.Forms
-@using Model
 @using Model.Agreements
 @using Model.Divisions
 @using Model.Partners
-@inherits Client.Shared.Form.BaseForm<Agreement>
+@using AgreementType = Model.Agreements.AgreementType
+@using DivisionInAgreement = Model.Agreements.DivisionInAgreement
+@using PartnerInAgreement = Model.Agreements.PartnerInAgreement
+@inherits Client.Shared.Form.BaseForm<Model.Agreements.Agreement>
 @inject IDivisionsForAgreementService DivisionsForAgreementService
 @inject IPartnersForAgreementService PartnersForAgreementService
+@inject IReadApi<Status> AgreementStatusesApi
+@inject IReadApi<AgreementType> AgreementTypesApi
 
 @{
     base.BuildRenderTree(__builder);
@@ -33,14 +36,17 @@
     private RenderFragment Number => FormRow(
         "Номер соглашения",
         "Number",
-        @<RadzenTextBox @bind-Value=@Item.Number Name="Number" Placeholder="Номер соглашения"/>
+        @<RadzenTextBox Style="width: 100%" @bind-Value=@Item.Number Name="Number" Placeholder="Номер соглашения"/>
     );
 
     private RenderFragment Type => FormRow(
         "Тип соглашения",
         "Type",
         @<UniversalCustomSelect
+             TItem="AgreementType"
+             Style="width: 100%"
              Name="Type"
+             LoadItems="() => AgreementTypesApi.ReadAll()"
              @bind-Value="@Item.Type"/>
     );
 
@@ -48,7 +54,10 @@
         "Статус соглашения",
         "Status",
         @<UniversalCustomSelect
+             TItem="Status"
+             Style="width: 100%"
              Name="Status"
+             LoadItems="() => AgreementStatusesApi.ReadAll()"
              @bind-Value="@Item.Status"/>
     );
 
@@ -57,6 +66,7 @@
         "Start",
         @<RadzenDatePicker 
              TValue=@(DateOnly) 
+             Style="width: 100%"
              Value=@Item.Start 
              ShowTime=false
              Change=@(start => Item.Start = DateOnly.FromDateTime(start ?? DateTime.Today)) 
@@ -68,6 +78,7 @@
         "End",
         @<RadzenDatePicker 
              TValue=@(DateOnly)
+             Style="width: 100%"
              ShowTime=false
              Value=@Item.End
              Change=@(end => Item.End = DateOnly.FromDateTime(end ?? DateTime.Today))
